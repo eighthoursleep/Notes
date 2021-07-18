@@ -1,13 +1,6 @@
----
-title: "编译和运行一个Cpp文件"
-date: "2021-07-11 18:00:01"
-lastmod: "2021-07-18 14:33:01"
-toc: true
-tags: [C++,]
-draft: false
----
+# 编译和运行一个Cpp文件
+2021-07-11
 
-<!--more-->
 ## VSCode
 ### 安装编译器集合包MinGW
 

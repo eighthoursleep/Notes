@@ -1,9 +1,5 @@
----
-title: 【GDC】Level Design Workshop：Blockmesh and Lighting Tips
-date: 2020-01-08 14:58:13
-tags: GDC
-toc: true
----
+# 【GDC】Level Design Workshop：Blockmesh and Lighting Tips
+2020-01-08
 
 # Invisible Intuition：Blockmesh and Lighting Tips to Guide Players and Set the Mood
 

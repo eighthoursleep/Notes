@@ -1,9 +1,5 @@
----
-title: 【GDC】Platinum Games：Action Without Borders
-date: 2020-01-08 00:24:13
-tags: GDC
-toc: true
----
+# 【GDC】Platinum Games：Action Without Borders
+2020-01-08
 
 ## What is an Action Game?
 
