@@ -1,0 +1,223 @@
+---
+title: C#设计模式（三）单例模式
+date: 2020-07-03 22:24:47
+tags: C Sharp
+toc: true
+categories: 设计模式
+---
+
+**举例**：正常情况下只能打开唯一一个任务管理器。
+
+**使用单例模式的目的是什么？**
+
+1. 让某个对象在游戏中永远只存在一个。比如一个游戏玩家只有一份角色数据，比如各个游戏模块只需要独立的一个控制器。
+2. 约束代码的调用方式，访问的时候指向唯一的对象，而不是重复进行创建对象、销毁对象。对象能而言，减少了内存垃圾回收的频率，点点滴滴优化积少成多。
+
+<!--more-->
+
+**使用单例模式通常面临两种需求：**
+
+1. 不需要继承MonoBehaviour，即不需要用到Awake、Start、Update等。通常应用在数据实体上。
+2. 需要继承MonoBehaviour，通常用在模块控制器上。
+
+**代码怎么写？**
+
+1. Singleton，不需要继承MonoBehaviour。定义属性访问器Instance，用static进行声明。可以基于类的级别进行访问，如：RoomModel.Instance。
+2. MonoSingleton，需要继承MonoBehaviour。建议所有继承该类的脚本都挂载同一个对象上，如GameManager、BattleManager、WindowManager等。这样做比每一个单例一个游戏物体更容易管理，调用出错率也低。用一个bool类型变量表示该对象是否在场景切换的时候销毁，然后监听场景变化的事件，做逻辑，根据布尔值将组件从物体上移除。
+
+**不需要继承Mono的单例：**
+
+```c#
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Singleton<T> where T:new()//约束T只能是class类型
+{
+    static T instance;
+    public static T Instance
+    {
+        get
+        {
+            if(instance == null)
+            {
+                instance = new T();
+            }
+            return instance;
+        }
+    }
+}
+```
+
+
+
+```c# Test.cs
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Test : MonoBehaviour
+{
+    // Start is called before the first frame update
+    void Start()
+    {
+        TestSingleton.Instance.MyFunc();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}
+public class TestSingleton : Singleton<TestSingleton>
+{
+    public void MyFunc()
+    {
+        Debug.Log("Singleton ...");
+    }
+}
+```
+
+**需要继承Mono的单例：**
+
+```c# MonoSingleton.cs
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class MonoSingleton<T> : MonoBehaviour where T:MonoBehaviour
+{
+    static T instance;
+    public static T Instance
+    {
+        get
+        {
+            if(MonoSingletonObject.go == null)
+            {
+                MonoSingletonObject.go = new GameObject("MonoSingletonObject");
+                DontDestroyOnLoad(MonoSingletonObject.go);
+            }
+            if(MonoSingletonObject.go != null && instance == null)
+            {
+                instance = MonoSingletonObject.go.AddComponent<T>();
+            }
+            return instance;
+        }
+    }
+    //
+    public static bool destroyOnLoad;
+    /// <summary>
+    /// 添加场景切换时候的事件
+    /// </summary>
+    public void AddSceneChangedEvent()
+    {
+        SceneManager.activeSceneChanged += OnSceneChanged;
+    }
+
+    private void OnSceneChanged(Scene arg0, Scene arg1)
+    {
+        if(destroyOnLoad == true)
+        {
+            if(instance != null)
+            {
+                DestroyImmediate(instance);//立即销毁
+                Debug.Log(instance == null);
+            }
+        }
+    }
+}
+/// <summary>
+/// 缓存一个游戏物体
+/// </summary>
+public class MonoSingletonObject
+{
+    public static GameObject go;
+}
+```
+
+
+
+```c# TestMonoSingleton.cs
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class TestMonoSingleton : MonoSingleton<TestMonoSingleton>
+{
+    public TestMonoSingleton()
+    {
+        destroyOnLoad = true;
+    }
+
+    public void Test()
+    {
+        Debug.Log("MonoSingleton ...");
+    }
+
+    void Start()
+    {
+        AddSceneChangedEvent();
+    }
+}
+```
+
+
+
+```c# Test.cs
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class Test : MonoBehaviour
+{
+    void Start()
+    {
+        TestMonoSingleton.Instance.Test();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+            SceneManager.LoadScene("02");
+    }
+}
+```
+
+
+
+**如何保证一个类只有一个实例并且这个实例易于被访问？**
+
+1. 全局变量：可以确保对象随时都可以被访问，但不能防止创建多个对象。
+2. 让类自身负责创建和保存它的唯一实例，并保证不能创建其他实例，它还提供一个访问该实例的方法。
+
+**单例模式**确保一个类中只有一个实例，并**提供一个全局访问点**来访问这个**唯一实例**。对象创建型模式。
+
+**单例模式的定义**：
+
+1. 某个类只能有一个实例；
+2. 必须自行创建这个实例；
+3. 必须自行向整个系统提供这个实例。
+
+# 一、结构
+
+# 二、实例说明
+
+# 三、单例模式的优点
+
+1. 提供了对唯一实例的受控访问；
+2. 可以节约系统资源，提高系统的性能；
+3. 允许可变数目的实例（多例类）。
+
+# 四、单例模式的缺点
+
+1. 扩展困难（缺少抽象层）；
+2. 单例类的职责过重；
+3. 由于自动垃圾回收机制，可能会导致共享的单例对象的状态丢失。
+
+# 五、单例模式的试用环境
+
+1. 系统只需要一个实例对象，或者因为资源消耗太大而只允许创建一个对象；
+2. 客户调用类的单个实例只允许使用一个公共访问点，除了该公共访问点，不能通过其他途径访问该实例。
