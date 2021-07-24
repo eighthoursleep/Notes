@@ -35,6 +35,62 @@
 
 回到VSCode ，按住`Ctrl+Shfit+P`，在弹窗的输入框中输入`Install from VSIX`（或简单输入`vsix`），再选择刚才下载好的`cpptools-win32.vsix`，VSCode 会自动安装，安装好后，重启 VSCode 即可。
 
+### 编译与运行Program.cpp
+
+新建一个cpp文件，取名Program.cpp，代码编写如下
+
+```cpp
+#include <iostream>
+int main(){
+    std::cout << "Hello I am Mingjun :)";
+    std::cout << std::endl;
+    return 0;
+}
+```
+
+使用g++命令编译
+
+```
+g++ Program.cpp
+```
+
+编译生成一个a.exe文件，因为没有指定生成的可执行文件的名字，所以默认为“a.exe”。我们空一通过 `-o`参数指定名字，即：
+
+```
+g++ Program.app -o Program
+```
+
+然后直接输入可执行文件名，即可执行（带不带文件名后缀均可）
+
+```
+F:\MyGitHub\Notes\Cpp\CppPrimer\Chapter_1>Program
+Hello I am Mingjun :)
+
+F:\MyGitHub\Notes\Cpp\CppPrimer\Chapter_1>a.exe
+Hello I am Mingjun :)
+```
+
+### g++常用命令
+
+`-c`生成`.o`目标文件
+
+`-o`可执行文件命名
+
+`-shared`指定生成动态链接库
+
+`-static`指定生成静态链接库
+
+`-L`要链接的库所在目录
+
+`-l`指定链接时需要的动态库，隐含命名规则，即在前加`lib`，在后加`.a`或`.so`确定库文件名
+
+### C++程序的编译过程
+
+1. **预处理**：宏的替换，消除注释，找相关库文件，命令：`g++ -E Program.cpp > Program.i`预处理不生成文件，需要重定向到一个输出文件`Program.i`里
+2. **编译**：将预处理后的文件转为汇编文件，命令：`g++ -S Program.cpp`生成`Program.s`文件
+3. **汇编**：将汇编文件转换为目标文件，命令：`g++ -c Program.cpp`生成`Program.o`文件
+4. **链接**：将目标文件和库文件整合为可执行文件，命令·：`g++ Program.o -o Program -L usr/include/iostream`，`-L`后的参数指定库文件目录
+
 ## VS 2017
 
 如果使用VS 2017开发，安装过程中注意勾选“Desktop development with C++”，这个组件包含C++命令编译器，而且该编译器还可用于创建基本的控制台程序、通用Windows平台程序、桌面程序、设备驱动和.NET组建。
