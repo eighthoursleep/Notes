@@ -1,15 +1,5 @@
----
-title: Unity 2018 UI基础
+# Unity 2018 UI基础
 date: 2020-02-19 19:17:46
-tags: Unity
-toc: true
----
-
-- 三种画布的添加
-- 不同分辨率的屏幕
-- 文本组件
-
-<!--more-->
 
 Unity版本：Unity 2018.4.13c1 Personal
 
@@ -58,13 +48,13 @@ HUD或状态条是游戏UI中视觉传达玩家信息的一种交互方式。
 
 想要看到那个Cube，需要将其放置在摄像机的视野中，我们将Cube位置重置，接着将Cube向Z轴正方向移动5个单位长度，使其正好在Main Camera正前方，此时我们得以在Game视窗中看到Cube，注意这个Cube不在画布上。
 
-![image-20200321191703903](C:\Users\WMJ\AppData\Roaming\Typora\typora-user-images\image-20200321191703903.png)
+![image-20200321191703903](Unity 2018 UI基础/image-20200321191703903.png)
 
 ## 2. Camera
 
 我们将Carves的Render Mode改成Screen Space - Camera，此时Render Camera没有指定，我们将Main Camera拖拽过去添加上。这时候我们发现Game视窗下的按钮消失了，我们选中Main Camera，将其Camera > Clipping Planes Far由原来的10改成100或1000此时我们又看到了button，或者不改变摄像机的可视范围，将Canves的Plane Distance(平面距离)改为5，即把画布移到摄像机的可视范围内，也同样在Game视窗中显示button。
 
-![image-20200321202535660](C:\Users\WMJ\AppData\Roaming\Typora\typora-user-images\image-20200321202535660.png)
+![image-20200321202535660](Unity 2018 UI基础/image-20200321202535660.png)
 
 ## 3. World Space
 
@@ -72,13 +62,13 @@ HUD或状态条是游戏UI中视觉传达玩家信息的一种交互方式。
 
 接下来我们将按钮Y方向旋转一定角度。
 
-![image-20200321203804848](C:\Users\WMJ\AppData\Roaming\Typora\typora-user-images\image-20200321203804848.png)
+![image-20200321203804848](Unity 2018 UI基础/image-20200321203804848.png)
 
-![image-20200321203711010](C:\Users\WMJ\AppData\Roaming\Typora\typora-user-images\image-20200321203711010.png)
+![image-20200321203711010](Unity 2018 UI基础/image-20200321203711010.png)
 
 再看Game视窗，可以看到倾斜的按钮
 
-![image-20200321204017725](C:\Users\WMJ\AppData\Roaming\Typora\typora-user-images\image-20200321204017725.png)
+![image-20200321204017725](Unity 2018 UI基础/image-20200321204017725.png)
 
 
 

@@ -1,21 +1,13 @@
----
-title: DarkSoulsDemo（五）角色冲刺
+# DarkSoulsDemo part 5 角色冲刺
 date: 2020-06-20 18:50:42
-tags: Unity
-categories: DarkSoulsDemo with Unity
----
 
-关键词：混合树，脚本控制
-
-<!--more-->
-
-本文出自：https://www.youtube.com/watch?v=gyqfmE_1aus&t=315s
+本文根据视频：https://www.youtube.com/watch?v=gyqfmE_1aus&t=315s
 
 ## 一、导入、添加冲刺动画片段
 
 打开动画控制器Humanoid，双击进入Locomotion，选中Blend Tree，在Inspector的Motion列表里点击加号新增动作域，将动画片段Sprint拖入。修改Pos X、Pos Y的值分别为0、2。
 
-![image-20200621112053231](image-20200621112053231.png)
+![image-20200621112053231](DarkSoulsDemo part 5 角色冲刺/image-20200621112053231.png)
 
 ## 二、修改脚本
 

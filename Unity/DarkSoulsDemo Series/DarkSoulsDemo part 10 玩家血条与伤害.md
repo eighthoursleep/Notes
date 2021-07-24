@@ -1,33 +1,23 @@
----
-title: DarkSoulsDemo（十）玩家血条与伤害
+# DarkSoulsDemo part 10 玩家血条与伤害
 date: 2020-06-23 15:41:04
-tags: 
-- Unity
-- UGUI
-categories: DarkSoulsDemo with Unity
----
-
-关键词：UI
-
-<!--more-->
 
 ## 一、放置UI元素
 
 在Hierarchy新建UI|Canvas，在Canvas下新建一个空物体，取名Health Bar，调整Health Bar的锚点。
 
-![image-20200624145622308](image-20200624145622308.png)
+![image-20200624145622308](DarkSoulsDemo part 10 玩家血条与伤害/image-20200624145622308.png)
 
 在Health Bar下新建两个Image，分别命名为Health Bar Fill和Health Bar Background，将它们的锚点都设置为stretch-stretch（按住Alt键）。
 
 Health Bar Fill|Image|Color设置为红色，Health Bar Background|Image|Color设置为黑色。将Health Bar Fill拖拽到Health Bar Background下方（使Health Bar Fil遮挡住Health Bar Backgroundl）。
 
-![image-20200624151034891](image-20200624151034891.png)
+![image-20200624151034891](DarkSoulsDemo part 10 玩家血条与伤害/image-20200624151034891.png)
 
-![image-20200624150658383](image-20200624150658383.png)
+![image-20200624150658383](DarkSoulsDemo part 10 玩家血条与伤害/image-20200624150658383.png)
 
 给Health Bar添加组件Slider，取消勾选IsInteractable，Transition和Navigation设置为None，将Health Bar Fill拖入Fill Rect。这时我们通过滑动Value滑条控制Health Bar Fill。
 
-![image-20200624150935440](image-20200624150935440.png)
+![image-20200624150935440](DarkSoulsDemo part 10 玩家血条与伤害/image-20200624150935440.png)
 
 ## 二、添加脚本
 
@@ -63,7 +53,7 @@ namespace MJ
 
 将Health Bar拖拽到Health Bar|Health Bar ( Script )|Slider
 
-![image-20200624153849967](image-20200624153849967.png)
+![image-20200624153849967](DarkSoulsDemo part 10 玩家血条与伤害/image-20200624153849967.png)
 
 给Player新建并添加一个PlayerStats.cs，编写脚本如下：
 
@@ -106,11 +96,11 @@ namespace MJ
 
 回到Unity编辑器，将Health Bar拖拽到Player|Player Stats (Script)|Health Bar。
 
-![image-20200624151725325](image-20200624151725325.png)
+![image-20200624151725325](DarkSoulsDemo part 10 玩家血条与伤害/image-20200624151725325.png)
 
 选中EventSystem，在其Standalone Input Module组件里会有兼容性警告，点击下方的Replace with InputSystemUIInputModule按钮即可。
 
-![image-20200624152352812](image-20200624152352812.png)
+![image-20200624152352812](DarkSoulsDemo part 10 玩家血条与伤害/image-20200624152352812.png)
 
 ## 三、做一个扣血物体
 
@@ -142,13 +132,13 @@ namespace MJ
 
 播放游戏，控制角色碰到Fire，左上角血条将减去一块。
 
-![image-20200624154206030](image-20200624154206030.png)
+![image-20200624154206030](DarkSoulsDemo part 10 玩家血条与伤害/image-20200624154206030.png)
 
 ## 四、添加受伤动画、阵亡动画
 
 想Animotor窗口网格区域拖入动画片段R_Damage_Left_02、R_Dead_04，分别重命名为Damage_Left、Dead，然后仅仅将Damage_Left这一个状态转向Empty状态。
 
-![image-20200624162650119](image-20200624162650119.png)
+![image-20200624162650119](DarkSoulsDemo part 10 玩家血条与伤害/image-20200624162650119.png)
 
 编辑PlayerStats.cs，t添加变量animatorHandler声明，用Awake方法获取，在TakeDamage方法里调用如下：
 
@@ -175,9 +165,9 @@ public void TakeDamage(int damage)
 
 保存脚本，播放游戏，当角色碰到Fire时，有受伤动画，当角色血条全黑时，有死亡动画。
 
-![image-20200624160242340](image-20200624160242340.png)
+![image-20200624160242340](DarkSoulsDemo part 10 玩家血条与伤害/image-20200624160242340.png)
 
-![image-20200624160621353](image-20200624160621353.png)
+![image-20200624160621353](DarkSoulsDemo part 10 玩家血条与伤害/image-20200624160621353.png)
 
 ## 五、脚本汇总
 

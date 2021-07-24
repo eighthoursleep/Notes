@@ -1,14 +1,5 @@
----
-title: UGUI按钮长按持续调用
+# UGUI按钮长按持续调用
 date: 2020-10-04 13:37:00
-tags: Unity
-categories: UGUI
-widgets: null
----
-
-UGUI按钮长按持续调用
-
-<!--more-->
 
 给按钮添加Event Trigger组件，点击Add New Event Type添加事件类型：PointerDown、PointerUp
 

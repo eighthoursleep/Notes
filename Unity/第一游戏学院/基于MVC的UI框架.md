@@ -1,18 +1,9 @@
----
-title: 基于MVC的UI框架
+# 基于MVC的UI框架
 date: 2020-04-22 11:01:11
-tag: Unity
-toc: true
-categories: 设计模式
----
-
-MVC
-
-<!--more-->
 
 # MVC框架介绍
 
-![image-20200811165446218](image-20200811165446218.png)
+![image-20200811165446218](基于MVC的UI框架/image-20200811165446218.png)
 
 ## Mode数据模型
 

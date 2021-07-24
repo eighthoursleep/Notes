@@ -1,13 +1,5 @@
----
-title: DarkSoulsDemo（六）重组脚本
+# DarkSoulsDemo part 6 重组脚本
 date: 2020-06-21 12:20:20
-tags: Unity
-categories: DarkSoulsDemo with Unity
----
-
-关键词：脚本，功能结构
-
-<!--more-->
 
 ## 一、功能结构概况
 

@@ -1,14 +1,5 @@
----
-title: xLua热更新解决方案
+# xLua热更新解决方案
 date: 2020-07-07 19:04:46
-widgets: null
-tags: Lua
-categories: xLua
----
-
-xLua准备、C#调用Lua、Lua调用C#、xLua热补丁
-
-<!--more-->
 
 ## xLua框架导入和AB包相关准备
 

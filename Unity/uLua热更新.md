@@ -1,14 +1,7 @@
----
-title: uLua热更新
+# uLua热更新
 date: 2020-08-06 08:51:05
-tags: Lua
-toc: true
-categories: 热更新
----
 
 关键文件：LuaInterface.dll
-
-<!--more-->
 
 # 什么是热更新？
 

@@ -1,13 +1,5 @@
----
-title: Transform组件
+# Transform组件
 date: 2020-07-12 21:09:42
-tags: Unity
-toc: true
----
-
-Position、Rotation、Scale、Translate()、Rotate()、Rotate()、LookAt()、Transform维护父子关系
-
-<!--more-->
 
 ## 位置（Position）
 

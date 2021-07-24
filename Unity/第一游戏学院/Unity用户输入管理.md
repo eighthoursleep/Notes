@@ -1,12 +1,5 @@
----
-title: Unity用户输入管理
+# Unity用户输入管理
 date: 2020-04-22 21:41:00
-tag: Unity
----
-
-虚拟轴、获取键盘事件、获取鼠标事件、移动设备输入
-
-<!--more-->
 
 # 一、虚拟轴
 
@@ -20,7 +13,7 @@ tag: Unity
 
 我们可以在菜单栏|Edit|Project Settings...|Input Manager里查看有关玩家输入的设置
 
-![image-20200423165430439](image-20200423165430439.png)
+![image-20200423165430439](Unity用户输入管理/image-20200423165430439.png)
 
 新建一个Test.cs，将其作为组件添加到一个物体上比如一个Capsule。，编辑Test.cs如下：
 

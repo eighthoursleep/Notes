@@ -1,13 +1,7 @@
----
-title:  用Unity 2019制作俄罗斯方块
+# 用Unity 2019制作俄罗斯方块
 date: 2020-04-09 21:26:00
-tag: Unity
-widgets: null
----
 
 版本：Unity 2019.3.4f1 Personal
-
-<!--more-->
 
 # 脚本
 

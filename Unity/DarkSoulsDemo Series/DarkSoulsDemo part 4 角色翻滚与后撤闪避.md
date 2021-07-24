@@ -1,15 +1,7 @@
----
-title: DarkSoulsDemo（四）角色翻滚与后撤闪避
+# DarkSoulsDemo part 4 角色翻滚与后撤闪避
 date: 2020-06-20 14:48:38
-tags: Unity
-categories: DarkSoulsDemo with Unity
----
 
-关键词：脚本控制
-
-<!--more-->
-
-本篇出自：https://www.youtube.com/watch?v=RVWh-YAQElQ
+本篇根据视频：https://www.youtube.com/watch?v=RVWh-YAQElQ
 
 资源链接：https://assetstore.unity.com/packages/3d/animations/runner-action-animation-pack-153906
 
@@ -29,7 +21,7 @@ Step_Back => Locomotion
 
 添加Bool类型参数IsInteracting
 
-![image-20200620164015991](image-20200620164015991.png)
+![image-20200620164015991](DarkSoulsDemo part 4 角色翻滚与后撤闪避/image-20200620164015991.png)
 
 ## 二、编辑脚本
 
@@ -104,7 +96,7 @@ public void PlayerTargetAnimation(string targetAnim, bool isInteracting)
 
 回到Unity编辑器，打开PlayerControls，添加Action Map，命名为Player Action。添加Action，取名Roll，Action Type为Button，添加绑定Button East [Gamepad]、Left Shift [Keyboard]。
 
-![image-20200620165518739](image-20200620165518739.png)
+![image-20200620165518739](DarkSoulsDemo part 4 角色翻滚与后撤闪避/image-20200620165518739.png)
 
 打开InputHandler.cs，添加声明bool类型变量b_Input、rollFlag，编写方法HandleRollInput：
 
@@ -218,7 +210,7 @@ namespace MJ
 
 回到Animator窗口，选中Rolling窗台，在Inspector点击Add Behaviour，命名ResetIsInteracting，创建并添加脚本。
 
-![image-20200620173856244](image-20200620173856244.png)
+![image-20200620173856244](DarkSoulsDemo part 4 角色翻滚与后撤闪避/image-20200620173856244.png)
 
 ResetIsInteracting.cs编写如下：
 
@@ -240,7 +232,7 @@ public class ResetIsInteracting : StateMachineBehaviour
 
 对Step_Back也应用上该脚本
 
-![image-20200620174243260](image-20200620174243260.png)
+![image-20200620174243260](DarkSoulsDemo part 4 角色翻滚与后撤闪避/image-20200620174243260.png)
 
 在AnimatorHandler.cs里声明变量inputHandler和playerLocomotion，在Initialize方法里获取，添加OnAnimatorMove方法。
 
@@ -273,15 +265,15 @@ private void OnAnimatorMove()
 
 给Player添加PlayerLocomotion脚本
 
-![image-20200620175732776](image-20200620175732776.png)
+![image-20200620175732776](DarkSoulsDemo part 4 角色翻滚与后撤闪避/image-20200620175732776.png)
 
 好，现在播放游戏，可以在按方向键的同时按键盘左Shift键实现角色翻滚，单按Shift键原地后撤步闪避了。翻滚姿势截图有点丑，将就看吧。
 
-![image-20200620183304778](image-20200620183304778.png)
+![image-20200620183304778](DarkSoulsDemo part 4 角色翻滚与后撤闪避/image-20200620183304778.png)
 
-![image-20200620183355596](image-20200620183355596.png)
+![image-20200620183355596](DarkSoulsDemo part 4 角色翻滚与后撤闪避/image-20200620183355596.png)
 
-![image-20200620183523775](image-20200620183523775.png)
+![image-20200620183523775](DarkSoulsDemo part 4 角色翻滚与后撤闪避/image-20200620183523775.png)
 
 ## 六、脚本汇总
 

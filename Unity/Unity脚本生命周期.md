@@ -1,9 +1,5 @@
----
-title: Unity脚本生命周期
+# Unity脚本生命周期
 date: 2020-08-24 08:06:14
-tags: Unity
-widgets: null
----
 
 Unity中定义了十个重要的事件函数，按照执行的先后次序依次为以下内容：
 
@@ -20,4 +16,4 @@ Unity中定义了十个重要的事件函数，按照执行的先后次序依次
 9. OnDisable：脚本禁用函数，当脚本禁用的时候触发。随着脚本的不断启用于禁用可以执行多次。
 10. OnDestroy：销毁函数，本脚本所属游戏对象销毁的时候执行脚本，仅执行一次。
 
-![graph](graph.png)
+![graph](Unity脚本生命周期/graph.png)

@@ -1,12 +1,7 @@
----
-title: UGUI图形交互系统
+# UGUI图形交互系统
 date: 2020-04-04 13:47:00
-tag: Unity
----
 
 Unity版本：Unity 2019.3.4f1
-
-<!--more-->
 
 # 画布与事件系统
 
@@ -28,19 +23,19 @@ Unity版本：Unity 2019.3.4f1
 
 如果我们在画布上放一个Image，颜色设置为黄颜色，主摄像机前放一个白色的Cube。我们无论在场景窗口里怎么放置Cube，都无法挡住画布上的黄颜色Image。
 
-![image-20200404205327401](image-20200404205327401.png)
+![image-20200404205327401](UGUI图形交互系统/image-20200404205327401.png)
 
 当我们将渲染模式设置为**Scream Space - Camera**时，把Main Camera拖拽到Render Mode下方的Render Camera，设置Plane Distance为2。这时我们将Cube移动靠近摄像机，画布上的Image可以被Cube挡住。
 
-![image-20200404211200418](image-20200404211200418.png)
+![image-20200404211200418](UGUI图形交互系统/image-20200404211200418.png)
 
-![image-20200404210645047](image-20200404210645047.png)
+![image-20200404210645047](UGUI图形交互系统/image-20200404210645047.png)
 
 屏幕空间 - 摄像机模式使用较少，适用于比如说在UI前边播放3D粒子效果。
 
 当我们把渲染模式设置为World Space，画布可以随意移动和改变大小（前两个模式不可以），但只有出现在摄像机视野内才会被渲染到。适用于制作游戏中的敌人血条、立体互动广告牌等。
 
-![image-20200404212143185](image-20200404212143185.png)
+![image-20200404212143185](UGUI图形交互系统/image-20200404212143185.png)
 
 
 
@@ -76,19 +71,19 @@ Unity版本：Unity 2019.3.4f1
 
 选中UI/公用下的所有素材，在Inspector里设置Texture Type为Sprite(2D and UI)，点击Apply。
 
-![image-20200409220746711](image-20200409220746711.png)
+![image-20200409220746711](UGUI图形交互系统/image-20200409220746711.png)
 
 将BG01的Sprite拖拽到Image的Image组件|Source Image。
 
-![image-20200409221207909](image-20200409221207909.png)
+![image-20200409221207909](UGUI图形交互系统/image-20200409221207909.png)
 
 然后用给画布新添一个Image，重命名为BG，Source Image拖入“公用”文件夹下的Logo，点击Set Native Size(设置原生大小)
 
-![image-20200409221505464](image-20200409221505464.png)
+![image-20200409221505464](UGUI图形交互系统/image-20200409221505464.png)
 
 重命名为Logo，然后移动到背景左上角
 
-![image-20200409222853090](image-20200409222853090.png)
+![image-20200409222853090](UGUI图形交互系统/image-20200409222853090.png)
 
 在画布下新建一个UI|Panel（面板），默认和画布大小一致，重命名为UserPanel，将BG和Logo拖拽到UserPanel子项。
 
@@ -106,21 +101,21 @@ Unity版本：Unity 2019.3.4f1
 
 通过上述类似方法，给UserPanel添加按钮：WebsiteBtn、ContactsBtn、RetrievePWDBtn、LoginBtn、RegisterBtn
 
-![image-20200409230946776](image-20200409230946776.png)
+![image-20200409230946776](UGUI图形交互系统/image-20200409230946776.png)
 
 给UserPanel添加UI|Text，设置文本组件如下：
 
-![image-20200410111607619](image-20200410111607619.png)
+![image-20200410111607619](UGUI图形交互系统/image-20200410111607619.png)
 
 给UserPanel添加UI|InputField（文本输入框），摆放到合适位置，调整大小合适，选中其子项Placeholder和Text，在Inspector里修改字体大小（Font Size）为20。
 
 复制一个InputField，将两个InputField的Image组件|Color设为透明。修改两个文本输入框的Placeholder、Text的Text组件设置。选中密码输入的InputField，可以修改其Input Field组件的Content Type（内容类型）为Password。完成设置后，将账号输入框重命名为UserInputField，将密码输入框重命名为PWDInputField。
 
-![image-20200410115134419](image-20200410115134419.png)
+![image-20200410115134419](UGUI图形交互系统/image-20200410115134419.png)
 
-![image-20200410115238890](image-20200410115238890.png)
+![image-20200410115238890](UGUI图形交互系统/image-20200410115238890.png)
 
-![image-20200410115329852](image-20200410115329852.png)
+![image-20200410115329852](UGUI图形交互系统/image-20200410115329852.png)
 
 为了让UI元素的摆放和美术人员给的效果图一致，我们可以采用如下方法改进：
 
@@ -183,7 +178,7 @@ public class UserPanel : MonoBehaviour
 
 将“UI/公共”路径下的BG02放入UserPanel的UserPanel脚本组件|bg中，播放游戏，可以看到游戏一启动我们的背景图换成了BG02，在账号输入框和密码输入框输入文本，点击登录按钮，Unity控制台窗口打印账号和密码内容，点击官网按钮，打开英雄联盟官网。
 
-![image-20200410144454523](image-20200410144456902.png)
+![image-20200410144454523](UGUI图形交互系统/image-20200410144456902.png)
 
 
 
@@ -193,15 +188,15 @@ public class UserPanel : MonoBehaviour
 
 给UserPanel添加UI|Toggle，编辑Toggle下的Label的Text组件|Text。
 
-![image-20200410171601814](image-20200410171601814.png)
+![image-20200410171601814](UGUI图形交互系统/image-20200410171601814.png)
 
 选中Toggle下的Background，调整勾选框致合适大小，选中Background下的Checkmark，将其锚点设置为stretch-stretch。
 
-![image-20200410171834994](image-20200410171834994.png)
+![image-20200410171834994](UGUI图形交互系统/image-20200410171834994.png)
 
 播放游戏，当Toggle被勾选上时，Toggle的Toggle组件下的Is On会被勾选
 
-![image-20200410172021614](image-20200410172021614.png)
+![image-20200410172021614](UGUI图形交互系统/image-20200410172021614.png)
 
 修改我们的UserPanel.cs，添加一个Toggle类型变量toggle，Start方法添加获取Toggle语句。
 
@@ -242,11 +237,11 @@ private void loginBtnOnClick()
 
 我们复制三个Toggle，再新建一个空的GameObject，给空GameObject添加Toggle Group组件，同时选中前边的三个Toggle，将GameObject拽到Inspector的Toggle组件|Group下。
 
-![image-20200410173308051](image-20200410173308051.png)
+![image-20200410173308051](UGUI图形交互系统/image-20200410173308051.png)
 
 播放游戏，这三个勾选框只允许勾选其中一个。
 
-![image-20200410173544673](image-20200410173544673.png)
+![image-20200410173544673](UGUI图形交互系统/image-20200410173544673.png)
 
 
 
@@ -256,11 +251,11 @@ private void loginBtnOnClick()
 
 在SettingPanel下新建一个UI|Slider，我们可以对它的三个子项进行个性化设置，我在此只修改了大小和颜色。
 
-![image-20200410180311571](image-20200410180311571.png)
+![image-20200410180311571](UGUI图形交互系统/image-20200410180311571.png)
 
 当我们播放游戏时，滑动Slider可以改变其Slider组件|Value的值
 
-![image-20200410180625592](image-20200410180625592.png)
+![image-20200410180625592](UGUI图形交互系统/image-20200410180625592.png)
 
 要在脚本中获取滑动条的值，我们先创建一个SettingPanel.cs，编写代码如下：
 
@@ -296,15 +291,15 @@ public class SettingPanel : MonoBehaviour
 
 给Canvas新建一个UI|Scrow View（滚动视图）,我们可以在Scrow View|Viewport|Content下放入要装的UI元素比如图片。
 
-![image-20200410213421959](image-20200410213421959.png)
+![image-20200410213421959](UGUI图形交互系统/image-20200410213421959.png)
 
 Content是我们要填装UI元素的容器，单独选中Content改变其大小可以展示总面积。如上图，在其中放入Image后还需要适当调整Image的位置。
 
-![image-20200410214338872](image-20200410214338872.png)
+![image-20200410214338872](UGUI图形交互系统/image-20200410214338872.png)
 
 Handle是滑条，要改变滑条背景需要在Scrollbar Horizontal/Vertical里设置。
 
-![image-20200410213852276](image-20200410213852276.png)
+![image-20200410213852276](UGUI图形交互系统/image-20200410213852276.png)
 
 
 
@@ -312,13 +307,13 @@ Handle是滑条，要改变滑条背景需要在Scrollbar Horizontal/Vertical里
 
 在滚动视图的Viewport里有一个Mask组件，当我们取消勾选后，将显示被遮住的内容。
 
-![image-20200410214533455](image-20200410214533455.png)
+![image-20200410214533455](UGUI图形交互系统/image-20200410214533455.png)
 
 我们给Panel新建一个Image，展示颜色为红色，选中Image再新建一个Image，设置颜色为黄色。调整黄色Image的大小使之盖过红色Image，当我们给父物体红色Image添加Mask组件后，子物体黄色Image超出部分会被父物体的遮罩覆盖。
 
-![image-20200410215829723](image-20200410215829723.png)
+![image-20200410215829723](UGUI图形交互系统/image-20200410215829723.png)
 
-![image-20200410215921935](image-20200410215921935.png)
+![image-20200410215921935](UGUI图形交互系统/image-20200410215921935.png)
 
 
 
@@ -326,7 +321,7 @@ Handle是滑条，要改变滑条背景需要在Scrollbar Horizontal/Vertical里
 
 给Content添加组件Horizontal/Vertical/Grid Layout Group，将使content内的UI元素全部呈水平/垂直排列，并做针对设置。下图给了一个垂直布局组件效果，同时我也在Padding处设置了边距
 
-![image-20200410221507116](image-20200410221507116.png)
+![image-20200410221507116](UGUI图形交互系统/image-20200410221507116.png)
 
 
 
@@ -334,7 +329,7 @@ Handle是滑条，要改变滑条背景需要在Scrollbar Horizontal/Vertical里
 
 给Content下的UI元素比如Image添加Layout Element组件后，勾选Ignore Layout，该Image将不受其他三种布局组件影响，可以随意放置。
 
-![image-20200410222931803](image-20200410222931803.png)
+![image-20200410222931803](UGUI图形交互系统/image-20200410222931803.png)
 
 
 
@@ -342,7 +337,7 @@ Handle是滑条，要改变滑条背景需要在Scrollbar Horizontal/Vertical里
 
 给Content添加组件Content Size Fitter，在Content Size Fitter|Vertical Fit选择Preferrd Size，Content的尺寸大小将根据内容布局自动调整。
 
-![image-20200411104056877](image-20200411104056877.png)
+![image-20200411104056877](UGUI图形交互系统/image-20200411104056877.png)
 
 将Panel重命名为HeroPanel，将Content下第一个Image重命名做成预制体Hero，创建脚本HeroPanel.cs，编写代码如下：
 
@@ -375,19 +370,19 @@ public class HeroPanel : MonoBehaviour
 
 将HeroPanel.cs添加到HeroPanel，将Hero预制体拖入HeroPanel组件|hero，将Content拖入HeroPanel组件|content。播放游戏，当我们删掉Content下大部分Image，然后鼠标在Game窗口里点击一下，按A键克隆Hero，选中Content我们可看到Content随着Hero的增加动态调节尺寸适应内容。
 
-![image-20200411105741808](image-20200411105741808.png)
+![image-20200411105741808](UGUI图形交互系统/image-20200411105741808.png)
 
-![image-20200411105811893](image-20200411105811893.png)
+![image-20200411105811893](UGUI图形交互系统/image-20200411105811893.png)
 
 内容尺寸适配器的另一种常见用法：
 
 给HeroPanel添加一个Text，给Text添加组件Content Size Fitter，Content Size Fitter下边两个属性全部设置为Preferrd Size。
 
-![image-20200411110920125](image-20200411110920125.png)
+![image-20200411110920125](UGUI图形交互系统/image-20200411110920125.png)
 
 我们输入成段的文本，Content对根据包括换行回车在内的文本内容进行自适应。
 
-![image-20200411111028122](image-20200411111028122.png)
+![image-20200411111028122](UGUI图形交互系统/image-20200411111028122.png)
 
 
 

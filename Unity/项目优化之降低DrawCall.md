@@ -1,13 +1,7 @@
----
-title: 项目优化之降低DrawCall
+# 项目优化之降低DrawCall
 date: 2020-10-05 10:00:33
-tags: Unity
-toc: true
----
 
 一个模型的数据经过CPU传输到GPU，并命令GPU进行绘制，称为一次DrawCall。
-
-<!--more-->
 
 # DrawCall基本原理
 

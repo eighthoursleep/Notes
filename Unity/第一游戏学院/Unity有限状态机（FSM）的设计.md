@@ -1,13 +1,5 @@
----
-title: Unity有限状态机（FSM）的设计
+# Unity有限状态机（FSM）的设计
 date: 2020-08-10 12:13:00
-tags: Unity
-toc: true
----
-
-关键词：
-
-<!--more-->
 
 ## 一、有限状态机的介绍
 

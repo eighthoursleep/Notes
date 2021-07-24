@@ -1,12 +1,5 @@
----
-title: MonoBehaviour类
+# MonoBehaviour类
 date: 2020/06/25 12:23:00
-tags: Unity
----
-
-关键词：Awake()、Start()、OnEnable()、OnDisable()、OnApplicationPause()、OnApplicationFocus()、OnApplicationQuit()、FixUpdate()、LateUpdate()、Update()
-
-<!--more-->
 
 所有的Unity组件都是MonoBehaviour的子类。脚本里自定义的类如果继承MonoBehaviour则可以通过组件的方式挂载到物体上，且这个类不能直接用new关键字生成一个对象。
 
@@ -74,7 +67,7 @@ public class MyTest2 : MonoBehaviour
 }
 ```
 
-![image-20200712210028284](image-20200712210028284.png)
+![image-20200712210028284](MonoBehaviour类/image-20200712210028284.png)
 
 ## Start方法
 
@@ -129,9 +122,9 @@ public class Test : MonoBehaviour
 
 ```
 
-![image-20200709222106738](D:/blogGitee/source/_posts/image-20200709222106738.png)
+![image-20200709222106738](MonoBehaviour类/image-20200709222106738.png)
 
-![image-20200709223152382](image-20200709223152382.png)
+![image-20200709223152382](MonoBehaviour类/image-20200709223152382.png)
 
 
 
