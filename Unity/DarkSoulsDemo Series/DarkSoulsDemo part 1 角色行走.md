@@ -25,73 +25,73 @@ FBX文件：LowPolyMan.fbx
 
 打开Packages Manager，安装Input System，如果没找到可以点击Advanced|Show preview packages。
 
-![image-20200618204104291](DarkSoulsDemo part 1 角色行走/image-20200618204104291.png)
+![image-20200618204104291](DarkSoulsDemo_part_1_角色行走/image-20200618204104291.png)
 
 安装过程中会弹出对话窗口，点击Yes。安装完后Unity编辑器将自动重启。
 
 在项目窗口右键，选中Create|Input Action。
 
-![image-20200618204357104](DarkSoulsDemo part 1 角色行走/image-20200618204357104.png)
+![image-20200618204357104](DarkSoulsDemo_part_1_角色行走/image-20200618204357104.png)
 
 重命名为PlayerControls，这个将控制控制器的输入。选中PlayerControls，在Inspector勾选Generate C# Class，点击Apply。
 
-![image-20200618204651632](DarkSoulsDemo part 1 角色行走/image-20200618204651632.png)
+![image-20200618204651632](DarkSoulsDemo_part_1_角色行走/image-20200618204651632.png)
 
 这时，PlayerControls.cs会被自动创建，我们双击打开PlayerControls（Input Action）。
 
 点击加号添加一个Action Maps，命名为Player Movement，添加两个Action，分别命名为Movement、Camera。修改Movement的属性Action|Action Type为Pass Through，Control Type为Vector 2
 
-![image-20200618205504866](DarkSoulsDemo part 1 角色行走/image-20200618205504866.png)
+![image-20200618205504866](DarkSoulsDemo_part_1_角色行走/image-20200618205504866.png)
 
-![image-20200618214052176](DarkSoulsDemo part 1 角色行走/image-20200618214052176.png)
+![image-20200618214052176](DarkSoulsDemo_part_1_角色行走/image-20200618214052176.png)
 
 删掉Movement下的\<No Binding\>（右键选择Delete），点击Movementy同行右边的加号，选择Add 2D Vector Composite。
 
-![image-20200618205756335](DarkSoulsDemo part 1 角色行走/image-20200618205756335.png)
+![image-20200618205756335](DarkSoulsDemo_part_1_角色行走/image-20200618205756335.png)
 
 重命名为WASD，设置它的属性Composite|Composite Type为2D Vector，Mode为Analog
 
-![image-20200618205956087](DarkSoulsDemo part 1 角色行走/image-20200618205956087.png)
+![image-20200618205956087](DarkSoulsDemo_part_1_角色行走/image-20200618205956087.png)
 
 设置WASD下的四个动作如下，
 
-![image-20200618213926007](DarkSoulsDemo part 1 角色行走/image-20200618213926007.png)
+![image-20200618213926007](DarkSoulsDemo_part_1_角色行走/image-20200618213926007.png)
 
-![image-20200618210207321](DarkSoulsDemo part 1 角色行走/image-20200618210207321.png)
+![image-20200618210207321](DarkSoulsDemo_part_1_角色行走/image-20200618210207321.png)
 
-![image-20200618213731388](DarkSoulsDemo part 1 角色行走/image-20200618213731388.png)
+![image-20200618213731388](DarkSoulsDemo_part_1_角色行走/image-20200618213731388.png)
 
-![image-20200618213821839](DarkSoulsDemo part 1 角色行走/image-20200618213821839.png)
+![image-20200618213821839](DarkSoulsDemo_part_1_角色行走/image-20200618213821839.png)
 
 选择Camera下的\<No Binding>，设置Path为Right Stick [Gamepad]，添加Processor Stick Deadzone。
 
-![image-20200618214330830](DarkSoulsDemo part 1 角色行走/image-20200618214330830.png)
+![image-20200618214330830](DarkSoulsDemo_part_1_角色行走/image-20200618214330830.png)
 
-![image-20200618214529084](DarkSoulsDemo part 1 角色行走/image-20200618214529084.png)
+![image-20200618214529084](DarkSoulsDemo_part_1_角色行走/image-20200618214529084.png)
 
 在Camera下添加Binding，设置Path为Delta[Mouse]，添加属性Normalize Vector 2。
 
-![image-20200618214645347](DarkSoulsDemo part 1 角色行走/image-20200618214645347.png)
+![image-20200618214645347](DarkSoulsDemo_part_1_角色行走/image-20200618214645347.png)
 
-![image-20200618214755135](DarkSoulsDemo part 1 角色行走/image-20200618214755135.png)
+![image-20200618214755135](DarkSoulsDemo_part_1_角色行走/image-20200618214755135.png)
 
-![image-20200618215016354](DarkSoulsDemo part 1 角色行走/image-20200618215016354.png)
+![image-20200618215016354](DarkSoulsDemo_part_1_角色行走/image-20200618215016354.png)
 
 然后关闭窗口，在弹出的对话框中选择Save。
 
 然后打开Project Setting，选中Input System Package，点击Create settings asset按钮，修改Default Hold Time为0。
 
-![image-20200618215441893](DarkSoulsDemo part 1 角色行走/image-20200618215441893.png)
+![image-20200618215441893](DarkSoulsDemo_part_1_角色行走/image-20200618215441893.png)
 
 ## 三、给角色添加碰撞体组件和刚体组件
 
 给Player添加胶囊碰撞体组件，设置属性Radus为0.3，Height为2。
 
-![image-20200618215824983](DarkSoulsDemo part 1 角色行走/image-20200618215824983.png)
+![image-20200618215824983](DarkSoulsDemo_part_1_角色行走/image-20200618215824983.png)
 
 添加Rigidbody组件，勾选Constraints Freeze Rotation X、Y、Z。
 
-![image-20200618220003141](DarkSoulsDemo part 1 角色行走/image-20200618220003141.png)
+![image-20200618220003141](DarkSoulsDemo_part_1_角色行走/image-20200618220003141.png)
 
 ## 四、编写脚本实现角色转向
 
@@ -237,7 +237,7 @@ namespace MJ {
 
 回到Unity编辑器，将InputHandler.cs和PlayerLocomotion.cs添加到Player
 
-![image-20200618220941129](DarkSoulsDemo part 1 角色行走/image-20200618220941129.png)
+![image-20200618220941129](DarkSoulsDemo_part_1_角色行走/image-20200618220941129.png)
 
 播放游戏，通过WASD我们可以控制角色在平面上“滑行”。
 
@@ -372,7 +372,7 @@ void Update(){
 
 保存修改后的脚本，回到Unity编辑器，将AnimatorHandler.cs添加到Player的子项Player，勾选Can Rotate。
 
-![image-20200618223109582](DarkSoulsDemo part 1 角色行走/image-20200618223109582.png)
+![image-20200618223109582](DarkSoulsDemo_part_1_角色行走/image-20200618223109582.png)
 
 播放游戏，想在控制角色移动，角色会转向。
 
@@ -393,17 +393,17 @@ private void HandleRotation(float delta)
 
 在Assets/Animator下新建一个Animator Controller，命名为Humanoid，将其拖拽添加到场景中Player|Player|Animator|Controller，双击Humanoid打开并进入Animtor窗口。
 
-![image-20200618224129014](DarkSoulsDemo part 1 角色行走/image-20200618224129014.png)
+![image-20200618224129014](DarkSoulsDemo_part_1_角色行走/image-20200618224129014.png)
 
 点击Parameters标签，点击加号添加两个Float类型参数Horizontal、Vertical。
 
 然后回到Layers标签，在Base Layer新建混合树，重命名为Locomotion。
 
-![image-20200618225000001](DarkSoulsDemo part 1 角色行走/image-20200618225000001.png)
+![image-20200618225000001](DarkSoulsDemo_part_1_角色行走/image-20200618225000001.png)
 
 双击进入Locomotion，将Blend Tree的混合模式设为2D Freeform Cartesian，设置参数Horizontal、Vertical，在Motion列表添加三个动作域，并分别做如下配置。
 
-![image-20200618225850260](DarkSoulsDemo part 1 角色行走/image-20200618225850260.png)
+![image-20200618225850260](DarkSoulsDemo_part_1_角色行走/image-20200618225850260.png)
 
 如果动画预览窗口里没有显示正确的模型，从项目窗口中拖入LowPolyMan.fbx即可。
 
@@ -419,11 +419,11 @@ public void Update()
 
 保存脚本，回到Unity编辑器，设置Player|Player|Animator|Avatar为LowPolyManAvatar。
 
-![image-20200618231441712](DarkSoulsDemo part 1 角色行走/image-20200618231441712.png)
+![image-20200618231441712](DarkSoulsDemo_part_1_角色行走/image-20200618231441712.png)
 
 播放游戏。此时角色的移动带有跑动动画。
 
-![image-20200618230923858](DarkSoulsDemo part 1 角色行走/image-20200618230923858.png)
+![image-20200618230923858](DarkSoulsDemo_part_1_角色行走/image-20200618230923858.png)
 
 ### 实际遇到的问题：
 
@@ -434,7 +434,7 @@ public void Update()
 
 2. 角色跑动的时候会“闪现、乱窜“，原因是勾选了Apply Root Motion。
 
-![image-20200618231814491](DarkSoulsDemo part 1 角色行走/image-20200618231814491.png)
+![image-20200618231814491](DarkSoulsDemo_part_1_角色行走/image-20200618231814491.png)
 
 ## 六、脚本汇总
 
