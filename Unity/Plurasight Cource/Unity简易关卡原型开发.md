@@ -1,16 +1,5 @@
----
-title: Unity简易关卡原型开发
+# Unity简易关卡原型开发
 date: 2020-02-07 17:03:06
-update: 2020-2-13 15:50:05
-tags: Unity
----
-
-- 编写鼠标交互脚本
-- 使用NavMesh组件实现角色移动
-
-...
-
-<!--more-->
 
 Unity版本：Unity 2018.4.13c1
 
@@ -30,11 +19,11 @@ Unity版本：Unity 2018.4.13c1
 
 完成后如下图：
 
-![image-20200207172113295](image-20200207172113295.png)
+![image-20200207172113295](Unity简易关卡原型开发/image-20200207172113295.png)
 
 在Assets文件夹下新建一个名叫“Cursors”的文件夹，导入png图片素材如下图：
 
-![image-20200207172929532](image-20200207172929532.png)
+![image-20200207172929532](Unity简易关卡原型开发/image-20200207172929532.png)
 
 # 二、编写鼠标交互脚本
 
@@ -87,19 +76,19 @@ public class MouseManager : MonoBehaviour
 
 把Cursors文件夹下的png素材拖拽到Mouse Manager组件如下图：
 
-![image-20200207174110820](image-20200207174110820.png)
+![image-20200207174110820](Unity简易关卡原型开发/image-20200207174110820.png)
 
 点击Inspector面板上方的Layers下拉按钮，点击Edit Layers
 
-![image-20200207174357668](image-20200207174357668.png)
+![image-20200207174357668](Unity简易关卡原型开发/image-20200207174357668.png)
 
 点开Layers，在User Layers 9填写”Clickable“
 
-![image-20200207174606366](image-20200207174606366.png)
+![image-20200207174606366](Unity简易关卡原型开发/image-20200207174606366.png)
 
 在Hierachy面板选中MouseManager，在Inspector面板的MouseManager组件下的Clickable Layer选项点击下拉，把默认的Nothing改选成Clickable
 
-![image-20200207174838667](image-20200207174838667.png)
+![image-20200207174838667](Unity简易关卡原型开发/image-20200207174838667.png)
 
 点击播放按钮验证效果。当鼠标移动到Floor上时，鼠标样式为target，当鼠标移动到Door上时，鼠标样式为doorway，当鼠标移动到周围环境时，鼠标样式为pointer。
 
@@ -119,7 +108,7 @@ public class MouseManager : MonoBehaviour
 
 点击Bake按钮创建一层附在Floor上的蓝色NavMesh表面
 
-![image-20200209104045071](image-20200209104045071.png)
+![image-20200209104045071](Unity简易关卡原型开发/image-20200209104045071.png)
 
 在Door的Inspector面板添加NavMeshObstacle组件，默认Carve勾选。产生的效果是Capsule无法通过Door，即视Door为一个障碍。
 
@@ -209,13 +198,13 @@ public class EventVector3 : UnityEvent<Vector3>{ }
 
 从Hierarchy面板拖拽Capsule到None(Object)，点击No function下拉框，勾选NavMeshAgent下的destination。
 
-![image-20200209165155270](image-20200209165155270.png)
+![image-20200209165155270](Unity简易关卡原型开发/image-20200209165155270.png)
 
 点击播放后，鼠标单击Floor上任意位置，Capsule移动跟随。
 
 在Capsule的Inspector面板的NavMeshAgent组件下的Steering部分可以修改移动速度(Speed)、角速度(Angular Speed)、加速度(Acceleration)、制动距离(Stopping Distance)、自动刹车(Auto Braking)。
 
-![image-20200209170725519](image-20200209170725519.png)
+![image-20200209170725519](Unity简易关卡原型开发/image-20200209170725519.png)
 
 # 四、玩家互动行为实现
 
@@ -297,11 +286,11 @@ public class EventVector3 : UnityEvent<Vector3>{ }
 
 将其Layer设置成Clickable，点击Untagged按钮，选择Add Tag，点击加号按钮，填写“Item”，保存。
 
-![image-20200209185228053](image-20200209185228053.png)
+![image-20200209185228053](Unity简易关卡原型开发/image-20200209185228053.png)
 
 点击播放，当鼠标点击Door后，Unity编辑器控制台打印消息“DOOR”，当鼠标点击Cube后，控制台打印消息消息“ITEM”。
 
-![image-20200209190218401](image-20200209190218401.png)
+![image-20200209190218401](Unity简易关卡原型开发/image-20200209190218401.png)
 
 # 五、NPC原型设计
 
@@ -382,17 +371,17 @@ public class PlayerController : MonoBehaviour
 
 在Hierarchy面板新建一个空Object Waypoint (1)，在Inspector面板修改图标颜色，操作如下图。
 
-![image-20200213125222589](image-20200213125222589.png)
+![image-20200213125222589](Unity简易关卡原型开发/image-20200213125222589.png)
 
 复制Waypoint (1)，粘贴自动生成一个Waypoint (2)。把两个Waypoint平移到Floor上方便观察的位置。
 
 选中NPC，点击Inspector面板的锁定面板按钮，同时选中Hierarchy面板的Waypoint (1)、Waypoint (2)拖拽到NPC的NPCController组件下的Waypoints
 
-![image-20200213130047903](image-20200213130047903.png)
+![image-20200213130047903](Unity简易关卡原型开发/image-20200213130047903.png)
 
 拖拽Waypoint过来后：
 
-![image-20200213130137382](image-20200213130137382.png)
+![image-20200213130137382](Unity简易关卡原型开发/image-20200213130137382.png)
 
 解除NPC的Inspector面板锁定，保存场景，点击Play播放。
 

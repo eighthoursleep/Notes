@@ -1,12 +1,5 @@
----
-title: Unity基本操作
+# Unity基本操作
 date: 2020-01-16 12:52:05
-tags: Unity
----
-
-基本操作
-
-<!--more-->
 
 1. 新建场景
 
@@ -79,14 +72,14 @@ tags: Unity
 
       坐标系切换按钮：
 
-      ![image-20200116150251601](image-20200116150251601.png)
+      ![image-20200116150251601](Unity基本操作/image-20200116150251601.png)
 
       - 自身坐标系：Local
       - 世界坐标系：Global
 
       摄像机两种模式切换：
 
-      ![image-20200116151440021](image-20200116151440021.png)
+      ![image-20200116151440021](Unity基本操作/image-20200116151440021.png)
 
       Persp：透视模式，近大远小
 
@@ -94,7 +87,7 @@ tags: Unity
 
    2. Mesh Filter组件（网格过滤器）：指定mesh（物体的几何形状），物体的形状由网格决定
 
-      ![image-20200116152627574](image-20200116152627574.png)
+      ![image-20200116152627574](Unity基本操作/image-20200116152627574.png)
 
    3. Mesh Renderer组件（网格渲染器）：从网格过滤器中获得几何体的形状然后进行渲染
 
@@ -118,7 +111,7 @@ tags: Unity
 
       2. 在Inspector面板中，预制体比非预制体多了一个“Prefab”选项
 
-         ![image-20200116155034563](image-20200116155034563.png)
+         ![image-20200116155034563](Unity基本操作/image-20200116155034563.png)
       
    7. 预制体的好处：编辑其中一个，在Inspector>Prefab，“Apply”一下，所有的全部改变
 
@@ -130,12 +123,12 @@ tags: Unity
 
    1. 创建3个Cube预制体，在Materials文件夹下新建一个叫“Black”的材质，在Inspector>Main Maps设置颜色成黑色
 
-   ![image-20200116160725130](image-20200116160725130.png)
+   ![image-20200116160725130](Unity基本操作/image-20200116160725130.png)
 
    2. 在Hierarchy面板选中其中一个Cube预制体，将"Black"材质拖拽到Inspector>Mesh Renderer>Materials>Element 0，Cube的颜色变为黑色。
 
    3. 如果要把其他两个Cube预制体也变成黑色，则在Inspector>Prefabs下点击Overrides旁的小三角，选择Apply All即可
 
-      ![image-20200116161610854](image-20200116161610854.png)
+      ![image-20200116161610854](Unity基本操作/image-20200116161610854.png)
 
    4. 如果此时在改变其中一个Cube预制体的材质，其他两个也会跟着一起改变

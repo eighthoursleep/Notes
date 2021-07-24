@@ -1,4 +1,4 @@
-# Unity C Sharp脚本基础
+# Unity_C_Sharp脚本基础
 date: 2020-01-18 17:34:55
 
 Unity版本：Unity 2017.4.35f1 Personal
@@ -222,11 +222,11 @@ public class Player : MonoBehaviour {
 
 给角色添加Rigidbody组件,并设置Constraints如图
 
-![image-20200222183920131](Unity C Sharp脚本基础/image-20200222183920131.png)
+![image-20200222183920131](Unity_C_Sharp脚本基础/image-20200222183920131.png)
 
 给Battle_Dummy添加Capsule Collider组件，Center设置为（0，0.5，0），Radius设置为0.4，Height设置为2。通过快捷键Ctrl+D快速生成两个复制品，拖到旁边如图：
 
-![image-20200222170229708](Unity C Sharp脚本基础/image-20200222170229708.png)
+![image-20200222170229708](Unity_C_Sharp脚本基础/image-20200222170229708.png)
 
 在Player.cs里为类Player添加方法OnCollisionEnter：
 
@@ -293,7 +293,7 @@ public class Player : MonoBehaviour {
 
 我们从Assets/Prefabs往场景里添加一个Chest
 
-![image-20200223115839508](Unity C Sharp脚本基础/image-20200223115839508.png)
+![image-20200223115839508](Unity_C_Sharp脚本基础/image-20200223115839508.png)
 
 在Scripts文件夹里新建一个TreasureChest.cs，为类TreasureChest添加一个**OnTriggerEnter**方法。
 
@@ -402,7 +402,7 @@ public class TreasureChest : MonoBehaviour {
 
 播放游戏，当角色靠近Chest按下空格键，播放箱子打开动画。
 
-![image-20200223174012993](Unity C Sharp脚本基础/image-20200223174012993.png)
+![image-20200223174012993](Unity_C_Sharp脚本基础/image-20200223174012993.png)
 
 ## 4. 射线侦测（Raycasting）
 
@@ -425,7 +425,7 @@ Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red);
 
 回到Unity播放游戏，点击Scene窗口，我们发现角色脚下正前方（Z轴正方向）出现一条4格长度的红线。
 
-![image-20200223202521447](Unity C Sharp脚本基础/image-20200223202521447.png)
+![image-20200223202521447](Unity_C_Sharp脚本基础/image-20200223202521447.png)
 
 要把红线上移到角色重新，我们可以对上边两行代码的第一行修改成如下：
 
@@ -556,7 +556,7 @@ void Update () {
 
 如果此时再按空格，则Coin继续弹出，并叠在之前的Coin上。
 
-![image-20200223221512891](Unity C Sharp脚本基础/image-20200223221512891.png)
+![image-20200223221512891](Unity_C_Sharp脚本基础/image-20200223221512891.png)
 
 接下来我们实现Coin实例的销毁。
 
