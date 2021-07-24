@@ -436,4 +436,4 @@ namespace MJ {
 
 以上四个脚本修改完后，播放游戏，摄像机会出现不跟随的情况。
 
-解决方法：把Hierarchy中Player原来的CameraHandler组件删除掉，再重新添加上，重新配置Target Transform、Camera Transform、Camera Pivot Transform即可，参考《DarkSoulsDemo（二）摄像机管理器》。
+解决方法：把Hierarchy中Player原来的CameraHandler组件删除掉，再重新添加上，重新配置Target Transform、Camera Transform、Camera Pivot Transform即可，参考《DarkSoulsDemo part 2 摄像机管理器》。

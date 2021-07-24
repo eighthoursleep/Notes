@@ -1,4 +1,4 @@
-# DarkSoulsDemo part 7 角色下落与着陆检测
+# DarkSoulsDemo_part_7_角色下落与着陆检测
 date: 2020-06-21 19:38:47
 
 本文根据视频教程：https://www.youtube.com/watch?v=dJdmUgqgZjU
@@ -9,9 +9,9 @@ date: 2020-06-21 19:38:47
 
 选中Player，修改其胶囊碰撞体组件参数Height为1.5。
 
-![image-20200621232841379](DarkSoulsDemo part 7 角色下落与着陆检测/image-20200621232841379.png)
+![image-20200621232841379](DarkSoulsDemo_part_7_角色下落与着陆检测/image-20200621232841379.png)
 
-![image-20200621194552352](DarkSoulsDemo part 7 角色下落与着陆检测/image-20200621194552352.png)
+![image-20200621194552352](DarkSoulsDemo_part_7_角色下落与着陆检测/image-20200621194552352.png)
 
 ## 二、编辑脚本
 
@@ -165,11 +165,11 @@ playerLocomotion.HandleFalling(delta, playerLocomotion.moveDirection);
 
 将下落动画片段Jump_Down_C_Loop拖入动画Base Layer中，重命名为Falling，不要建立任何转变关系，不添加Behaviour，勾选Foot IK。
 
-![image-20200621231959232](DarkSoulsDemo part 7 角色下落与着陆检测/image-20200621231959232.png)
+![image-20200621231959232](DarkSoulsDemo_part_7_角色下落与着陆检测/image-20200621231959232.png)
 
-![image-20200621203834221](DarkSoulsDemo part 7 角色下落与着陆检测/image-20200621203834221.png)
+![image-20200621203834221](DarkSoulsDemo_part_7_角色下落与着陆检测/image-20200621203834221.png)
 
-![image-20200621204246510](DarkSoulsDemo part 7 角色下落与着陆检测/image-20200621204246510.png)
+![image-20200621204246510](DarkSoulsDemo_part_7_角色下落与着陆检测/image-20200621204246510.png)
 
 打开PlayerLocomotion.cs，在HandleMovement方法开头添加上角色互动信号判断：
 
@@ -185,7 +185,7 @@ public void HandleMovement(float delta)
 
 保存脚本，将角色放置在高处，播放游戏，让角色往下跳，角色检测下落做出下坠动作，检测着陆并播放着陆动画。
 
-![image-20200621231637695](DarkSoulsDemo part 7 角色下落与着陆检测/image-20200621231637695.png)
+![image-20200621231637695](DarkSoulsDemo_part_7_角色下落与着陆检测/image-20200621231637695.png)
 
 ## 四、可能遇到的问题
 

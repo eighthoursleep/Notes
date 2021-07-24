@@ -1,11 +1,11 @@
-# DarkSoulsDemo part 3 摄像机碰撞
+# DarkSoulsDemo_part_3_摄像机碰撞
 date: 2020-06-20 12:26:24
 
 本片根据视频：https://www.youtube.com/watch?v=Don3lGSAF2A
 
 给Plane围上围墙，播放游戏，角色走到墙边，如果移动鼠标使摄像机到墙里，角色会被墙挡住。接下来我们将解决这个问题
 
-![image-20200620125145990](DarkSoulsDemo part 3 摄像机碰撞/image-20200620125145990.png)
+![image-20200620125145990](DarkSoulsDemo_part_3_摄像机碰撞/image-20200620125145990.png)
 
 ## 一、修改CameraHandler脚本
 
@@ -79,19 +79,19 @@ public void FollowTarget(float delta)
 
 回到Unity编辑器，修改Camera Holder、Camera Pivot的层级为Controller。
 
-![image-20200620135924787](DarkSoulsDemo part 3 摄像机碰撞/image-20200620135924787.png)
+![image-20200620135924787](DarkSoulsDemo_part_3_摄像机碰撞/image-20200620135924787.png)
 
 调整Camera Pivot|Transform|Y到与角色的头部差不多高。
 
-![image-20200620143727326](DarkSoulsDemo part 3 摄像机碰撞/image-20200620143727326.png)
+![image-20200620143727326](DarkSoulsDemo_part_3_摄像机碰撞/image-20200620143727326.png)
 
 播放游戏，控制角色走到墙边，此时摄像机再身后保持正常距离。
 
-![image-20200620143124247](DarkSoulsDemo part 3 摄像机碰撞/image-20200620143124247.png)
+![image-20200620143124247](DarkSoulsDemo_part_3_摄像机碰撞/image-20200620143124247.png)
 
 移动鼠标使摄像机处在角色面前，摄像机与墙有碰撞而不会穿过墙。
 
-![image-20200620143521391](DarkSoulsDemo part 3 摄像机碰撞/image-20200620143521391.png)
+![image-20200620143521391](DarkSoulsDemo_part_3_摄像机碰撞/image-20200620143521391.png)
 
 ## 三、脚本汇总
 

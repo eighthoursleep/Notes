@@ -1,4 +1,4 @@
-# DarkSoulsDemo part 5 角色冲刺
+# DarkSoulsDemo_part_5_角色冲刺
 date: 2020-06-20 18:50:42
 
 本文根据视频：https://www.youtube.com/watch?v=gyqfmE_1aus&t=315s
@@ -7,7 +7,7 @@ date: 2020-06-20 18:50:42
 
 打开动画控制器Humanoid，双击进入Locomotion，选中Blend Tree，在Inspector的Motion列表里点击加号新增动作域，将动画片段Sprint拖入。修改Pos X、Pos Y的值分别为0、2。
 
-![image-20200621112053231](DarkSoulsDemo part 5 角色冲刺/image-20200621112053231.png)
+![image-20200621112053231](DarkSoulsDemo_part_5_角色冲刺/image-20200621112053231.png)
 
 ## 二、修改脚本
 

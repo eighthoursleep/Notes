@@ -1,4 +1,4 @@
-# DarkSoulsDemo part 2 摄像机管理器
+# DarkSoulsDemo_part_2_摄像机管理器
 date: 2020-06-19 13:44:52
 
 本篇根据视频：https://www.youtube.com/watch?v=c1FYp1oOFIs
@@ -7,7 +7,7 @@ date: 2020-06-19 13:44:52
 
 在Hierarchy新建一个空物体，命名为Camera Holder，右键Camera Holder，新建一个空物体，命名为Camera Pivot，将Main Camera拖拽到Camera Pivot。
 
-![image-20200620105630903](DarkSoulsDemo part 2 摄像机管理器/image-20200620105630903.png)
+![image-20200620105630903](DarkSoulsDemo_part_2_摄像机管理器/image-20200620105630903.png)
 
 ## 二、写脚本
 
@@ -56,11 +56,11 @@ namespace MJ
 
 回到Unity编辑器，在Hierarchy选中Player，在Inspector设置层级。
 
-![image-20200620110418619](DarkSoulsDemo part 2 摄像机管理器/image-20200620110418619.png)
+![image-20200620110418619](DarkSoulsDemo_part_2_摄像机管理器/image-20200620110418619.png)
 
-![image-20200620110515678](DarkSoulsDemo part 2 摄像机管理器/image-20200620110515678.png)
+![image-20200620110515678](DarkSoulsDemo_part_2_摄像机管理器/image-20200620110515678.png)
 
-![image-20200620110607910](DarkSoulsDemo part 2 摄像机管理器/image-20200620110607910.png)
+![image-20200620110607910](DarkSoulsDemo_part_2_摄像机管理器/image-20200620110607910.png)
 
 回到CameraHandler.cs，在Awake方法下编写FollowTarget方法和HandleCameraRotation方法：
 
@@ -117,11 +117,11 @@ private void FixedUpdate()
 
 保存脚本，回到Unity编辑器，选中将CameraHandler.cs添加到Camera Holder，并给Target Transform、Camera Transform、Camera Pivot Transform赋值。
 
-![image-20200620112444496](DarkSoulsDemo part 2 摄像机管理器/image-20200620112444496.png)
+![image-20200620112444496](DarkSoulsDemo_part_2_摄像机管理器/image-20200620112444496.png)
 
 然后将Player、Camera Holder、Camera Pivot的位置坐标全部重置为（0，0，0），选中Main Camera ,调整到角色后背合适的位置。调整摄像机视野Main Camera|Camera|Field of View。
 
-![image-20200620113344191](DarkSoulsDemo part 2 摄像机管理器/image-20200620113344191.png)
+![image-20200620113344191](DarkSoulsDemo_part_2_摄像机管理器/image-20200620113344191.png)
 
 现在保存场景，播放游戏，在移动角色的同时，我们可以像再黑暗之魂里一样移动摄像机的视角。
 
