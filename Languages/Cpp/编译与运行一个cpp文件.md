@@ -59,6 +59,10 @@ g++ Program.cpp
 ```
 g++ Program.app -o Program
 ```
+或
+```
+g++ -o Program Program.cpp
+```
 
 然后直接输入可执行文件名，即可执行（带不带文件名后缀均可）
 
