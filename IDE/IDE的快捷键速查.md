@@ -10,6 +10,8 @@
 
 复制光标所在行并插入下一行：Ctrl + D
 
+切换光标上一次/下一次的位置：Ctrl + Alt + 左右方向键 
+
 
 
 ## Visual Studio Code
