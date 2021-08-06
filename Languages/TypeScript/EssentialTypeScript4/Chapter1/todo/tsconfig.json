@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "ES3",
+        "target": "ES2015",
         "outDir": "./dist",
         "rootDir": "./src",
         "module": "commonjs"
