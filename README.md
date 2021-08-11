@@ -3,11 +3,11 @@ These shits are just my study notes.
 
 # Content
 
-[Computer Graphics](/Computer Graphics/)
+[Computer Graphics](/Computer%20Graphics/)
 
-[Game Design](/Game Design/)
+[Game Design](/Game%20Design/)
 
-[Game Engine](/Game Engine/)
+[Game Engine](/Game%20Engine/)
 
 [Programming Languages](/Languages/)
 

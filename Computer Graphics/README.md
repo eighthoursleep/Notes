@@ -1,4 +1,4 @@
 # Computer Graphics
 [WebGL](/WebGL/)
 
-[go back](../)
+[go back](../../../)
