@@ -1,4 +1,3 @@
-// DrawRectangle.js copyright Eighthoursleep
 function main(){
     var canvas = document.getElementById("example");
     if(!canvas){
