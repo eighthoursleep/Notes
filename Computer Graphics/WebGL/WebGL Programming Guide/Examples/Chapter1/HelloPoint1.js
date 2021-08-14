@@ -31,5 +31,5 @@ function main(){
     //清空canvas
     glContext.clear(glContext.COLOR_BUFFER_BIT);
     //绘制一个点
-    glContext.drawArrays(glContext.POINT, 0, 1);
+    glContext.drawArrays(glContext.POINTS, 0, 1);
 }
