@@ -61,25 +61,29 @@ npm init --yes
 
 ### 第2步：创建编译设置文件
 
-为了给编译做一些设置，新建一个`.json`文件，取名为`tsconfig.json`，写入内容如下：
+执行以下命令生成编译设置文件`tsconfig.json`
+
+```
+tsc --init
+```
+
+内容如下：
 
 ```json
 {
-	"compileOptions":{
-		"target":"es2018",
-		"outDir":"./dist",
-		"rootDir":"./src",
-		"module":"commonjs"
-	}
+  "compilerOptions": {
+    "target": "es2018",		// 规定ES目标版本: 'ES3' (默认), 使用最新的'ES2018'或者'ESNEXT'
+    "module": "commonjs",	// 规定模块代码生成规范为'commonjs'
+    "outDir": "./bin",		//规定编译结果输出目录
+    "rootDir": "./src"		//规定源文件目录
+  }
 }
+
 ```
 
-这个段设置告诉编译器：
+`outDir`和`rootDir`默认是被注释的，可以取消这两项的注释，分别填入输出路径和源文件路径
 
-- 要使用的js版本
-- 要编译的`.ts`源文件在`./src`目录下
-- 将编译结果输出到`./dist`目录下
-- 加载分立的文件要使用`commonjs`标准
+编译选项完整列表请看：https://www.tslang.cn/docs/handbook/compiler-options.html
 
 ### 第3步：添加TypeScript源文件
 
@@ -92,7 +96,8 @@ console.log("Hi, I want eighthoursleep.");
 
 ### 第4步：编译并执行代码
 
-TypeScript文件必须被编译为纯JavaScript文件，才可以被浏览器或Node.js运行时执行。在**项目根目录**下执行以下命令进行编译：
+TypeScript文件必须被编译为纯JavaScript文件才可以被浏览器或Node.js运行时执行。
+在**项目根目录**下执行以下命令进行编译：
 
 ```
 tsc
