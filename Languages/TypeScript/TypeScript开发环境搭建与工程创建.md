@@ -103,10 +103,10 @@ TypeScript文件必须被编译为纯JavaScript文件才可以被浏览器或Nod
 tsc
 ```
 
-编译器读取tsconfig.json，定位`src`目录里的TypeScript源文件。创建`dist`文件夹并向其中写入JavaScript文件。
+编译器读取tsconfig.json，定位`src`目录里的TypeScript源文件。创建`bin`文件夹并向其中写入JavaScript文件。
 
 使用下边的命令执行`index.js`
 
 ```
-node dist/index.js
+node bin/index.js
 ```
