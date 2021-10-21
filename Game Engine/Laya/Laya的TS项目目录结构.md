@@ -1,5 +1,7 @@
 # Laya的TS项目目录结构
 
+（摘自[Laya官网](https://layabox.com)）
+
 
 YouProjectName目录
 

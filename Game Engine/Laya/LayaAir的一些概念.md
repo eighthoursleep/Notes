@@ -1,6 +1,6 @@
 # LayaAir使用中的基础概念
 
-
+（摘自[Laya官网](https://layabox.com)）
 
 ## 画布
 
