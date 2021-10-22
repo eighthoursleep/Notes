@@ -8,7 +8,7 @@
 
 性能如下表：
 
-![sortTable](sortTable\sortTable.jpg)
+![sortTable](sortTable/sortTable.jpg)
 
 ## 结论
 
