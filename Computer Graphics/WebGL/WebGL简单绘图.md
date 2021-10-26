@@ -2,11 +2,11 @@
 
 ## Canvas及其使用方式
 
-Canvas在这里是指`< canvas >`标签，是HTML5中新引入的元素，它定义了网页的绘图区域。
+Canvas在这里是指`<canvas>`标签，是HTML5中新引入的元素，它定义了网页的绘图区域。
 
-HTML5出现前，只能在`< img>`标签上显示静态图像，不能实时绘制和渲染，要显示动态图像就通过第三方解决方案Flash Player等。
+HTML5出现前，只能在`<img>`标签上显示静态图像，不能实时绘制和渲染，要显示动态图像就通过第三方解决方案Flash Player等。
 
-HTML5出现后，引入`< canvas >`标签，允许JS动态绘制二维图形。WebGL加入后，允许JS在`< canvas >`绘制三维图形。
+HTML5出现后，引入`<canvas>`标签，允许JS动态绘制二维图形。WebGL加入后，允许JS在`<canvas>`绘制三维图形。
 
 ## HTML引入WebGL JS文件
 
@@ -46,10 +46,10 @@ function main(){
 }
 ```
 
-- `< canvas >`标签通过属性`width`和`height`规定画布区域大小（像素数），用属性id指定唯一标识符。
-- 默认情况下，如果不用JS做些什么，`< canvas >`是透明的。
-- 如果浏览器不支持`< canvas >`，会直接忽略，因此可以在标签下写上提示错误的信息。
-- `< body >`标签指定`onload`属性，告诉浏览器`< body >`元素加载完成后（即页面加载完成），以`DrawRectangle.js`为入口，执行里边定义的`main()`函数。
+- `<canvas>`标签通过属性`width`和`height`规定画布区域大小（像素数），用属性id指定唯一标识符。
+- 默认情况下，如果不用JS做些什么，`<canvas>`是透明的。
+- 如果浏览器不支持`<canvas>`，会直接忽略，因此可以在标签下写上提示错误的信息。
+- `<body>`标签指定`onload`属性，告诉浏览器`< body >`元素加载完成后（即页面加载完成），以`DrawRectangle.js`为入口，执行里边定义的`main()`函数。
 
 ## 简单的WebGL绘图函数
 
@@ -93,18 +93,12 @@ function main(){
         console.log("Failed to get the rendering context for WebGL");
         return;
     }
-    //指定清空canvas的填充色
+    //指定清空canvas的填充色 red, green, blue, alpha
+    //如果任何参数值小于0.0或者大于1.0，会被截断为0.0或1.0
     glContext.clearColor(0.0, 0.0, 0.0, 1.0);
     //清空canvas
     glContext.clear(glContext.COLOR_BUFFER_BIT);
 }
-```
-
-- 关于指定背景色
-
-```javascript
-glContext.clearColor(red, green, blue, alpha)
-//如果任何参数值小于0.0或者大于1.0，会被截断为0.0或1.0
 ```
 
 由于WebGL继承自OpenGL，因此它遵循OpenGL颜色分量的取值范围，从0.0到1.0而非0到255。RGB值越高，颜色越亮，第4分量α值越高，颜色越不透明。
@@ -131,7 +125,7 @@ glContext.clear(buffer)
 | 深度缓冲区 | 1.0                  | glContext.clearDepth(depth)                   |
 | 模板缓冲区 | 0                    | glContext.clearStencil(s)                     |
 
-### 从绘制一个点开始认识着色器
+### 通过着色器绘制一个点
 
 例子：
 
@@ -203,10 +197,10 @@ function main(){
 
 WebGL需要两种着色器：
 
-- 顶点着色器（Vertex shader）
+- **顶点着色器（Vertex shader）**
   - 用来描述顶点的特性（比如位置、颜色等）。
 
-- 片元着色器（Fragmentshader）
+- **片元着色器（Fragmentshader）**
   - 进行逐片元处理过程（比如光照）
 
 着色器使用类似C的OpenGL ES着色器语言（`GLSL ES`）编写，代码作为字符串存储在变量`VSHADER_SOURCE`和`FSHADER_SOURCE`中。
@@ -253,7 +247,7 @@ initShaders()将着色器代码传给WebGL系统，并建立着色器以便随�
 
 ### 顶点着色器
 
-和C语言程序一样，着色器程序必须包含一个无返回值且不能指定参数的`main()`函数。
+和C语言程序一样，着色器程序必须包含一个**无返回值**且**不能指定参数**的`main()`函数。
 
 顶点着色器的内置变量：
 
@@ -316,11 +310,11 @@ WebGL使用**笛卡尔坐标系**，具有XYZ三个轴。
 
 ### 从JavaScript向着色器传输数据
 
-使用**attribute变量**和**uniform变量**可以做到这点。
+使用attribute变量和uniform变量可以做到这点。
 
-attribut变量是一种GLSL ES变量，用来从外部向顶点着色器传输数据，只有顶点着色器可使用。
+**attribute变量**是一种GLSL ES变量，用来从外部向顶点着色器传输数据，只有顶点着色器可使用。
 
-uniform变量传输对于所有顶点都相同的数据或与顶点无关的数据
+**uniform变量**传输对于所有顶点都相同的数据或与顶点无关的数据
 
 #### attribute变量
 
@@ -375,31 +369,31 @@ function main(){
         return;
     }
 
-    var gl = getWebGLContext(canvas);
-    if(!gl){
+    var glContext = getWebGLContext(canvas);
+    if(!glContext){
         console.log("Failed to get the rendering context for WebGL");
         return;
     }
 
-    if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
+    if (!initShaders(glContext, VSHADER_SOURCE, FSHADER_SOURCE)) {
         console.log("Failed to initialize shaders.");
         return;
     }
 
     //获取attribute变量的存储位置
-    var a_Position = gl.getActiveAttrib(gl.program, "a_Position");
+    var a_Position = glContext.getActiveAttrib(glContext.program, "a_Position");
     if (a_Position < 0) {
         console.log("Failed to get the storage location of a_Position");
         return;
     }
 
     //将顶点位置传输给attribute变量
-    gl.vertexAttrib3f(a_Position, 0.0, 0.0, 0.0);
+    glContext.vertexAttrib3f(a_Position, 0.0, 0.0, 0.0);
 
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    glContext.clearColor(0.0, 0.0, 0.0, 1.0);
+    glContext.clear(glContext.COLOR_BUFFER_BIT);
 
-    gl.drawArrays(gl.POINTS, 0, 1);
+    glContext.drawArrays(glContext.POINTS, 0, 1);
 }
 ```
 

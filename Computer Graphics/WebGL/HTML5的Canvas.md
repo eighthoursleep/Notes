@@ -174,15 +174,14 @@ function canvasApp(){
 }
 </script>
 </head>
-<body onload="eventWindowLoaded();"> <!-- onload函数在页面加载完毕后调用JS脚本 -->
+<body onload="eventWindowLoaded();">
+<!-- onload函数在页面加载完毕后调用 -->
 <div style="position: absolute; top: 50px;left:50px;">
 <canvas id="canvas" width="500" height="500">
 若看到这个文字，说明浏览器不支持WebGL!</canvas></div>
 </body>
-</html>  
+</html>
 ```
-
-onload函数在页面加载完毕后调用JS脚本
 
 arc.js
 
