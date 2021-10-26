@@ -1,4 +1,4 @@
-# WebGL入门
+# WebGL简单绘图
 
 ## Canvas及其使用方式
 
@@ -131,7 +131,7 @@ glContext.clear(buffer)
 | 深度缓冲区 | 1.0                  | glContext.clearDepth(depth)                   |
 | 模板缓冲区 | 0                    | glContext.clearStencil(s)                     |
 
-### 从绘制一个点认识着色器
+### 从绘制一个点开始认识着色器
 
 例子：
 

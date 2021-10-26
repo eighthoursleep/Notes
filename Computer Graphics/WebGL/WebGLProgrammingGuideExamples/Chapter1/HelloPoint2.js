@@ -17,29 +17,29 @@ function main(){
         return;
     }
 
-    var gl = getWebGLContext(canvas);
-    if(!gl){
+    var glContext = getWebGLContext(canvas);
+    if(!glContext){
         console.log("Failed to get the rendering context for WebGL");
         return;
     }
 
-    if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
+    if (!initShaders(glContext, VSHADER_SOURCE, FSHADER_SOURCE)) {
         console.log("Failed to initialize shaders.");
         return;
     }
 
     //获取attribute变量的存储位置
-    var a_Position = gl.getActiveAttrib(gl.program, "a_Position");
+    var a_Position = glContext.getActiveAttrib(glContext.program, "a_Position");
     if (a_Position < 0) {
         console.log("Failed to get the storage location of a_Position");
         return;
     }
 
     //将顶点位置传输给attribute变量
-    gl.vertexAttrib3f(a_Position, 0.0, 0.0, 0.0);
+    glContext.vertexAttrib3f(a_Position, 0.0, 0.0, 0.0);
 
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    glContext.clearColor(0.0, 0.0, 0.0, 1.0);
+    glContext.clear(glContext.COLOR_BUFFER_BIT);
 
-    gl.drawArrays(gl.POINTS, 0, 1);
+    glContext.drawArrays(glContext.POINTS, 0, 1);
 }

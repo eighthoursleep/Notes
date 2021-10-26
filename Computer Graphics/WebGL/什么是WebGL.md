@@ -30,4 +30,3 @@ WebGL是一项用在网页上绘制和渲染复杂三维图形，并允许用户
 # WebGL程序的结构
 
 WebGL页面包含三种语言：HTML、JavaScript、GLSL SE(着色器语言)，其中GLSL SE以字符串的形式内嵌在JavaScript中。
-
