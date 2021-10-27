@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real-Time 3D Graphics with WebGL2</title>
+    <style type="text/css">
+        canvas{
+            border: 5px dotted blue;
+        }
+    </style>
+    <script type="text/javascript">
+        'use strict';
+        let glContext;
+        function updateClearColor(...color) {
+            glContext.clearColor(...color);
+            glContext.clear(glContext.COLOR_BUFFER_BIT);
+            glContext.viewport(0,0,0,0);
+        }
+        function checkKey(event) {
+            console.log("event.keyCode",event.keyCode);
+            switch (event.keyCode) {
+                case 49:{   //键盘数字键1的keyCode
+                    updateClearColor(0.2,0.8,0.2,1.0);//绿色
+                    break;
+                }
+                case 50:{   //键盘数字键2的keyCode
+                    updateClearColor(0.2,0.2,0.8,1.0);//蓝色
+                    break;
+                }
+                case 51:{   //键盘数字键3的keyCode
+                    updateClearColor(Math.random(), Math.random(), Math.random(), 1.0);//随机颜色
+                    break;
+                }
+                case 52:{   //键盘数字键4的keyCode
+                    const color = glContext.getParameter(glContext.COLOR_CLEAR_VALUE);
+                    alert(`clearColor = (
+                        ${color[0].toFixed(1)},
+                        ${color[1].toFixed(1)},
+                        ${color[2].toFixed(1)},
+                    )`)
+                    window.focus();
+                    break;
+                }
+            }
+        }
+        function init(){
+            const canvas = document.getElementById('webgl-canvas');
+            if(!canvas){
+                console.error('此页面没有找到canvas元素');
+                return;
+            }
+            glContext = canvas.getContext('webgl2');
+            const msg = glContext
+                ? '成功获取到WebGL2 Context'
+                :'不支持WebGL';
+            alert(msg);
+            //当键盘上某个键被按下时调用checkKey
+            window.onkeydown = checkKey;
+        }
+        //当document加载完成后调用init
+        window.onload = init;
+    </script>
+</head>
+<body>
+    <canvas id="webgl-canvas" width="800" height="600">
+        Your browser does not support the HTML5 canvas element.
+    </canvas>
+</body>
+</html>
