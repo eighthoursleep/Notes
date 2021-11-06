@@ -160,11 +160,73 @@ void fct(int n){
 1. 避免在普通代码种分配内存，把分配操作隐藏在行为良好的抽象的实现内部；
 2. 使代码远离各种潜在风险，避免资源泄露。
 
-#### 初始化容器
-
-
-
 ### 抽象类型
+
+抽象类型将使用者与类的实现细节完全隔离开来。
+
+因为对抽象类型的表现形式一无所知，所以必须从自由存储为对象分配空间，然后通过引用或指针访问对象。
+
+```cpp
+class Container{
+    public:
+    virtual double& operator[](int) = 0;	//纯虚函数
+    virtual int size() const = 0;	//常量成员函数
+    virtual ~Container(){}	//析构函数
+};
+```
+
+关键词`virtual`的意思是**“可能随后在其派生类种重新定义”**。
+
+用关键词`virtual`声明的函数称为**虚函数**。
+
+Container的派生类负责为Container接口提供具体实现。
+
+`=0`说明该函数是**纯虚函数**，意味者Container的派生类必须定义这个函数。
+
+含有纯虚函数的类称为**抽象类**。
+
+Container的用法：
+
+```cpp
+void use(Container& c){
+    const int sz = c.size();
+    for(int i=0;i!=sz;++i){
+        cout << c[i] << '\n';
+    }
+}
+```
+
+如果一个类负责为其他一些类提供接口，那么我们把前者称为**多态类型（polymorphic type）**。
+
+作为一个抽象类，Container没有构造函数，因为它没有什么数据需要初始化。
+
+Container有一个析构函数，且该析构函数是`virtual`的，因为抽象类需要通过引用或者指针来操作。
+
+当我们试图通过一个指针销毁Container时，我们并不清楚它的实现部分到底拥有哪些资源。
+
+```cpp
+class Vector_container:public Container{
+    Vector v;
+    public:
+    Vector_container(int s):v(s){}	//含有s个元素的Vector
+    ~Vector_container(){}
+    
+    double& operator[](int i){
+        return v[i];
+    }
+    int size() const {
+        return v.size();
+    }
+}
+```
+
+`:public`可读作**“派生自”**或**“是...的子类型”**。
+
+成员`operator[]()`和`size()`覆盖（override）了基类Container种的对应成员。
+
+析构函数`~Vector_container()`覆盖了基类的析构函数`~Container()`。
+
+成员`v`的析构函数（`~Vector()`）被其类的析构函数（`~Vector_container()`）隐式调用。
 
 ### 虚函数
 
