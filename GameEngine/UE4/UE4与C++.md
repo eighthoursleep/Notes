@@ -167,3 +167,9 @@ void AMyActor::CollectMe(bool bDestroy /*= true*/)
 
 ## 使用类
 
+在IDE里编译和启动工程，然后再内容浏览器里右键，选择蓝图类，在弹窗里选择MyActor。
+
+### 在蓝图里调用C++函数
+
+
+
