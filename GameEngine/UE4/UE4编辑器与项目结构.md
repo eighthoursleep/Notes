@@ -24,39 +24,29 @@
 
 ## UE4编辑器
 
-默认布局：
+### 模式面板
 
-**工具栏**：
-
-![toolbar](ue4EditorImgs/toolbar.png)
-
-你可以在这里保存当前场景、打开内容浏览器、访问快速设置、搭建光照、播放游戏等。
-
-**模组面板**：
+位于左上方，用于切换编辑模式（快捷键（Shift + 1 到 5））。除了放置或移动3D模型这一模式外，还预备有生成风景的”地貌“模式、绘制风景及用于编辑3D模型的模式等。
 
 ![modesPanel](ue4EditorImgs/modesPanel.png)
 
-你可以在这里切换各种模组，比如放置Actors模组（默认模组），Mesh Paint模组等。
+- Place mode：给场景放置actor。
+- Paint mode：允许你直接在viewport上绘制静态网格Actor。
+- Landscape mode：新建或修改landscape。
+- Foliage mode：绘制foliage。
+- Brush mode：修改BSP(binary space partitioning)笔刷。这时一个几何工具，可以快速搭建关卡原型。
 
-**内容浏览器**：
+### 内容浏览器
+
+你可以在这里导入、创建、查找、移动、删除游戏资源比如：蓝图、材质、序列。
 
 ![contentBrowser](ue4EditorImgs/contentBrowser.png)
 
-你可以在这里导入和创建所有的游戏资源。
-
-**细节面板**：
-
-![detailsPanel](ue4EditorImgs/detailsPanel.png)
-
-你可以在这里修改关卡里选中的actor的属性。
-
-**World Outliner**：
-
-![worldOutliner](ue4EditorImgs/worldOutliner.png)
-
-这里展示当前关卡中所有的正在显示的actor。通过点击眼睛图标可以快速隐藏或显示actor。
-
 ### 工具栏
+
+位于上方水平显示的一列图标。
+
+![toolbar](ue4EditorImgs/toolbar.png)
 
 - 保存：保存当前场景。
 - Source Control：可以访问各种版本控制工具比如Perforce、Git、Subversion等。
@@ -69,37 +59,9 @@
 - 播放游戏：播放当前关卡
 - Launch：发布当前关卡到给定的设备上。
 
-### 模组面板
+### 视口（Viewport）
 
-模组面板可以切换各种不同的工具模式，快捷键（Shift + 1 到 5）。
-
-![modesPanel2](ue4EditorImgs/modesPanel2.png)
-
-- Place mode：给场景放置actor。
-- Paint mode：允许你直接在viewport上绘制静态网格Actor。
-- Landscape mode：新建或修改landscape。
-- Foliage mode：绘制foliage。
-- Brush mode：修改BSP(binary space partitioning)笔刷。这时一个几何工具，可以快速搭建关卡原型。
-
-### 内容浏览器
-
-你可以在这里导入和创建游戏资源比如：蓝图、材质、序列。
-
-### 细节面板
-
-细节面板展示在场景中选中的actor信息和功能。
-
-### World Outliner
-
-搜索物体时，加上减号比如`-table`可以过滤掉名字含有“table”的物体。
-
-搜索加上加号比如`+table`将更精准的显示含有“table”的物体。
-
-搜索的时候，将关键字用双引号括起来比如“lunch table”，将显示名字叫lunch table的物体。
-
-### Viewport
-
-在Viewport里，按快捷键**G**将在viewport里**切换游戏显示模式或编辑显示模式**。
+在视口里，按快捷键**G**将在viewport里**切换游戏显示模式或编辑显示模式**。
 
 在游戏播放时，在viewport按下**F11**可以**切换到窗口最大化**。
 
@@ -107,11 +69,42 @@
 
 ![viewportImmersiveMode](ue4EditorImgs/viewportImmersiveMode.png)
 
-以下操作时关于如何在viewport里游览：
+#### 用鼠标操作视口
 
 - 按住鼠标右键 + 键盘的WASD键
-- 按住鼠标右键 + 移动鼠标，可以观看四周。
-- 按住鼠标左键 + 移动鼠标
-- 按住鼠标中键 + 移动鼠标，可以实现视野平移。
+- 按住鼠标右键 ，前后左右拖拽，可以上下左右旋转相机的朝向，观看四周。
+- 按住鼠标左键：
+  - 前后拖动，可以前后移动显示位置
+  - 左右拖动，可以进行左右旋转
+
+- 按住鼠标中键/同时按住鼠标左右键，再拖拽，可以移动垂直方向的位置。前后拖动鼠标可以上下移动显示的位置，左右拖动鼠标可以左右平移。
+
+#### 用键盘操作视口
+
+前提：按住鼠标左键或右键：
+
+- 前后左右移动：WASD、方向键、8462
+- 上下移动：E/Q、9/7、PageUp/PageDown
+- 缩放：C/Z、3/1
 
 再选中物体后，通过快捷键 Ctrl + Shift + T可以切换viewport的工具栏的显示/隐藏。
+
+### 世界大纲/场景大纲面板（World Outliner）
+
+用于管理放置在编辑中的关卡的部件。
+
+这里展示当前关卡中所有的正在显示的actor。通过点击眼睛图标可以快速隐藏或显示actor。
+
+![worldOutliner](ue4EditorImgs/worldOutliner.png)
+
+如果在视口中搜索物体时，加上减号比如`-table`可以过滤掉名字含有“table”的物体。
+
+搜索加上加号比如`+table`将更精准的显示含有“table”的物体。
+
+搜索的时候，将关键字用双引号括起来比如“lunch table”，将显示名字叫lunch table的物体。
+
+### 细节面板
+
+细节面板展示在场景中选中的actor信息和功能。
+
+![detailsPanel](ue4EditorImgs/detailsPanel.png)
