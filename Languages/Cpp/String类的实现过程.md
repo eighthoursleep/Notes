@@ -1,0 +1,56 @@
+# String类的实现过程
+
+```cpp
+class String
+{
+    public:
+    	String(const char* cstr = 0);
+    	String(const String& str);
+    	String& operator=(const String& str);
+    	~String();
+    	char* get_c_str() const {return m_data;}
+    private:
+    	char* m_data;//字符串本身是一个指针（4个byte）
+};
+
+...
+    
+//构造函数
+inline
+String::String(const char* cstr = 0)
+{
+    if(cstr){
+        m_data = new char[strlen(cstr)+1];
+        strcpy(m_data, cstr);
+    }
+    else{	//未指定初值
+        m_data = new char[1];
+        *m_data = '\0';
+    }
+}
+//析构函数
+inline
+String::~String()
+{
+    delete[] m_data;
+}
+//拷贝构造函数
+inline
+String::String(const String& str)
+{
+    m_data = new char[strlen(str.m_data) + 1];
+    strcpy(m_data, str.mdata);//来源端拷贝到目的端
+}
+//拷贝赋值函数
+inline
+String& String::operator=(const String& str)
+{
+    if(this == &str)
+        return *this;
+    delet[] m_data;
+    m_data = new char[strlen(str.m_data) + 1];
+    strcpy(m_data, str.m_data);
+    return *this;
+}
+```
+
