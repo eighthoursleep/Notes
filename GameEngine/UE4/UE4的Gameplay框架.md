@@ -1,21 +1,5 @@
 # UE4的Gameplay框架
 
-## Actor类
-
-Actor类是所有可以在游戏世界中放置和生成的对象的基类。
-
-Actor支持对象的位置、角度、缩放的变换
-
-Actor可以挂载任意数量的Actor组件类，这些Actor组件类定义了这个Actor是如何移动和被渲染的。
-
-Actor默认没有任何可视化的表现形式，它的表现形式取决于挂在上边的组件。
-
-Actor支持复用和函数调用。
-
-生命周期
-
-
-
 ## Game Mode
 
 GameMode控制游戏流程，定义关卡的游戏规则。在网游里会被放在服务端。
@@ -30,7 +14,9 @@ GameMode是玩法框架中的蓝图最顶层
 
 ## Game State
 
-GameState记录着游戏的状态。在网游中都存在于客户端和服务端。客户端可以请求GameState关于游戏的当前状态。服务端可以修改游戏的当前状态，并发给所有客户端。
+GameState和GameMode配合使用。
+
+GameState记录着游戏的状态信息。在网游中都存在于客户端和服务端。客户端可以请求GameState关于游戏的当前状态。服务端可以修改游戏的当前状态，并发给所有客户端。
 
 ### Game State Base类
 
@@ -38,13 +24,29 @@ GameState记录着游戏的状态。在网游中都存在于客户端和服务�
 
 ## Game Instance
 
-当游戏启动的时候，GameInstance就成功创建了。只要游戏还在运行，GameInstance就一直存在。
+当游戏启动的时候，GameInstance就成功创建了。只要游戏还在运行，GameInstance就一直存在。GameInstance贯穿游戏的始终。
+
+GameInstance适合放置独立于关卡的数据，例如主界面UI的数据。
 
 GameInstance可以在不同关卡之间传递消息。例如，玩家在某个关卡里打赢了一个挑战，可以将具体的信息存在GameInstance里。当玩家来到主界面的时候可以看到屏幕上显示的挑战项已被完成。
 
 GameInstance是UObject的子类，不可被复制。存在于服务端和客户端。服务端或客户端除了自身，不会发现其他的GameInstance。
 
 GameInstance用过Project Settings | Maps &Modes | Game Instance class进行设置。
+
+## Actor类
+
+Actor类是所有可以在游戏世界中放置和生成的对象的基类。
+
+Actor支持对象的位置、角度、缩放的变换
+
+Actor可以挂载任意数量的Actor组件类，这些Actor组件类定义了这个Actor是如何移动和被渲染的。
+
+Actor默认没有任何可视化的表现形式，它的表现形式取决于挂在上边的组件。
+
+Actor支持复用和函数调用。
+
+生命周期
 
 
 
@@ -62,7 +64,7 @@ Pawn可以在网络间复制。
 
 ## Character类
 
-Character是Pawn的子类，在Pawn的基础上进行了很多拓展。
+Character是Pawn的子类，在Pawn的基础上进行了很多拓展，比如可以移动、有碰撞。
 
 Character的视觉表现支持动画的骨骼网格体。
 
@@ -87,6 +89,8 @@ Character是操作两足类长相的角色的首选class。
 
 PlayerController是Controller的子类。由玩家输入来控制Pawn，相应的，AIController由人工智能控制。
 
+可以用一个PlayerController代表一个玩家。
+
 默认情况下，一个Controller可以在任何时候通过调用`Possess()`函数控制一个Pawn。通过调用`UnPosses()`函数来停止控制。Controller也可以接收来自正在控制的Pawn的通知。
 
 在网游里，服务端可以发现所有的客户端的controller，客户端只能发现自身的controller。
@@ -100,6 +104,22 @@ PlayerState是每个玩家的可以访问的一个Actor。在单人游戏里只�
 因为PlayerState是一种拷贝，客户端和服务端都可以发现所有玩家的PlayerState。
 
 PlayerState可以通过`GameState`类访问。GameState是一个存放玩家数据的地方，比如分数，昵称等。
+
+
+
+## 蓝图
+
+UE特有的一种图形化编程工具。
+
+## 关卡蓝图
+
+关卡蓝图是特殊的蓝图，每一个关卡绑定一个关卡蓝图。关卡蓝图不能添加组件，只能进行图表操作。关卡蓝图不能复用。开发者可以在关卡蓝图中引用场景中的物体。
+
+## 蓝图类
+
+类似Unity的预制体。包含了很多组件和功能（代码），可以复用，放到场景中相当于实例化。
+
+
 
 ## 例子
 
@@ -129,7 +149,12 @@ PlayerState可以通过`GameState`类访问。GameState是一个存放玩家数�
 
 功能：
 
-1. 反射
-2. 垃圾回收
-3. 序列化（存档，反序列化：读档）
-4. COD（Class Object Default，类默认对象）
+1. Garbage collection垃圾回收
+2. Reference updating引用自动更新
+3. Reflectio反射
+4. Serialization序列化
+5. Automatic updating of default property changes自动检测默认变量的更改
+6. Automatic property initialization自动变量初始化
+7. Automatic editor integration和UE编辑器的自动交互
+8. Type information available at runtime运行时类型识别
+9. Network replication网络复制
