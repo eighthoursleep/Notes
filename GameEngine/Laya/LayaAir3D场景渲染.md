@@ -16,7 +16,7 @@ Scene3D继承于Sprite。
 
 在Unity 2018.4.7中，通过工具栏Window|Rendering|Lighting Settings打开光照渲染面板
 
-![lightWindow](sceneRendering/lightWindow.png)
+![lightWindow](SceneRendering/lightWindow.png)
 
 以下属性在LayaAir支持范围内
 
@@ -56,9 +56,9 @@ Scene3D继承于Sprite。
 
  在确认要导出的场景后，打开导出插件面板（工具栏LayaAir3D|Export Tool），点击 **浏览** 选择导出目录，选择好导出目录后，点击 **导出** 导出场景。
 
-![lightWindow](sceneRendering/layaExport.png)
+![lightWindow](SceneRendering/layaExport.png)
 
-![lightWindow](sceneRendering/layaSceneExport.png)
+![lightWindow](SceneRendering/layaSceneExport.png)
 
 `..\bin\unitylib\Conventional\MainScene.ls`就是刚导出的场景文件了，里面记录了场景的各种**数据**、**模型**、**光照贴图**、**位置**等。
 
