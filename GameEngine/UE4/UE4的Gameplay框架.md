@@ -2,7 +2,7 @@
 
 ## Game Mode
 
-GameMode控制游戏流程，定义关卡的游戏规则。在网游里会被放在服务端。
+GameMode定义关卡的游戏规则以及获胜条件。它金存在于服务器上。GameMode一般再游戏工程中不会由太多数据改变，并且它一定不应该具有客户端需要的临时数据。
 
 ### Game Mode Base类
 
@@ -16,11 +16,31 @@ GameMode是玩法框架中的蓝图最顶层
 
 GameState和GameMode配合使用。
 
-GameState记录着游戏的状态信息。在网游中都存在于客户端和服务端。客户端可以请求GameState关于游戏的当前状态。服务端可以修改游戏的当前状态，并发给所有客户端。
+GameState记录着游戏的状态信息，包括关联玩家的列表、分数、象棋游戏中棋子位置或者开放世界游戏中已经完成的任务列表。GameState存在于服务器和所有客户端上，可以自由进行复制来保持同步。客户端可以请求GameState关于游戏的当前状态。服务端可以修改游戏的当前状态，并发给所有客户端。
 
 ### Game State Base类
 
 
+
+## Player State
+
+PlayerState是游戏中的一个参与者的状态。作为游戏一部分存在的AI没有PlayerState。PlayerState中适合包含的实例数据有：玩家昵称、分数，像多人在线竞技场这样的比赛中的级别，或者再夺旗游戏中玩家当前是否占领旗帜。所有玩家的PlayerState再所有机器上都存在（和PlayerController不同），并且可以自由地进行复制来保持同步。
+
+PlayerState是每个玩家的可以访问的一个Actor。在单人游戏里只存在一个PlayerState，在多人游戏里，每个玩家都有自己的一个playerstate。
+
+客户端和服务器都可以发现所有玩家的PlayerState。
+
+PlayerState可以通过`GameState`类访问。
+
+## 架构中类的关系
+
+下图解释了这些了核心游戏类之间的关系：
+
+![UE4GameplayFramework](ue4NoteImgs/UE4GameplayFramework.png)
+
+一个游戏由GameMode和GameState构成。加入游戏的玩家同PlayerController关联。这些PlayerController允许玩家再游戏中占有pawn，以便它们再游戏中由物理表示。
+
+PlayerController为玩家提供输入控制，HUD以及处理相机视图的PlayerCameraManager。
 
 ## Game Instance
 
@@ -52,7 +72,7 @@ Actor支持复用和函数调用。
 
 ## Pawn类
 
-Pawn是Actord的子类。它具有游戏中角色的物理表现和NPC的AI。
+Pawn是Actord的子类。它是玩家或AI实体再游戏世界中的物理象征。Pawn决定玩家或AI实体的外边，还决定再其再冲突和其他物理互动方面的交互方式。
 
 Pawn由Controller控制，可以是PlayerController也可以是AIController。
 
@@ -60,7 +80,21 @@ pawn即使默认没有视觉表现，也能在游戏世界里表示自身的位�
 
 pawn可以由自己的动作逻辑，但最好由Controller来控制。
 
-Pawn可以在网络间复制。
+默认情况下，Controller和Pawn之间是一对一关系。在游戏过程中生成的Pawn不会被Controller自动控制。
+
+在蓝图中，使用`SetActorLocation`是增加Pawn派生类运动的最佳方式。
+
+### 默认Pawn
+
+DefaultPawn类是Pawn的子类，附带额外功能。比如本地DefaultPawnMovementComponent、球形CollisionComponent和StaticMeshComponent。
+
+DefaultPawnMovementComponent的运动风格默认为无重力运动。除了MovementComponent变量外，它还包括MaxSpeed、Acceleration和Deceleration浮点值。这三个白能量可在DefaultPawn派生的蓝图类中访问。
+
+### 观众类
+
+SpectatorPawn类是DefaultPawn的子类。
+
+
 
 ## Character类
 
@@ -70,7 +104,7 @@ Character的视觉表现支持动画的骨骼网格体。
 
 Character自带胶囊体组件，并以此模拟物理碰撞。
 
-Character的Movement组件，具有丰富的操控角色的功能，包括：走、跑、条、游、飞等。而且这个组件是Charactor特有的，区别于其他的class。
+CharacterMovement组件，具有丰富的操控角色的功能，包括：走、跑、条、游、飞等。而且这个组件是Charactor特有的，区别于其他的class。
 
 Character具有网络功能。
 
@@ -94,16 +128,6 @@ PlayerController是Controller的子类。由玩家输入来控制Pawn，相应�
 默认情况下，一个Controller可以在任何时候通过调用`Possess()`函数控制一个Pawn。通过调用`UnPosses()`函数来停止控制。Controller也可以接收来自正在控制的Pawn的通知。
 
 在网游里，服务端可以发现所有的客户端的controller，客户端只能发现自身的controller。
-
-
-
-## Player State
-
-PlayerState是每个玩家的可以访问的一个Actor。在单人游戏里只存在一个PlayerState，在多人游戏里，每个玩家都有自己的一个playerstate。
-
-因为PlayerState是一种拷贝，客户端和服务端都可以发现所有玩家的PlayerState。
-
-PlayerState可以通过`GameState`类访问。GameState是一个存放玩家数据的地方，比如分数，昵称等。
 
 
 
@@ -137,24 +161,30 @@ UE特有的一种图形化编程工具。
 
 ## Component
 
+
+
 ### ActorComponent
+
+UActorComponent是基础于UObject的一个子类，这意味着其实Component也是有UObject的那些通用功能的。
 
 ### SceneComponent
 
-
+SceneComponent提供了两大能力：一是Transform，二是SceneComponent的互相嵌套。
 
 
 
 ## UObject
 
-功能：
+UObject提供的功能：
 
-1. Garbage collection垃圾回收
-2. Reference updating引用自动更新
-3. Reflectio反射
-4. Serialization序列化
-5. Automatic updating of default property changes自动检测默认变量的更改
-6. Automatic property initialization自动变量初始化
-7. Automatic editor integration和UE编辑器的自动交互
-8. Type information available at runtime运行时类型识别
-9. Network replication网络复制
+1. 元数据（MetaData）
+2. 反射（Reflection）
+3. 垃圾回收（Garbage collection）
+4. 序列化（Serialization）
+5. 和UE编辑器的自动交互（Automatic editor integration）
+6. 类默认对象（Class Default Object）
+7. 引用自动更新（Reference updating）
+8. 自动检测默认变量的更改（Automatic updating of default property changes）
+9. 自动变量初始化（Automatic property initialization）
+10. 运行时类型识别（Type information available at runtime）
+9. 网络复制（Network replication）
