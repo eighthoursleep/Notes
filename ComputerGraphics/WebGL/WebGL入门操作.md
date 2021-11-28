@@ -55,6 +55,8 @@ function main(){
 
 WebGL Context是一个JS对象，我们可以通过它访问WebGL的函数和属性，即调用WebGL API。
 
+**WebGL Context可以理解为一种类似状态机的东西，一旦你修改了它的属性，这个修改效果会一直保持着，直到下一次修改。**你可以在任何时候查询WebGL Context属性，来知道属性被改成什么样了才导致现在呈现的显示效果。
+
 WebGL无需下载什么东西添加到你的项目文件夹里，因为它已经存在于Web浏览器中。
 
 获取到canvas后，通过`getContext("webgl2")`函数获取到WebGL Context的引用。
@@ -100,11 +102,9 @@ WebGL无需下载什么东西添加到你的项目文件夹里，因为它已经
 </html>
 ```
 
-WebGL Context可以理解为一个状态机，当你修改属性，这个修改操作会保留到下一个修改操作到来。你可以在任何时候查询WebGLContext当前状态的属性。
+WebGL Context可以理解为一种类似状态机的东西，当你修改WebGL Context的属性，这个修改效果会一直保持，直到下一次修改。你可以在任何时候查询WebGLContext当前时刻的属性，以便对照当前的效果。
 
 ## 设置WebGL Context属性
-
-
 
 下边的例子，通过`clearColor()`函数换颜色清空canvas，通过`getParameter(glContext.COLOR_CLEAR_VALUE)`获取canvas当前的清屏颜色。
 
@@ -448,13 +448,67 @@ WebGL使用**笛卡尔坐标系**，具有XYZ三个轴。
 
 #### attribute变量
 
-使用步骤：
+关键词`attribute`一个**存储限定符**，还有一个存储限定符叫`uniform`，`attribute`表示接下来的变量是一个attribute变量。
+
+**attribute变量必须声明为全局变量。**
+
+变量的声明格式：
+
+> < 存储限定符 > < 类型 > < 变量名 >
+
+我们在使用`initShaders()`在WebGL系统中建立顶点着色器后，WebGL会对着色器进行解析，辨识出着色器具有的attribute变量，每个变量都有一个存储地址，以便外部通过存储地址向变量传输数据。
+
+**怎么获取attribute变量?**
+
+使用`gl.getAttributeLocation()`函数。
+
+```javascript
+gl.getAttributeLocation(program, name)
+//获取由name指定的attribute变量的存储地址
+/*
+参数program: 着色器程序对象（包含顶点着色器和片元着色器）
+参数name: 想要获取其存储地址的attribute变量的名称
+返回值大于等于0: attribute变量的存储地址
+返回-1: 指定的attribute变量不存在，或者命名具有gl_或webgl_前缀
+*/
+```
+
+**怎么向attribute变量赋值？**
+
+使用`gl.vertexAttrib3f()`函数。
+
+```js
+gl.vertexAttrib3f(location, v0, v1, v2)
+//将数据(v0,v1,v2)传入由location参数指定的attribute变量
+/*
+参数location: 要修改的attribute变量的存储位置
+v0~v2均为浮点型数值，即xyz坐标值
+无返回值
+*/
+```
+
+`gl.vertexAttrib3f()`的同族函数：
+
+```js
+gl.vertexAttrib1f(location, v0)
+gl.vertexAttrib2f(location, v0, v1)
+gl.vertexAttrib3f(location, v0, v1, v2)
+gl.vertexAttrib4f(location, v0, v1, v2, v3)//函数名最后一个字母f表示浮点型，改成i则表示整型
+gl.vertexAttrib4v(location, v)//传四维向量，4表示数组中的元素个数
+```
+
+```js
+var position =  new Float32Array([1.0, 2.0, 3.0, 1.0]);
+gl.vertexAttrib4fv(a_Position, position);
+```
+
+**步骤**：
 
 1. 在顶点着色器声明attribute变量；
 2. 将attribute变量赋值给`gl_Position`变量；
 3. 向attribute变量传数据。
 
-例子（通过attribute变量给顶点着色器传输位置信息）：
+**例子**（通过attribute变量给顶点着色器传输位置信息）：
 
 HelloPoint2.html
 
@@ -477,14 +531,14 @@ HelloPoint2.html
 </html>
 ```
 
-HelloPoint2.js
-
 ```javascript
+//HelloPoint2.js
 var VSHADER_SOURCE = `
     attribute vec4 a_Position;
+    attribute float a_PointSize;
     void main(){
         gl_Position = a_Position;
-        gl_PointSize = 10.0;
+        gl_PointSize = a_PointSize;
     }
 `
 var FSHADER_SOURCE = `
@@ -511,14 +565,21 @@ function main(){
     }
 
     //获取attribute变量的存储位置
-    var a_Position = glContext.getActiveAttrib(glContext.program, "a_Position");
+    var a_Position = glContext.getAttribLocation(glContext.program, "a_Position");
     if (a_Position < 0) {
         console.log("Failed to get the storage location of a_Position");
+        return;
+    }
+    var a_PointSize = glContext.getAttribLocation(glContext.program, "a_PointSize");
+    if (a_PointSize < 0) {
+        console.log("Failed to get the storage location of a_PointSize");
         return;
     }
 
     //将顶点位置传输给attribute变量
     glContext.vertexAttrib3f(a_Position, 0.0, 0.0, 0.0);
+    //将顶点大小传输给attribute变量
+    glContext.vertexAttrib1f(a_PointSize, 5.0);
 
     glContext.clearColor(0.0, 0.0, 0.0, 1.0);
     glContext.clear(glContext.COLOR_BUFFER_BIT);
@@ -527,31 +588,186 @@ function main(){
 }
 ```
 
-关键词`attribute`被称为存储限定符，它表示接下来的变量是一个attribute变量。
+WebGL系统的绘制操作实际上是在颜色缓冲区中进行绘制，绘制结束后系统将缓冲区中的内容显示在屏幕上，然后颜色缓冲区就会被重置，其中的内容会丢失（默认操作）。
 
-attribute变量必须声明为全局变量。
+**例子**（点击画点）
 
-变量的声明格式：
+```js
+//ClickPoint.js
+var VSHADER_SOURCE = `
+    attribute vec4 a_Position;
+    void main(){
+        gl_Position = a_Position;
+        gl_PointSize = 5.0;
+    }
+`
+var FSHADER_SOURCE = `
+    void main(){
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
+`
+function main(){
+    var canvas = document.getElementById("example");
+    if(!canvas){
+        console.log("Fail to retrieve the <canvas> element");
+        return;
+    }
 
-> < 存储限定符 > < 类型 > < 变量名 >
+    var glContext = getWebGLContext(canvas);
+    if(!glContext){
+        console.log("Failed to get the rendering context for WebGL");
+        return;
+    }
 
-我们在使用`initShaders()`在WebGL系统中建立顶点着色器后，WebGL会对着色器进行解析，辨识出着色器具有的attribute变量，每个变量都有一个存储地址，以便外部通过存储地址向变量传输数据。
+    if (!initShaders(glContext, VSHADER_SOURCE, FSHADER_SOURCE)) {
+        console.log("Failed to initialize shaders.");
+        return;
+    }
 
-向WebGL系统请求这个存储地址，需使用`gl.getAttributeLocation()`来获取attribute变量的地址。
+    //获取attribute变量的存储位置
+    var a_Position = glContext.getAttribLocation(glContext.program, "a_Position");
+    if (a_Position < 0) {
+        console.log("Failed to get the storage location of a_Position");
+        return;
+    }
 
-```javascript
-gl.getAttributeLocation(program, name)
-//获取由name参数指定的attribute变量的存储地址
+    glContext.clearColor(0.0, 0.0, 0.0, 1.0);
+    glContext.clear(glContext.COLOR_BUFFER_BIT);
 
-//program指定包含顶点着色器和片元着色器的着色器程序对象
+    canvas.onmousedown = function (ev){
+        click(ev, canvas, glContext, a_Position);
+    }
+}
+var g_points = [];
+function click(ev,canvas, glContext, a_Position){
+    var rect = ev.target.getBoundingClientRect();
+    var canvasWidth = canvas.clientWidth;
+    var canvasHeight = canvas.clientHeight;
+    var point_x = (ev.clientX - rect.left - canvasWidth/2)/(canvasWidth/2);
+    var point_y = ( - (ev.clientY - rect.top - canvasHeight/2))/(canvasHeight/2);
+    g_points.push([point_x,point_y]);
+    glContext.clear(glContext.COLOR_BUFFER_BIT);//每一次点击，画前先清屏
+    var tempPoint;
+    for (var i=0;i<g_points.length;i++){
+        tempPoint = g_points[i];
+        glContext.vertexAttrib2f(a_Position, tempPoint[0], tempPoint[1]);//传入每个点的位置
+        glContext.drawArrays(glContext.POINTS, 0, 1);//绘制每个点
+    }
+}
+```
 
-//name指定想要获取其存储地址的attribute变量的名称
+#### uniform变量
 
-//返回attribute变量的存储地址(值大于等于0)
-//返回-1则表示指定的attribute变量不存在，或者命名具有gl_或webgl_前缀
+只有顶点着色器才可以使用`attribute`变量，使用片元着色器需要使用`uniform`变量或者`varying`变量。
+
+获取uniform变量的存储地址，使用`getUniformLocation()`函数，和获取attribute变量的地址类似。
+
+给uniform变量赋值的函数也和attribute类似：
+
+```js
+gl.uniform1f(location, v0)
+gl.uniform2f(location, v0, v1)
+gl.uniform3f(location, v0, v1, v2)
+
+gl.uniform4f(location, v0, v1, v2, v3)
 ```
 
 
 
-#### uniform变量
+**例子**（点击画出不同象限对应的颜色的点）
 
+```js
+var VSHADER_SOURCE = `
+    attribute vec4 a_Position;
+    void main(){
+        gl_Position = a_Position;
+        gl_PointSize = 5.0;
+    }
+`
+var FSHADER_SOURCE = `
+    precision mediump float;//精度限定词，用于指定变量的范围和精度，这里用中等精度。
+    uniform vec4 u_FragColor;
+    void main(){
+        gl_FragColor = u_FragColor;
+    }
+`
+function main(){
+    var canvas = document.getElementById("example");
+    if(!canvas){
+        console.log("Fail to retrieve the <canvas> element");
+        return;
+    }
+
+    var glContext = getWebGLContext(canvas);
+    if(!glContext){
+        console.log("Failed to get the rendering context for WebGL");
+        return;
+    }
+
+    if (!initShaders(glContext, VSHADER_SOURCE, FSHADER_SOURCE)) {
+        console.log("Failed to initialize shaders.");
+        return;
+    }
+
+    //获取attribute变量的存储位置
+    var a_Position = glContext.getAttribLocation(glContext.program, "a_Position");
+    if (a_Position < 0) {
+        console.log("Failed to get the storage location of a_Position");
+        return;
+    }
+    var u_FragColor = glContext.getUniformLocation(glContext.program,"u_FragColor");
+    if (u_FragColor < 0) {
+        console.log("Failed to get the storage location of u_FragColor");
+        return;
+    }
+
+    glContext.clearColor(0.0, 0.0, 0.0, 1.0);
+    glContext.clear(glContext.COLOR_BUFFER_BIT);
+
+    initColors();
+
+    canvas.onmousedown = function (ev){
+        click(ev, canvas, glContext, a_Position, u_FragColor);
+    }
+}
+
+var g_points = [];
+var g_colors = [];
+function click(ev,canvas, glContext, a_Position, u_FragColor){
+    var rect = ev.target.getBoundingClientRect();
+    var canvasWidth = canvas.clientWidth;
+    var canvasHeight = canvas.clientHeight;
+    var point_x = (ev.clientX - rect.left - canvasWidth/2)/(canvasWidth/2);
+    var point_y = ( - (ev.clientY - rect.top - canvasHeight/2))/(canvasHeight/2);
+    g_points.push([point_x,point_y]);
+    glContext.clear(glContext.COLOR_BUFFER_BIT);//每一次点击，画前先清屏
+    var tempPoint;
+    for (var i=0;i<g_points.length;i++){
+        tempPoint = g_points[i];
+        var tempColor = getColor(tempPoint[0],tempPoint[1]);
+        glContext.vertexAttrib2f(a_Position, tempPoint[0], tempPoint[1]);//传入每个点的位置
+        glContext.uniform4f(u_FragColor,tempColor[0],tempColor[1],tempColor[2],tempColor[3]);
+        glContext.drawArrays(glContext.POINTS, 0, 1);//绘制每个点
+    }
+}
+
+function initColors(){
+    g_colors.push([1.0, 0.0, 0.0, 1.0]);
+    g_colors.push([0.0, 1.0, 0.0, 1.0]);
+    g_colors.push([0.0, 0.0, 1.0, 1.0]);
+    g_colors.push([1.0, 1.0, 1.0, 1.0]);
+}
+
+function getColor(posX, posY){
+    var color;
+    if (posX >= 0 && posY >= 0){
+        color = g_colors[0];
+    }else if (posX < 0 && posY >= 0){
+        color = g_colors[1];
+    }else if (posX < 0 && posY < 0){
+        color = g_colors[2];
+    }else if (posX >= 0 && posY < 0){
+        color = g_colors[3];
+    }
+    return color;
+}

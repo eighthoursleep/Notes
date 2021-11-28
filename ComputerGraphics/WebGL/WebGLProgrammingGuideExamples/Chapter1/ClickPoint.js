@@ -1,9 +1,8 @@
 var VSHADER_SOURCE = `
     attribute vec4 a_Position;
-    attribute float a_PointSize;
     void main(){
         gl_Position = a_Position;
-        gl_PointSize = a_PointSize;
+        gl_PointSize = 5.0;
     }
 `
 var FSHADER_SOURCE = `
@@ -35,19 +34,27 @@ function main(){
         console.log("Failed to get the storage location of a_Position");
         return;
     }
-    var a_PointSize = glContext.getAttribLocation(glContext.program, "a_PointSize");
-    if (a_PointSize < 0) {
-        console.log("Failed to get the storage location of a_PointSize");
-        return;
-    }
-
-    //将顶点位置传输给attribute变量
-    glContext.vertexAttrib3f(a_Position, 0.0, 0.0, 0.0);
-    //将顶点大小传输给attribute变量
-    glContext.vertexAttrib1f(a_PointSize, 5.0);
 
     glContext.clearColor(0.0, 0.0, 0.0, 1.0);
     glContext.clear(glContext.COLOR_BUFFER_BIT);
 
-    glContext.drawArrays(glContext.POINTS, 0, 1);
+    canvas.onmousedown = function (ev){
+        click(ev, canvas, glContext, a_Position);
+    }
+}
+var g_points = [];
+function click(ev,canvas, glContext, a_Position){
+    var rect = ev.target.getBoundingClientRect();
+    var canvasWidth = canvas.clientWidth;
+    var canvasHeight = canvas.clientHeight;
+    var point_x = (ev.clientX - rect.left - canvasWidth/2)/(canvasWidth/2);
+    var point_y = ( - (ev.clientY - rect.top - canvasHeight/2))/(canvasHeight/2);
+    g_points.push([point_x,point_y]);
+    glContext.clear(glContext.COLOR_BUFFER_BIT);//每一次点击，画前先清屏
+    var tempPoint;
+    for (var i=0;i<g_points.length;i++){
+        tempPoint = g_points[i];
+        glContext.vertexAttrib2f(a_Position, tempPoint[0], tempPoint[1]);//传入每个点的位置
+        glContext.drawArrays(glContext.POINTS, 0, 1);//绘制每个点
+    }
 }
