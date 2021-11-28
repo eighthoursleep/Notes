@@ -77,6 +77,7 @@ function initColors(){
     g_colors.push([0.0, 1.0, 0.0, 1.0]);
     g_colors.push([0.0, 0.0, 1.0, 1.0]);
     g_colors.push([1.0, 1.0, 1.0, 1.0]);
+
 }
 
 function getColor(posX, posY){

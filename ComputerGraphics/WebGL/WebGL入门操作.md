@@ -668,7 +668,6 @@ function click(ev,canvas, glContext, a_Position){
 gl.uniform1f(location, v0)
 gl.uniform2f(location, v0, v1)
 gl.uniform3f(location, v0, v1, v2)
-
 gl.uniform4f(location, v0, v1, v2, v3)
 ```
 
@@ -677,6 +676,7 @@ gl.uniform4f(location, v0, v1, v2, v3)
 **例子**（点击画出不同象限对应的颜色的点）
 
 ```js
+//ColorPoint.js
 var VSHADER_SOURCE = `
     attribute vec4 a_Position;
     void main(){
