@@ -167,3 +167,448 @@ gl.drawArrays(mode, first, count)
 */
 ```
 
+### 一次画三个点
+
+**例子**（绘制3个点）
+
+```js
+var VSHADER_SOURCE = `
+    attribute vec4 a_Position;
+    void main(){
+        gl_Position = a_Position;
+        gl_PointSize = 10.0;
+    }
+`
+var FSHADER_SOURCE = `
+    void main(){
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
+`
+function main(){
+    var canvas = document.getElementById("example");
+    if(!canvas){
+        console.log("Fail to retrieve the <canvas> element");
+        return;
+    }
+
+    var glContext = getWebGLContext(canvas);
+    if(!glContext){
+        console.log("Failed to get the rendering context for WebGL");
+        return;
+    }
+
+    if (!initShaders(glContext, VSHADER_SOURCE, FSHADER_SOURCE)) {
+        console.log("Failed to initialize shaders.");
+        return;
+    }
+	//设置顶点位置
+    var vertexCount = initVertexBuffers(glContext);
+    if (vertexCount < 0){
+        console.log("Failed to set the positions of the vertices.");
+        return;
+    }
+
+    glContext.clearColor(0.0, 0.0, 0.0, 1.0);
+    glContext.clear(glContext.COLOR_BUFFER_BIT);
+
+    glContext.drawArrays(glContext.POINTS, 0, vertexCount);
+}
+
+function initVertexBuffers(glContext){
+    var vertices = new Float32Array([
+        0.0, 0.5,
+        -0.5, -0.5,
+        0.5, -0.5
+    ]);
+    var vertexCount = vertices.length / 2;
+    //创建缓冲区对象
+    var vertexBuffer = glContext.createBuffer();
+    if (!vertexBuffer){
+        console.log("Failed to create the vertex buffer object.");
+        return -1;
+    }
+    //绑定缓冲区对象
+    glContext.bindBuffer(glContext.ARRAY_BUFFER, vertexBuffer);
+    //向缓冲区写入节点数据
+    glContext.bufferData(glContext.ARRAY_BUFFER, vertices, glContext.STATIC_DRAW);
+    //获取attribute变量的存储位置
+    var a_Position = glContext.getAttribLocation(glContext.program, "a_Position");
+    if (a_Position < 0) {
+        console.log("Failed to get the storage location of a_Position");
+        return;
+    }
+    //将缓冲区分配给a_Position
+    glContext.vertexAttribPointer(a_Position, 2,glContext.FLOAT,false,0,0);
+    //激活缓冲区
+    glContext.enableVertexAttribArray(a_Position);
+    return vertexCount;
+}
+```
+
+### 画三角形
+
+**例子**（绘制1个三角形）：
+
+把上边例子做如下两处改动：
+
+1. 在顶点着色器中，删掉`gl_PointSize = 10.0`。这句话只有在绘制单个顶点的时候才起作用。
+2. `glContext.drawArrays()`方法的第1个参数从`glContext.POINTS`改为`glContext.TRIANGLES`。
+
+`glContext.drawArrays()`方法的第1个参数改为`glContext.TRIANGLES`相当于告诉WebGL，“从缓冲区中的第1个顶点开始，使顶点着色器执行3次”，用3个点绘制出一个三角形。
+
+**7个WebGL可以绘制的基本图形：**
+
+| 参数              | 描述                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| gl.POINTS         | 一系列**点**，绘制在v0, v1, v2, ... 处。                     |
+| gl.LINES          | 一系列**单独的线段**，绘制在(v0, v1), (v2, v3), ...处，如果点的个数是奇数，最后一个点将被忽略。 |
+| gl.LINES_STRIP    | 一系列**连接的线段**，可以理解为折线，第1个点是起点，最后一个点是终点。 |
+| gl.LINE_LOOP      | 一系列**连接的线段**，可以理解为首尾有连接的折线。           |
+| gl.TRIANGLES      | 一系列**单独的三角形**，绘制在(v0, v1, v2), (v3, v4, v5), ...如果点的个数不是3的整数倍，最后剩下的1个或2个点将被忽略。 |
+| gl.TRIANGLE_STRIP | 一系**列条带状的三角形**，前3个点构成了第1个三角形，从第2个点开始的3个点构成了第2个三角形，与前一个三角形共享1条边，以此类推。三角形会被绘制在(v0, v1, v2), (v2, v1, v3), (v2, v3, v4), ... |
+| gl.TRIANGLE_FAN   | 一系列三角形组成的类似扇形的图形，前3个点构成了第1个三角形，接下来的1个点和前1个三角形的最后一条边组成接下来的1个三角形。这些三角形会被绘制在(v0, v1, v2), (v0, v2, v3), (v0, v3, v4) ... |
+
+![drawTriangle](webglPic/drawTriangle.png)
+
+你可以使用上述7个最基本的图形绘制任何东西。
+
+### 画矩形
+
+**例子**（用三角带画矩形）
+
+将上一个画三角星的例子做如下改动：
+
+1. 缓冲区的节点数据改为：
+
+   ```js
+   function initVertexBuffers(glContext){
+       var vertices = new Float32Array([
+           -0.5, 0.5,
+           -0.5, -0.5,
+           0.5, 0.5,
+           0.5, -0.5
+       ]);
+       ...
+   }
+   ```
+
+2. `glContext.drawArrays()`方法的第1个参数从`glContext.TRIANGLES`改为`glContext.TRIANGLE_STRIP`。
+
+**例子**（用三角扇画矩形）
+
+将上一个用三角带画矩形的例子做如下改动：
+
+1. 缓冲区的节点数据改为：
+
+   ```js
+   function initVertexBuffers(glContext){
+       var vertices = new Float32Array([
+           -0.5, 0.5,
+           -0.5, -0.5,
+           0.5, -0.5,
+           0.5, 0.5
+       ]);
+       ...
+   }
+   ```
+
+2. `glContext.drawArrays()`方法的第1个参数从`glContext.TRIANGLE_STRIP`改为`glContext.TRIANGLE_FAN`。
+
+## 移动、旋转、缩放
+
+### 平移
+
+**例子**：平移三角形
+
+```js
+var VSHADER_SOURCE = `
+    attribute vec4 a_Position;
+    uniform vec4 u_Translation;
+    void main(){
+        gl_Position = a_Position + u_Translation;
+    }
+`
+var FSHADER_SOURCE = `
+    void main(){
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
+`
+function main(){
+    var canvas = document.getElementById("example");
+    if(!canvas){
+        console.log("Fail to retrieve the <canvas> element");
+        return;
+    }
+
+    var glContext = getWebGLContext(canvas);
+    if(!glContext){
+        console.log("Failed to get the rendering context for WebGL");
+        return;
+    }
+
+    if (!initShaders(glContext, VSHADER_SOURCE, FSHADER_SOURCE)) {
+        console.log("Failed to initialize shaders.");
+        return;
+    }
+    //设置顶点位置
+    var vertexCount = initVertexBuffers(glContext);
+    if (vertexCount < 0){
+        console.log("Failed to set the positions of the vertices.");
+        return;
+    }
+    var translation = new Float32Array([0.5, 0.5, 0.0, 0.0]);
+    var u_Translation = glContext.getUniformLocation(glContext.program ,"u_Translation");
+    glContext.uniform4fv(u_Translation, translation);
+
+    glContext.clearColor(0.0, 0.0, 0.0, 1.0);
+    glContext.clear(glContext.COLOR_BUFFER_BIT);
+
+    glContext.drawArrays(glContext.TRIANGLES, 0, vertexCount);
+}
+
+function initVertexBuffers(glContext){
+    var vertices = new Float32Array([
+        0.0, 0.5,
+        -0.5, -0.5,
+        0.5, -0.5,
+    ]);
+    var vertexCount = vertices.length / 2;
+    //创建缓冲区对象
+    var vertexBuffer = glContext.createBuffer();
+    if (!vertexBuffer){
+        console.log("Failed to create the vertex buffer object.");
+        return -1;
+    }
+    //绑定缓冲区对象
+    glContext.bindBuffer(glContext.ARRAY_BUFFER, vertexBuffer);
+    //向缓冲区写入节点数据
+    glContext.bufferData(glContext.ARRAY_BUFFER, vertices, glContext.STATIC_DRAW);
+    //获取attribute变量的存储位置
+    var a_Position = glContext.getAttribLocation(glContext.program, "a_Position");
+    if (a_Position < 0) {
+        console.log("Failed to get the storage location of a_Position");
+        return;
+    }
+    //将缓冲区分配给a_Position
+    glContext.vertexAttribPointer(a_Position, 2,glContext.FLOAT,false,0,0);
+    //激活缓冲区
+    glContext.enableVertexAttribArray(a_Position);
+    return vertexCount;
+}
+```
+
+**注意**：着色器中`a_Position + u_Translation`之后还是一个坐标值，而**gl_Position**是**齐次坐标**，**齐次坐标的最后一个分量是1**，那么它的**前3个分量可以表示一个点的三维坐标**，所以在写坐标偏移量的时候，最后一个分量填0.0。
+
+### 旋转
+
+为描述一个旋转，必须指明：
+
+1. 旋转轴
+2. 旋转方向
+3. 旋转角度
+
+![rotatedTriangleGraph](webglPic/rotatedTriangleGraph.png)
+
+![rotatedTriangleEquation](webglPic/rotatedTriangleEquation.png)
+
+![rotatedTriangleEquation2](webglPic/rotatedTriangleEquation2.png)
+
+![rotatedTriangleEquation3](webglPic/rotatedTriangleEquation3.png)
+
+![rotatedTriangleEquation4](webglPic/rotatedTriangleEquation4.png)
+
+**例子**：旋转三角形
+
+```js
+var VSHADER_SOURCE = `
+    attribute vec4 a_Position;
+    uniform float u_CosB, u_SinB;
+    void main(){
+        // x' = x * cos(beta) - y * sin(beta)
+        // y' = x * sin(beta) + y * cos(beta)
+        // z' = z
+        gl_Position.x = a_Position.x * u_CosB - a_Position.y * u_SinB;
+        gl_Position.y = a_Position.x * u_SinB + a_Position.y * u_CosB;
+        gl_Position.z = a_Position.z;
+        gl_Position.w = 1.0;
+    }
+`
+var FSHADER_SOURCE = `
+    void main(){
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
+`
+function main(){
+    var canvas = document.getElementById("example");
+    if(!canvas){
+        console.log("Fail to retrieve the < canvas > element");
+        return;
+    }
+
+    var glContext = getWebGLContext(canvas);
+    if(!glContext){
+        console.log("Failed to get the rendering context for WebGL");
+        return;
+    }
+
+    if (!initShaders(glContext, VSHADER_SOURCE, FSHADER_SOURCE)) {
+        console.log("Failed to initialize shaders.");
+        return;
+    }
+    //设置顶点位置
+    var vertexCount = initVertexBuffers(glContext);
+    if (vertexCount < 0){
+        console.log("Failed to set the positions of the vertices.");
+        return;
+    }
+    var angle = 90;//旋转角度
+    var rad = angle / 180 * Math.PI;//角度转弧度
+    var cosB = Math.cos(rad);
+    var sinB = Math.sin(rad);
+    var u_CosB = glContext.getUniformLocation(glContext.program ,"u_CosB");
+    var u_SinB = glContext.getUniformLocation(glContext.program ,"u_SinB");
+    glContext.uniform1f(u_CosB, cosB);
+    glContext.uniform1f(u_SinB, sinB);
+
+    glContext.clearColor(0.0, 0.0, 0.0, 1.0);
+    glContext.clear(glContext.COLOR_BUFFER_BIT);
+
+    glContext.drawArrays(glContext.TRIANGLES, 0, vertexCount);
+}
+
+function initVertexBuffers(glContext){
+    var vertices = new Float32Array([
+        0.0, 0.5,
+        -0.5, -0.5,
+        0.5, -0.5,
+    ]);
+    var vertexCount = vertices.length / 2;
+    //创建缓冲区对象
+    var vertexBuffer = glContext.createBuffer();
+    if (!vertexBuffer){
+        console.log("Failed to create the vertex buffer object.");
+        return -1;
+    }
+    //绑定缓冲区对象
+    glContext.bindBuffer(glContext.ARRAY_BUFFER, vertexBuffer);
+    //向缓冲区写入节点数据
+    glContext.bufferData(glContext.ARRAY_BUFFER, vertices, glContext.STATIC_DRAW);
+    //获取attribute变量的存储位置
+    var a_Position = glContext.getAttribLocation(glContext.program, "a_Position");
+    if (a_Position < 0) {
+        console.log("Failed to get the storage location of a_Position");
+        return;
+    }
+    //将缓冲区分配给a_Position
+    glContext.vertexAttribPointer(a_Position, 2,glContext.FLOAT,false,0,0);
+    //激活缓冲区
+    glContext.enableVertexAttribArray(a_Position);
+    return vertexCount;
+}
+```
+
+### 变换矩阵
+
+**旋转矩阵**：
+
+![rotationMatrix](webglPic/rotationMatrix.png)
+
+**平移矩阵**：
+
+![translationMatrix](webglPic/translationMatrix.png)
+
+**4×4的旋转矩阵**：
+
+![rotation4X4Matrix](webglPic/rotation4X4Matrix.png)
+
+**例子**：利用旋转矩阵旋转三角形
+
+```js
+var VSHADER_SOURCE = `
+    attribute vec4 a_Position;
+    uniform mat4 u_xformMatrix;
+    void main(){
+        gl_Position = u_xformMatrix * a_Position;
+    }
+`
+var FSHADER_SOURCE = `
+    void main(){
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
+`
+function main(){
+    var canvas = document.getElementById("example");
+    if(!canvas){
+        console.log("Fail to retrieve the < canvas > element");
+        return;
+    }
+
+    var glContext = getWebGLContext(canvas);
+    if(!glContext){
+        console.log("Failed to get the rendering context for WebGL");
+        return;
+    }
+
+    if (!initShaders(glContext, VSHADER_SOURCE, FSHADER_SOURCE)) {
+        console.log("Failed to initialize shaders.");
+        return;
+    }
+    //设置顶点位置
+    var vertexCount = initVertexBuffers(glContext);
+    if (vertexCount < 0){
+        console.log("Failed to set the positions of the vertices.");
+        return;
+    }
+    var angle = 90;//旋转角度
+    var rad = angle / 180 * Math.PI;//角度转弧度
+    var cosB = Math.cos(rad);
+    var sinB = Math.sin(rad);
+    var u_xformMatrix = glContext.getUniformLocation(glContext.program ,"u_xformMatrix");
+    var xformMatrix = new Float32Array([
+        cosB, sinB, 0, 0,
+        -sinB, cosB, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    ]);
+    glContext.uniformMatrix4fv(u_xformMatrix, false, xformMatrix);
+
+    glContext.clearColor(0.0, 0.0, 0.0, 1.0);
+    glContext.clear(glContext.COLOR_BUFFER_BIT);
+
+    glContext.drawArrays(glContext.TRIANGLES, 0, vertexCount);
+}
+
+function initVertexBuffers(glContext){
+    var vertices = new Float32Array([
+        0.0, 0.5,
+        -0.5, -0.5,
+        0.5, -0.5,
+    ]);
+    var vertexCount = vertices.length / 2;
+    //创建缓冲区对象
+    var vertexBuffer = glContext.createBuffer();
+    if (!vertexBuffer){
+        console.log("Failed to create the vertex buffer object.");
+        return -1;
+    }
+    //绑定缓冲区对象
+    glContext.bindBuffer(glContext.ARRAY_BUFFER, vertexBuffer);
+    //向缓冲区写入节点数据
+    glContext.bufferData(glContext.ARRAY_BUFFER, vertices, glContext.STATIC_DRAW);
+    //获取attribute变量的存储位置
+    var a_Position = glContext.getAttribLocation(glContext.program, "a_Position");
+    if (a_Position < 0) {
+        console.log("Failed to get the storage location of a_Position");
+        return;
+    }
+    //将缓冲区分配给a_Position
+    glContext.vertexAttribPointer(a_Position, 2,glContext.FLOAT,false,0,0);
+    //激活缓冲区
+    glContext.enableVertexAttribArray(a_Position);
+    return vertexCount;
+}
+```
+
+
+
+#### 缩放
