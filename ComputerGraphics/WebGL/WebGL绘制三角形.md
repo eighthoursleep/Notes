@@ -609,6 +609,64 @@ function initVertexBuffers(glContext){
 }
 ```
 
+矩阵是二维的，其元素按照行和列进行排列，而数组是一维的，其元素只是排成一排。
 
+有两种方式在数组中存储矩阵元素：按行主序、按列主序。
+
+WebGL和OpenGL一样，矩阵元素**按列主序**存储在数组中。
+
+使用`gl.uniformMatrix4fv()`函数可以将数组传给`u_xformMatrix`变量。函数名的最后一个字母是`v`，表示它可以向着色器传输多个数据值。
+
+```js
+gl.uniformMatrix4fv(location, transpose, array)
+//将array表示的4x4矩阵分配给由location指定的uniform变量。
+/*
+参数location: uniform变量的存储位置。
+参数Transpose: 是否矩阵转置，在WebGL中必须指定为‘false’。
+参数array: 待传输的类型化数组，4x4矩阵按列主序存储在其中。
+
+无返回值。
+*/
+```
+
+**例子**：利用平移矩阵平移三角形
+
+对上边的例子做如下改动：
+
+1. 修改变换矩阵：
+
+   ```js
+   var Tx = 0.5, Ty = 0.5, Tz = 0.0;
+   var xformMatrix = new Float32Array([
+       1.0, 0.0, 0.0, 0.0,
+       0.0, 1.0, 0.0, 0.0,
+       0.0, 0.0, 1.0, 0.0,
+       Tx, Ty, Tz, 1.0
+   ]);
+   ```
 
 #### 缩放
+
+缩放矩阵：
+
+![scaleMatrix](webglPic/scaleMatrix.png)
+
+**例子**：利用缩放矩阵缩放三角形
+
+对上边的例子做如下改动：
+
+1. 修改变换矩阵：
+
+   ```js
+   var Sx = 1.0, Sy = 1.5, Sz = 1.0;
+   var xformMatrix = new Float32Array([
+       Sx, 0.0, 0.0, 0.0,
+       0.0, Sy, 0.0, 0.0,
+       0.0, 0.0, Sz, 0.0,
+       0.0, 0.0, 0.0, 1.0
+   ]);
+   ```
+
+注意，如果将Sx, Sy, Sz指定为0，缩放因子就是0.0，图形就会缩小到不可见。
+
+如果希望保持图形的尺寸不变，应该将缩放因子全部设为1.0。

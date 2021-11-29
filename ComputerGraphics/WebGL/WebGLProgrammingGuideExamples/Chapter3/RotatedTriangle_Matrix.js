@@ -44,6 +44,7 @@ function main(){
         0, 0, 1, 0,
         0, 0, 0, 1
     ]);
+
     glContext.uniformMatrix4fv(u_xformMatrix, false, xformMatrix);
 
     glContext.clearColor(0.0, 0.0, 0.0, 1.0);
