@@ -519,7 +519,7 @@ function initVertexBuffers(glContext){
 
 **4×4的旋转矩阵**：
 
-![rotation4X4Matrix](webglPic/rotation4X4Matrix.png)
+![rotation4x4Matrix](webglPic/rotation4x4Matrix.png)
 
 **例子**：利用旋转矩阵旋转三角形
 
