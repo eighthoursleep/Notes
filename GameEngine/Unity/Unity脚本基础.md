@@ -918,19 +918,67 @@ MonoBehaviour的事件非常多，官方文档中共列举了64个。下面将�
 | OnMouseUp                  | 用户放开鼠标按键时调用                           |
 | OnMouseUpAsButton          | 用户在同一个UI元素或碰撞体上，松开鼠标按键时调用 |
 
+例子（跟随摄像机）：
 
+```c#
+//挂载到Main Camera
+using UnityEngine;
+public class FollowCam : MonoBehaviour
+{
+    // 追踪的目标，在编辑器里指定
+    public Transform followTarget;
+    Vector3 offset;
+    void Start()
+    {
+        // 算出从目标到摄像机的向量，作为摄像机的偏移量
+        offset = transform.position - followTarget.position;
+    }
+    void LateUpdate()
+    {
+        // 每帧更新摄像机的位置
+        transform.position = followTarget.position + offset;
+    }
+}
+```
 
 ### 触发器事件
 
+如果没有触发器，就需要用大量数学运算来检测物体之间的碰撞。
 
+例子：
 
+在默认场景中创建一个立方体和一个球体。
 
+1. 假设小球是运动的，且已经有了碰撞体组件。给小球添加 Rigidbody组件，并勾选刚体的Is Kinematic选项。
+2. 假设立方体表示一个静止的范围，勾选立方体的Box Collider中的 Is Trigger选项，将它变成一个触发器。
+3. 如果需要一个透明但有触发效果的范围，可以禁用立方体的Mesh Renderer组件。
+4. 创建脚本TestTrigger，并将其挂载到立方体上，其内容如下：
 
-## 协程入门
+```c#
+using UnityEngine;
+public class TestTrigger : MonoBehaviour
+{
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("---- 碰撞！ " + other.name);
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        Debug.Log("---- 碰撞持续中…… " + Time.time);
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        Debug.Log("==== 碰撞结束 " + other.name);
+    }
+}
+```
 
+如果仔细观察，会发现输出信息的时间间隔是0.02秒，这正是默认的FixedUpdate事件的时间间隔。
 
+注意：**必须给运动的碰撞体加上刚体组件：**
 
+要让两个物体之间产生触发器事件或者碰撞事件，就要求其中一个物体必须带有刚体组件（可以是动力学刚体）。如果两个物体均不含刚体组件，那么就不会触发物理事件。
 
+在两个物体中，应当给运动的物体挂载刚体组件（可以是动力学刚体）。
 
-
-
+如果需要一个透明但有触发效果的范围，可以禁用物体的Mesh Renderer组件。
