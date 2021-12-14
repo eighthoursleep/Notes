@@ -858,7 +858,7 @@ void Update()
 
 ### 理解脚本的生命周期
 
-![lifecycle](UnityScriptingFundamentalsImg/lifecycle.png)
+![lifecycle](UnityScriptingImg/lifecycle.png)
 
 脚本代码的执行，只是引擎整体运行的一个小环节。由于脚本执行时还占用着计算资源，引擎还等待着脚本执行完毕，因此脚本方法必须尽快执行，尽快返回。如果方法的执行时间超过了数十毫秒，就会引起明显的脚本卡顿，如果脚本出现了死循环等问题，就会导致整个游戏进程卡死。
 
