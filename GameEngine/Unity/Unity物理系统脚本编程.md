@@ -322,25 +322,325 @@ private void Update()
 
 注意，上所述的各种射线检测都是以物理系统为基础的。射线需要与碰撞体和触发 器配合才能发挥出作用。
 
+常用的直线型射线用类型`Ray`表示。Ray包含了`origin`（起点）和`direction`（方向）的定义，起点和方向都用`Vector3`类型表示，前者是一个坐标，后者是一个表示方向的向量。
+
+有很多方法可以在游戏世界中发射一条射线，最常用的方法是`Physics.Raycast()`和`Physics.RaycastAll()`。由于实践中有各式各样的具体应用场景，因此`Physics.Raycast()`方法的重载有10种以上，不过实际大同小异，例如以下3种：
+
+```c#
+bool Raycast(Vector3 origin, Vector3 direction);
+bool Raycast(Vector3 origin, Vector3 direction, float maxDistance);
+bool Raycast(Vector3 origin, Vector3 direction, float maxDistance, int layerMask);
+```
+
+以上3个函数共同的参数都是发射点坐标和方向向量，返回值都是是否击中了某个 碰撞体或触发器。
+
+第3个参数`maxDistance`的作用是指定射线的最大长度。虽然名字叫作“射线”，但 与几何中的射线不同，这里的“射线”更多是“发射”的意思。例如游戏中经常通过往 角色脚下发射很短的射线（0.01，代表1厘米）来判断角色是否站在地上。
+
+除了指定方向和位置的射线以外，以下还有一类很常用的重载形式：
+
+```c#
+bool Raycast(Ray ray, out RaycastHit hitInfo);
+bool Raycast(Ray ray, out RaycastHit hitInfo, float maxDistance);
+bool Raycast(Ray ray, out RaycastHit hitInfo, float maxDistance, int layerMask);
+```
+
+这种形式的射线检测用了一种常用结构体Ray（射线），它只是将射线数据对象先单独创建出来，并没有实际区别。Ray对象有多种创建方法，例如：
+
+```c#
+// 创建从原点向上的射线
+Ray ray = new Ray(Vector3.zero, Vector3.up);
+// 获得当前鼠标指针在屏幕上的位置（单位是像素）
+Vector2 mousePos = Input.mousePosition;
+// 创建一条射线，起点是摄像机位置，方向指向鼠标指针所在的点（隐含了从屏幕到世界的坐标转
+换）
+Ray ray2 = Camera.main.ScreenPointToRay(mousePos);
+// 之后可以将ray或ray2发射出去，例如：
+Physics.Raycast(ray, 10000, LayerMask.GetMask("Default"));
+```
+
+这些重载形式的第2个参数，即类型为`RaycastHit`的参数hitInfo也很有用，它保存着详细的碰撞信息，如碰撞点的配置、法线等。
+
+
+
+### 层和层遮罩
+
+很多时候，需要射线仅被某些物体阻挡，例如希望检测地面的射线只检测地面，而 不要检测其他东西，也就是说应当穿过地面以外的东西。那么这里就要用到Layer和 Layer Mask（层遮罩）的概念了。
+
+“层”的概念让物理系统变得更加好用和实用。例如一条子弹射线，仅让它碰到 Ground（地面）、Player（玩家角色）和Obstacle（障碍物）这3个层，而不会和其他 层的物体碰撞，其编写代码如下：
+
+```c#
+int mask = LayerMask.GetMask("Ground", "Player", "Obstacle");
+if (Physics.Raycast(transform.position, Vector3.forward, mask))
+{
+ // 碰到了物体
+}
+```
+
+“与某3层碰撞”这一条件用一个int就能表示。这其实是一种二进制的妙用，用一个int最多可以表示32个层的遮罩，Layer和Tag最多也只有32个。
+
+如果让mask表示这3层以外的所有层，则用一个二进制的取反运算即可，其方法如下：
+
+```c#
+mask = ~mask;	//英文波浪线，代表二进制取反
+```
+
+有时需要改变物体所在的层，如将一个物体设置在Default层上，其方法如下：
+
+```c#
+gameObject.layer = LayerMask.NameToLayer("Default");
+```
+
+可以通过函数`LayerMask.NameToLayer()`将层名称转化为整数表示的层，也可以用函数`LayerMask.LayerToName()`将表示层的整数转化为层名字。
+
+### 射线编程
+
+1. 射线碰撞信息
+
+   射线检测其实有着丰富的碰撞信息，如可以获取到碰撞 点坐标、被碰撞物体的所有信息，甚至可以获取到碰撞点的法线（碰撞点所在物体平面 的朝向）。这些丰富的碰撞信息，都被保存在RaycastHit结构体中。
+
+   ```c#
+   bool Raycast(Vector3 origin, Vector3 direction, out RaycastHit hitInfo, float maxDistance);
+   bool Raycast(Vector3 origin, Vector3 direction, out RaycastHit hitInfo, float maxDistance, int layerMask);
+   bool Raycast(Ray ray, out RaycastHit hitInfo, float maxDistance, int layerMask);
+   ```
+
+   综合用法：
+
+   ```c#
+   private void TestRay()
+    {
+       // 声明变量，用于保存碰撞信息
+       RaycastHit hitInfo;
+       // 发射射线，起点是当前物体的位置，方向是世界前方
+       if (Physics.Raycast(transform.position, Vector3.forward, out hitInfo))
+       {
+           // 如果确实碰到物体，会运行到这里。没碰到物体就不会
+           // 获取碰撞点的坐标（世界坐标）
+           Vector3 point = hitInfo.point;
+           // 获取对方的碰撞体组件
+           Collider coll = hitInfo.collider;
+           // 获取对方的Transform组件
+           Transform trans = hitInfo.transform;
+           // 获取对方的物体名称
+           string name = coll.gameObject.name;
+           // 获取碰撞点的法线向量
+           Vector3 normal = hitInfo.normal;
+       }
+       ...
+   }
+   ```
+
+   
+
+2. 其他形状的射线
+
+   射线不仅可以有长度，还可以有粗细和形状。除了前面所提到的直线射线，还有球形射线、盒子射线和胶囊体射线。
+
+   与发射射线类似，各种形状的射线也有很多种函数重载，以下是几种常用的重载形式：
+
+   ```c#
+   // 球形射线：
+   bool SphereCast(Ray ray, float radius);
+   bool SphereCast(Ray ray, float radius, out RaycastHit hitInfo);
+   // 盒子射线：
+   bool BoxCast(Vector3 center, Vector3 halfExtents, Vector3 direction);
+   bool BoxCast(Vector3 center, Vector3 halfExtents, Vector3 direction, out RaycastHit hitInfo, Quaternion orientation);
+   // 胶囊体射线：
+   bool CapsuleCast(Vector3 point1, Vector3 point2, float radius, Vector3 direction);
+   bool CapsuleCast(Vector3 point1, Vector3 point2, float radius, Vector3 direction, out RaycastHit hitInfo, float maxDistance);
+   ```
+
+   区别在于，球形射线需要指定球的半径；盒子射线需要指定盒子的中心点和盒子的半边 长（边长的一半），如果有必要再加上盒子的朝向；胶囊体的形状更为复杂，需要用 point1、point2和radius（半径）这3个参数指定胶囊体的起点和形状。
+
+3. 穿过多个物体的射线
+
+   有时需要射线在遇到第一个物体时不停止，继续前进，最终穿过多个物体。使用 `Physics.RaycastAll()`函数可以获取到射线沿途碰到的所有碰撞信息，该函数的返回值是RaycastHit数组。
+
+   ```c#
+   RaycastHit[] RaycastAll(Ray ray, float maxDistance);
+   RaycastHit[] RaycastAll(Vector3 origin, Vector3 direction, float maxDistance);
+   RaycastHit[] RaycastAll(Ray ray, float maxDistance, int layerMask);
+   RaycastHit[] RaycastAll(Ray ray);
+   ```
+
+   同样，也有球形穿越射线、盒子穿越射线和胶囊体穿越射线，函数名称分别为`SpherecastAll`、`BoxcastAll`和`CapsulecastAll`。
+
+4. 区域覆盖型射线（Overlap）
+
+   有时需要检测一个空间范围，例如炸弹爆炸时，范围10米之内的物体都会受到波 及，那么这里需要的就不是一条射线，而是一个半径为10米的球形区域。物理系统也提 供了这类函数，它们均以Physics.Overlap开头，列举如下：
+
+   ```c#
+   Collider[] OverlapBox(Vector3 center, Vector3 halfExtents, Quaternion orientation, int layerMask);
+   Collider[] OverlapCapsule(Vector3 point0, Vector3 point1, float radius, int layerMask);
+   Collider[] OverlapSphere(Vector3 position, float radius, int layerMask);
+   ```
+
+   以球形覆盖检测`OverlapSphere()`为例，调用该函数时，会返回原点为position、 半径为radius的球体内，满足一定条件的碰撞体集合（以数组表示），而这个球体称为 “3D相交球”。
+
+5. 射线调试技巧
+
+   射线检测函数类型多、重载多、参数多，可能会让读者看得一头雾水。在实际游戏开发中，虽然这些参数不容易填写正确，但也有很好的方法可以提高编程的效率。这个方法就是使用`Debug.DrawLine()`函数和`Debug.DrawRay()`函数，将看不见的射线以可视化的形式表现出来，方便查看参数是否正确。
+
+   `Debug.DrawLine()`函数和`Debug.DrawRay()`函数的常用形式如下：
+
+   ```c#
+   void DrawLine(Vector3 start, Vector3 end, Color color);
+   void DrawLine(Vector3 start, Vector3 end, Color color, float duration);
+   void DrawRay(Vector3 start, Vector3 dir, Color color);
+   void DrawRay(Vector3 start, Vector3 dir, Color color, float duration);
+   ```
+
+   `Debug.DrawLine()`函数通过指定线段的起点、终点和颜色（默认红色），绘制一条线段；`Debug.DrawRay`函数则是通过指定起点和方向向量，绘制一条射线。两者的用法是相似的。 使用时要注意，发射射线时，参数通常为起点、方向向量和长度，而`DrawLine()`方法用的是起点和终点。应正确使用向量加法，避免看到的线条与实际射线不一致。
+
+   ```c#
+   // 以一个简单的射线为例
+   Raycast(start, direction, length);
+   // 对应的可视化线条
+   DrawLine(start, start + direction.normalized * length, Color.red);
+   // 其中nomalized是将向量标准化，即方向不变长度变为1
+   ```
+
+   需要说明的是，这种绘制方法仅在开发期生效，不会出现在最终的游戏发布版中。 在默认情况下，该辅助线仅在编辑器的场景窗口中可见。如果要在Game窗口中看到它， 则需要单击Game窗口右上角的Gizmos（辅助线框）按钮，而且无论怎么设置，它都不会 出现在最终的游戏发布版中。
+
+   以上函数的最后一个参数，即持续时间（duration）可以省略，省略后这条参考线 只出现一帧。如果在代码中每帧都绘制线条，那么就可以省略该参数。如果这个线条只 出现一帧且看不清，则可以填写一个较大的持续时间（单位是秒），让射线停留在屏幕 上方以便查看。
+
 ### 修改物理材质
 
+每个物体都有着不同的摩擦力。光滑的冰面摩擦力很小，而地毯表面的摩擦力则很大。另外每种材料也有着不同的弹性，橡皮表面的弹性大，硬质地面的弹性小。在 Unity中这些现象都符合日常的理念。
 
+虽然从原理上讲，物体的摩擦力和弹性有着更复杂的内涵，例如普通的钢板看起来并没有太多弹性，但在合适的条件下却可以用来作为弹簧板。Unity的物理引擎对物体 表面材料的性质做了简化处理，仅有5种常用属性，但可以满足大多数游戏的需求。
+
+在Project窗口中单击鼠标右键，选择Create→Physics Material，就可以创建一 个物理材质。物理材质的参数被简单定义为Dynamic Friction（动态摩擦系数）、 Static Friction（静态摩擦系数）、Bounciness（弹性系数）、与其他物体接触时的 Friction Combine（摩擦力系数算法）和Bounce Combine（弹性系数算法）
+
+动态摩擦系数就是物体之间正在相对滑动时的摩擦系数。例如0.1代表很光滑的表面，0.9代表很粗糙的表面。
+
+静态摩擦系数就是物体之间没有相对滑动时的摩擦系数。现实生活中，物体的静态 摩擦力一般略大于动态摩擦力，当然在游戏世界中可以随意调节它们的大小。
+
+弹性系数可以调节物体反弹力的大小。例如0.8可以代表充气很足的篮球，0则代表 没有任何反弹力。弹性系数一般不能高于0.9，否则会导致物体反弹的速度比撞击前的 速度还快，这样它会变得越来越快，没有止境。
+
+最后两个参数决定了两个物体表面都具有摩擦系数和弹性系数时，如何计算综合的 摩擦系数和弹性系数。可选择取平均值、取最大值、取最小值或相乘4种方式。
+
+最后，有两点值得说明：
+
+1. 是物理材质是配合碰撞体使用的。碰撞体有一个“材质”（Material）的属性， 这里自然不是指渲染材质，而是指物理材质。将创建好的物理材质拖曳到该属性上即可指定该属性。
+2. 是不指定任何物理材质时，碰撞体具有默认的物理材质。
 
 ### FixedUpdate详解
 
+FixedUpdate，物理更新，会保证稳定的时间间隔。 所谓Fixed的意思就是“固定的、稳定的”。获取两次Update之间的时间间隔用`Time.deltaTime`，获取两次FixedUpdate之间的时间间隔用`Time.fixedDeltaTime`。
 
+当设备运行不流畅、帧率下降时，会发现Time.deltaTime变大了（即帧与帧之间的 时间间隔变长），但是Time.fixedDeltaTime却不会。一般Time.fixedDeltaTime会是一 个固定的值（默认为0.02秒，可以通过选择主菜单的Edit→Project Settings→Time来修改）。
+
+先理解“物理系统对于时间是非常敏感的”，例子：
+
+1. 子弹从枪口射出，0.1秒后击中物体。假如物理更新频率不稳定，导致子弹接触物体时并没有及时检测，再晚0.02秒，子弹就已经穿过了物体。这样子弹就错过了碰撞的时机，导致后续结果完全不同。
+2. 在Unity中做一个在地上弹跳的皮球，弹性设置为0.8。由于没有外力作用，弹跳高度会越来越低。搭建场景做一个简单的实验，通过实验可得：默认物理帧率为50帧时，球会弹跳8次；物理帧率降低为20帧时，小球弹跳9次；物理帧率升高到100帧时，小球弹跳6次；而当物理帧率降低到10帧以下时，小球会穿过地板。
+
+事实证明，物理更新的时间间隔会极大影响物理效果的正确性，那么为什么不把默认的50帧变得更大一些呢？这是因为物理更新次数越高，硬件的计算负担就越重。引擎设计师不得不在性能和正确性上做出取舍，默认50帧是实验验证过的最合适的选择。
+
+除此之外，物理更新不仅要保证频率高，还要保证频率稳。不稳定的频率一样会带 来糟糕的效果，因此所有的物理系统处理都在引擎循环中的一个专门环节上完成。
+
+如果机器硬件确实卡顿了，例如手机或计算机正处于繁 忙、无响应的状态，物理更新还能保证更新频率吗？答案是有办法间接保证这一点。
+
+简单来说，游戏世界的时间是一个虚拟的概念，一定程度上可以人为控制。如果在 某个时刻T，硬件卡顿了0.06秒，正好错过了3次FixedUpdate()的调用时机，那么在下 一次有机会运行的时候，FixedUpdate()函数会补上之前错过的3次，连续执行4次，而 且还会“假装”这4次的调用时间点分别是T+0.02s、T+0.04s、T+0.06s、T+0.08s。通 过这样的机制，就能确保无论硬件运行是否稳定，游戏都能保证“稳定”的物理更新， 避免出现奇怪的结果。作为对比，Update()函数则没有这个特性。
+
+**小技巧：解决刚体移动过快的问题**
+
+为了避免游戏中子弹飞行过快，错过了碰撞体或触发器，Unity的刚体具有一个 “Collision Detection（碰撞检测方式）”选项，将默认的“Discrete（离散）” 改为“Continuous（连续）”，就可以避免错误碰撞。 它的原理大致是，高速飞行的子弹的路径在空间中是一些离散的点，通过在这 些路径点之间连线，检查连线是否碰撞到物体，就能知道子弹是否碰撞到物体。
+
+在“跟随式摄像机”的设计里， 玩家角色是在Update()函数中移动的，摄像机也是在Update()函数或LateUpdate()函数中移动的。但是，如果玩家角色是一个通过对刚体施加力控制的小球，就可能会出现一 些小问题。尝试一下会发现，如果小球是物理移动，而摄像机在Update()函数或 LateUpdate()函数中移动，那么会导致屏幕有抖动的情况，画面不是很稳定，小球运动越快则抖动越明显。 
+
+这是由于刚体因速度或受力而产生的运动，属于物理更新。而Update()函数和 LateUpdate()函数不属于物理更新，这其中有着微妙的时间差。要解决这个问题并不难，针对物理移动的刚体，只要将跟随摄像机的移动也编写到FixedUpdate()里，抖动的问题就会消失了。
 
 ### 修改角速度
 
+与修改刚体速度类似，可以直接修改刚体的角速度让刚体旋转。以下代码可以让刚 体在按下R键时旋转起来：
 
+```c#
+Void Update()
+{
+    if (Input.GetKeyDown(KeyCode.R))
+    {
+        rigid.angularVelocity = new Vector3(0, 60, 0);
+    }
+}
+```
+
+刚体的angularVelocity属性的数据类型为Vector3，代表沿x轴、y轴和z轴的旋转速度，单位是“弧度/秒”。
+
+由于刚体具有角阻尼（Angular Drag），因此即便没有接触其他物体，旋转也会慢慢停下来。
 
 ### 质心
 
+```c#
+public class Tumbler : MonoBehaviour
+{
+    Rigidbody rigid;
+    void Start () {
+        rigid = GetComponent<Rigidbody>();
+        // 设置centerOfMass就可以指定重心了（本地坐标系）
+        rigid.centerOfMass = new Vector3(0, -1, 0);
+    }
+}
+```
 
+游戏物体的重心不受真实世界的限制，不但可以设置在物体的任意位置，而且还可以超出物体本身的范围。对不倒翁来说重心越低就越稳定，因此甚至可以把重心设置在物体下方10米处。
+
+对物体施加力时，施加力的位置不同，最终的效果也不同。例如，用手推桌子上的杯子，如 果推杯子的下半部分，那么杯子会平移，如果推杯子的上半部分，杯子就可能会倒。
+
+严格来说，对一个不受任何力的物体（在Unity里就是去掉了重力，也不与其他物体接触的刚体），如果受力的方向通过了该物体的质心，物体就不会获得角速度。如果受力的方向错过了质心，那么物体就会有旋转的趋势。质心到受力线的距离越远，旋转 的趋势就越强。
 
 ### 其他施加力的方式
 
+函数`AddForce()`施加力时，就是从物体的质心位置施加的。
 
+如果要模拟更复杂的情况，让脚本给物体的不同位置施加力，可以使用以下函数：
+
+```c#
+void AddForceAtPosition(Vector3 force, Vector3 position);
+void AddForceAtPosition(Vector3 force, Vector3 position, ForceMode mode);
+```
+
+`AddForceAtPosition()`函数的第1个参数force代表施加的力，用向量表示；第2个参数就是施加力的位置，以世界坐标表示（不是相对坐标，因此使用时可能需要转换坐标）。
+
+之前讲解函数`AddForce()`时，忽略了它的最后一个参数——ForceMode（力的模式），`AddForceAtPostion()`函数同样也有该参数。“力的模式”参数是一个枚举类型，定义如下：
+
+```c#
+public enum ForceMode
+{
+    // 默认方式为持续施加力，符合牛顿力学
+    Force = 0,
+    // 设置为瞬间爆发力，适合表现快速猛烈的力，例如爆炸
+    // 力的持续时间有区别，但仍然符合牛顿力学
+    Impulse = 1,
+    // 瞬时改变刚体速度，不考虑物体质量
+    VelocityChange = 2,
+    // 直接改变加速度，不考虑物体质量
+    Acceleration = 5
+}
+```
+
+施加力的时候，可以通过改变参数mode来让施加力的含义发生变化。以 上4个枚举值中，前两种是比较常用的，第三种完全可以用直接修改刚体速度的 velocity属性代替。
 
 ### 刚体约束
 
+对一个刚体来说，它的移动、旋转往往被物理系统所控制。物体会因物理因素的影响而移动、旋转和倒地等，但是很多时候并不需要它完全自由运动。
+
+例如一个推箱子的游戏，只需要箱子在地板上平移而不是转来转去；推动油桶的时 候并不需要油桶飞起来（y轴的值增大）或倒下（沿x轴或z轴旋转）。这时候就可以利 用“Rigidbody Constraints（刚体约束）”解决这一问题。
+
+3D刚体的约束有6个选项，分别是冻结（锁定）沿x轴、y轴、z轴移动和冻结（锁 定）沿x轴、y轴和z轴的旋转，如图3-12所示。根据需要锁定一些自由度，可以让刚体的行为更可控。
+
+冻结刚体的位移和旋转自由度，影响着因物理原因而产生的移动，主要包含以下几 种情况。 一是受重力影响。 二是被其他物体推动或撞击。 三是脚本施加的力改变了物体速度。 四是脚本修改了刚体速度或角速度。 以上情况均受冻结的影响，而直接修改Transform的位置和朝向，则不受刚体约束 的限制。 除了在编辑器界面上修改刚体约束，也可以在脚本中随时修改，其方法如下：
+
+```c#
+// 冻结所有的缩放和旋转
+rigid.constraints = RigidbodyConstraints.FreezeAll;
+// 仅冻结沿x轴的位移，取消所有其他约束
+rigid.constraints = RigidbodyConstraints.FreezePositionX;
+// 仅冻结所有旋转，取消位移约束
+rigid.constraints = RigidbodyConstraints.FreezeRotation;
+// 冻结沿x轴和z轴的旋转，冻结沿y轴的位移
+rigid.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY;
+```
+
+由于刚体约束用一个整数代表多种状态，因此指定多个状态时需要用到二进制运算，特别是“按位或”运算符（符号为`|`）。
