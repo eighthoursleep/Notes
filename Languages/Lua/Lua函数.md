@@ -1,78 +1,52 @@
----
-title: Lua函数
-date: 2020-01-26 18:04:46
-toc: true
-tags: Lua
----
+# Lua函数
 
-没写完...
+## 参数的简化
 
-无参无返回、有参、标准库函数
-
-<!--more-->
-
-## 自定义函数
+函数若只有一个参数，且这个参数是一个字符串或Table构造式，则圆括号可以省略，这种是一种语法现象。
 
 ```lua
---函数的两种定义格式
-function [function_name](param1, param2, ...)
-	...
-    -- return ...
+myName = "";
+
+function SetName(name)
+	myName = name;
 end
--- 或者
-a = funtion()
+
+SetName "Mi 12 Pro" -- 参数简化
+
+print(myName)
+
+function PrintArr(arr)
+	print(table.concat( arr, " + "));
 end
+
+PrintArr {"点赞","投币","收藏","关注"} -- 参数简化
 ```
 
-### 无参数无返回值
+> Mi 12 Pro
+> 点赞 + 投币 + 收藏 + 关注
+
+## 可变参数
+
+"可变参数"又称”变长参数“，使用符号`...`表示多个参数，主要应用在形参中。类似C#的para关键字。
 
 ```lua
-function F1()
-    print("执行F1 !")
+function PrintMultiArgs( ... )
+	arg = {...} -- 未知个数的参数，用一个表存起来，再用
+	for k,v in pairs(arg) do
+		print(v)
+	end
 end
-F1() -- 函数必须在先定义再使用
-F2 = function()
-	print("执行F2 !")
-end
-F2()
+PrintMultiArgs(1999,"♂", true, 648)
 ```
 
-> 执行F1 !
-> 执行F2 !
-
-### 多参数多返回
-
-```lua
-function F3(a)
-	print(a)
-end
-function F4(a)
-	return a , "- yes?", true
-end
-F3(233)
-F3("Hi :)")
-F3(true)
-F3() -- 外部没填参数，则传入nil
-F3(11,22,33) -- 多传入的参数会被丢弃
--- 多返回值时，在前边声明多个变量来接收
-temp1, temp2, temp3 = F4("-- Excuse me.")
-print(temp1, temp2, temp3)
--- 如果变量不够，直接去对应位置的返回值
-temp1, temp2 = F4("-- Excuse me.")
-print(temp1, temp2)
--- 如果变量多了，多出的变量会被赋值为nil
-temp1, temp2, temp3, temp4 = F4("-- Excuse me.")
-print(temp1, temp2, temp3, temp4)
-```
-
-> 233
-> Hi :)
+> 1999
+> ♂
 > true
-> nil
-> 11
-> -- Excuse me.	-- yes?	true
-> -- Excuse me.	-- yes?
-> -- Excuse me.	-- yes?	true	nil
+> 648
+
+Lua 5.0以上版本通过局部变量`arg`可以接收所有变长参数。`arg`是Lua中内置的函数，本质是把可变参数封装成一个表。`#arg`可以表示参数的个数。
+
+函数访问变长参数时，使用`{...}`表达式。
 
 ### 函数不可重载
 
@@ -92,26 +66,6 @@ F6()
 ```
 
 > nil
-
-### 参数个数未知
-
-```lua
-function F7( ... )
-	-- 未知个数的参数，用一个表存起来，再用
-	arg = {...}
-	for i=1,#arg do
-		print(arg[i])
-	end
-end
-F7(1,"♂", true,4,5,6)
-```
-
-> 1
-> ♂
-> true
-> 4
-> 5
-> 6
 
 ### 函数嵌套
 
@@ -149,7 +103,7 @@ lua中函数是一种类型，可以被存放在变量或者数据结构中，�
 
 在Lua函数中再定义函数，称为内嵌函数，内嵌函数可以访问外部函数已经创建的所有局部变量，而这些变量就被称为该内嵌函数的upvalue（upvalue实际指的是变量而不是值），这些变量可以在内部函数之间共享。于是成全了Lua中闭包。
 
-## 标准库（标准函数）
+## Lua标准库函数
 
 Lua内置提供了一些[常用的函数](https://www.lua.org/manual/5.4/)帮助我们开发：
 
@@ -248,6 +202,16 @@ table.remove -- 移除指定位置的数据
 table.sort -- 排序
 table.unpack -- 返回一个数组，指定范围的数组
 ```
+
+
+
+## Lua函数尾调用
+
+
+
+## Lua函数的本质
+
+
 
 ## 求最大值与函数作为参数传递
 

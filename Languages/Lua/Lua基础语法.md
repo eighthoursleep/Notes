@@ -519,14 +519,8 @@ str3 = [[大家好]]
    print(str1.."\n"..str2) -- 支持转义字符、字符串拼接
    print(22 .. 33); -- 数字连接，数字与点号间要有空格
    print('n'..'b'); -- 字符串连接
-   
-   print(string.format("I am %d years old",24))
-   -- %d : 与数字拼接
-   -- %a : 与任何字符拼接
-   -- %s : 与字符配对
-   -- 以上为常用3种
    ```
-
+   
 3. 取得字符串长度
 
    ```lua
@@ -650,6 +644,13 @@ print(strSub);
 -- 反转
 strSub = string.reverse(strSub);
 print(strSub);
+
+-- 格式化
+print(string.format("I am %d years old",24))
+-- %d : 与数字拼接
+-- %a : 与任何字符拼接
+-- %s : 与字符配对
+-- 以上为常用3种
 ```
 
 > 12
@@ -663,24 +664,203 @@ print(strSub);
 > bug never changed.
 > heLLo
 > oLLeh
+> I am 24 years old
 
 ## 表（Table）
 
+Table是Lua的一种数据结构用来帮助我们创建不同的数据类型，如：数组、键值、集合等。
 
+Table的**基本特征**与**定义**:
+
+Table的下标可以是负数
+
+Table的长度可以动态改变（与C#的固定长度数组不同），可以把Table数组认为是C#的List、Dictionary等集合类型。
+
+```lua
+arr = {11,22,33}
+print(arr)
+print(arr[1])
+print(arr[0])
+```
+
+> table: 00DB9808
+> 11
+> nil
+
+Table集合，可以有“空表”、“直接声明且定义表内容”、“声明表然后逐一赋值”等3种方式。
+
+Table集合，也可以定义成类似“数组”的定义方式，其访问可以使用下标进行访问。
+
+访问Table中的数据（“键值对”类型数据）可以直接用`.`符号访问，也可以使用中括号访问，但一定要加字符串，否在报错。
+
+**Table中的索引，从“1”开始。**
+
+```lua
+tab = {str1="haha",str2="hehe",str3="hhh"}
+print(tab["str2"])
+print(tab.str3);
+```
+
+>hehe
+>hhh
+
+Table的数值的修改方式：
+
+1. 直接移除，索引不会变化。
+2. 使用Table专用删除函数，索引会自动排序。
+3. 推荐Table中数据的删除，使用专门的函数处理。
 
 ### 表的构造与基本访问方式
 
+表的初始化：
 
+1. 空表初始化
+2. 数组类型表的初始化
+3. 字典类型表的初始化
+   1. 有规律“键值对”
+   2. 无规律“键值对”
+
+表的赋值与访问：
+
+1. 空表的赋值与访问
+2. 数组类型表的赋值与访问
+3. 字典类型表的赋值与访问
+4. “键值对”访问
+5. “属性”访问
+
+注意：表的访问中，如果使用中括号一定要加双引号。
 
 ### 表的赋值与迭代输出
 
+数组类型表的赋值与迭代输出
 
+```lua
+tab = {12,34,56,78}
+for i=1, #tab do	-- 使用#符号得到表的长度
+	print(tab[i])
+end
+
+for i=1, table.getn(tab) do -- 使用table.getn()得到表的长度
+	print(tab[i])
+end
+```
+
+字典类型表的赋值与迭代输出
+
+```lua
+tab = {str1="点赞",str2="投币",str3="收藏"}
+for i=1, 3 do
+	print(tab["str"..i])
+end
+```
+
+使用`#`和`table.getn()`无法取得字典类型表的长度
+
+```lua
+tab = {str1="点赞",str2="投币",str3="收藏"}
+print(#tab)
+print(table.getn(tab))
+```
+
+> 0
+> 0
 
 ### 使用迭代器函数输出
+
+```lua
+tab = {str1="点赞",str2="投币",str3="收藏"}
+for k,v in pairs(tab) do
+	print(k,v)
+end
+
+tab2 = {"点赞","投币","收藏"}
+for k,v in ipairs(tab2) do
+	print(v)
+end
+```
+
+> str2	投币
+> str3	收藏
+> str1	点赞
+> 点赞
+> 投币
+> 收藏
 
 
 
 ### 表的常用函数
+
+`table.getn()`：得到数组类型表的长度个数。
+
+`table.concat()`：表的链接。把表中的数据进行连续后输出（字符串）。
+
+`table.insert()`：表的元素的插入。
+
+`table.remove()`：表的元素的移除，默认移除最后一个元素。
+
+`table.sort()`：表的排序。默认：数值从小到大排序，英文字符串，按A ... z的先后顺序排序。
+
+`table.maxn()`：表的元素数量。
+
+`table.get()`：得到数组类型表的长度个数
+
+```lua
+tab = {11,22,33}
+print(table.concat(tab))
+tab2 = {"点赞","投币","收藏","关注"}
+print(table.concat(tab2))
+print(table.concat( tab2, " + ", 2, 4 ))
+```
+
+> 112233
+> 点赞投币收藏关注
+> 投币 + 收藏 + 关注
+
+```lua
+tab = {"点赞","投币","收藏","关注"}
+table.insert(tab,2,"白嫖")
+print(table.concat( tab, " + "))
+```
+
+> 点赞 + 白嫖 + 投币 + 收藏 + 关注
+
+```lua
+tab = {"点赞","投币","收藏","关注"}
+table.remove(tab)
+print(table.concat( tab, " + "))
+table.remove(tab, 1)
+print(table.concat( tab, " + "))
+```
+
+> 点赞 + 投币 + 收藏
+> 投币 + 收藏
+
+
+```LUA
+tab = {11,-22,33}
+table.sort(tab)
+
+for i=1, #tab do
+	print(tab[i])
+end
+
+tabStr = {"skyrim","Skyrim AE","battle field","Cyberpuck","call of duty","back 4 blood"}
+table.sort(tabStr)
+
+for i=1, table.getn(tabStr) do
+	print(tabStr[i])
+end
+```
+
+> -22
+> 11
+> 33
+> Cyberpuck
+> Skyrim AE
+> back 4 blood
+> battle field
+> call of duty
+> skyrim
 
 
 
@@ -688,50 +868,103 @@ print(strSub);
 
 面向对象编程概念：封装、继承、多态。
 
+**封装**：把一个实体的信息、功能、响应都装入一个单独的对象中。
+
+**继承**：允许在不改动原来程序的基础上对其进行扩充，可以使得原功能得以保存，而新功能也得以扩展。有利于重复编码，提高开发效率。
+
+**多态**：同一操作作用于不同的对象，可以有不同的解释，产生不同的执行结果。
+
+Lua语法没有OOP机制，使用Table实现面向对象机制。把Table模拟一个“类”来使用。
+
 ### 使用表模拟“字段”、“方法”
 
+定义表的字段：“tableName.field”
 
+定义表的方法：“tableName.methodName()”
 
-### 调用表中字段与方法
+定义表的第2种方式，匿名方法赋值给表字段。
 
+```lua
+Person = {};
 
+Person.name = "player";
+Person.damage = 1000;
+Person.coin = 0;
+
+Person.ShowAttack = function () -- 第1种定义方式（匿名函数）
+	print(Person.name .. "'s damage is " .. Person.damage);
+end
+
+function Person.GetCoin(coin) -- 第2种定义方式（常用）
+	Person.coin = Person.coin + coin;
+	print(Person.name .. string.format(" get %d coins.", coin))
+end
+
+Person.ShowAttack();
+Person.GetCoin(648);
+```
+
+> player's damage is 1000
+> player get 648 coins.
 
 ### 表对象self关键字的作用
 
+方法中直接引用表的字段有什么缺陷？
 
+方法会受限于表名。方法与表明有强耦合。不灵活。
 
-```lua
-myTable = {} -- 声明对象
-local this = myTable -- 声明this关键字代表当前对象
--- 声明并初始化对象中的属性
-myTable.name = "MJ"
-myTable.age = 24
--- 声明并定义对象中的方法
-myTable.functionName = function()
-    ...
-end
-
-function myTable.function()
-    ...
-end
-```
+使用局部的表引用变量，可以降低方法与表引用的耦合性。
 
 ```lua
-Enemy = {}
-local this = Enemy
+Person = {};
+local thisPersion = Person; -- 如果没有这句话，将下边的thisPersion全改为Person运行会报错。
 
-Enemy.hp = 100
-Enemy.speed = 12.3
+Person.name = "player";
+Person.damage = 1000;
+Person.coin = 0;
 
-Enemy.Move = function()
-	print("敌人在移动")
+Person.ShowAttack = function ()
+	print(thisPersion.name .. "'s damage is " .. thisPersion.damage);
 end
 
-function Enemy.Attack()
-    print(this.hp,"attack")
-    this.Move()
+function Person.GetCoin(coin)
+	thisPersion.coin = thisPersion.coin + coin;
+	print(thisPersion.name .. string.format(" get %d coins.", coin))
 end
 
-Enemy.Attack()
+aa = Person;
+Person = nil;
+aa.ShowAttack();
 ```
 
+> player's damage is 1000
+
+使用`self`关键字，直接在方法中引用表自身字段与方法。
+
+```lua
+Phone = {};
+
+Phone.name = "player";
+Phone.price = 4999;
+
+function Phone:SetName(name)
+	self.name = name;
+end
+
+function Phone:SetPrice(price)
+	self.price = price;
+end
+
+function Phone:ShowPrice()
+	print(string.format("the price of %s is %d RMB.",self.name,self.price));
+end
+
+aa = Phone;
+Phone = nil;
+aa:SetName("mix 4");
+aa:SetPrice(1999);
+aa:ShowPrice();
+
+```
+
+> the price of mix 4 is 1999 RMB.
