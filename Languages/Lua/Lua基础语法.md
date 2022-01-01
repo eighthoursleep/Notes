@@ -565,11 +565,6 @@ str3 = [[大家好]]
    print(string.sub(str, 3, 4)) -- 截取字符串
    print(string.rep(str, 2)) -- 字符串重复
    print(string.gsub(str, "Dark", "Bright")) -- 字符串修改
-   
-   a = string.byte("Lua",2) --字符 转 ASCII码
-   print(a)
-   --ASCII码转字符
-   print(string.char(a))
    ```
 
 **注意：**
