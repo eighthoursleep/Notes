@@ -1,12 +1,6 @@
----
-title: Lua元表
-date: 2020-01-30 17:04:46
-tags: Lua
----
+# Lua元表
 
-元表概念、设置元表、特定操作（__tostring, _call, _index, _newIndex）、运算符重载
 
-<!--more-->
 
 ## 元表概念
 
@@ -16,7 +10,33 @@ tags: Lua
 
 当我们在子表中进行一些特定操作时，会执行元表中的内容
 
+**为什么需要”元表“？**
+
+在Lua中的每个值都有一套预定义的操作合集。例如可以将数字相加，可以连接字符串，还可以在table中插入一对key-value等。
+
+但是我们无法将两个table相加，无法对函数作比较，也无法调用一个字符串。
+
+**元表的作用：**
+
+Lua提供了元表与元方法来修改一个值的行为，使其在面对一个“非预定义”的操作时执行一个指定的操作。
+
+例如：对两个“表”进行“加法”操作。类似C#中的“扩展方法”、“操作符重载”等技术。
+
+**元表性质：**
+
+**任何table都可以作为任何值的元表**，而**一组相关的table也可以共享一个通用的元表**，此元表描述了它们共同的行为。一个table甚至可以作为它自己的元表，用于描述其特有的行为。总之任何搭配形式都是合法的。
+
+
+
 ## 设置元表
+
+**设置元表的步骤：**
+
+1. 定义原始表
+2. 定义元表（核心计算）
+3. 设置元方法
+4. 设置元表
+5. 测试输出
 
 ```lua
 myTable = {}
@@ -29,39 +49,98 @@ setmetatable(myTable,metaTable)
 
 
 
-## 特定操作
+## 元表方法
 
-### __tostring
+**元表重要函数：**
+
+有两个函数可以获取与设置元表：`setmetatable(t1, t2)`设置t1的元表为t2。`getmetatable(t)`获取t的元表。
+
+**“元方法”定义值的行为，就有相应的元方法。**
+
+### 算术类元方法
+
+`__add`加, `__sub`减, `__mul`乘, `__div`除,
+
+`__unm`相反数, `__mod`取模, `__pow`乘幂, `__concat`连接操作符
+
+
+
+### 关系类元方法
+
+`__eq`等于, `__lt`小于, `__le`小于等于
+
+
+
+### 库定义的元方法
+
+`__tostring`（print时调用），`__metatable`（设置后不可修改元表）
 
 ```lua
-myTable = {
-	name = "Sero"
-}
-metaTable = {
-	-- 当子表要被当做字符串使用时，会默认调用这个元表的__tostring()方法
-	__tostring = function()
-		return "fus ro dah"
-	end
+tab_1 = {10,20,50};
+tab_2 = {30,40,80};
+tab_3 = {num1=10, num2=20, num3=50};
+tab_4 = {num1=30, num2=40, num3=80};
+tab_5 = {str1="C#", str2="Lua", str3="Unity"};
 
-}
-metaTable2 = {
-	-- 默认第一个参数传入自身
-	__tostring = function(t)
-		return t.name
-	end
-	
-}
--- 设置元表函数 setmetatable(table_1,table_2)
--- 第一个参数：子表
--- 第二个参数：元表
-setmetatable(myTable,metaTable)
-print(myTable)
-setmetatable(myTable,metaTable2)
-print(myTable)
+setTable = {}
+function setTable.Adding(tab1,tab2)
+    local result = {};
+    for i, v in pairs(tab1) do
+        if (v==nil) then
+            break;
+        end
+        result[i]=tab1[i]+tab2[i];
+    end
+    return result;
+end
+
+function setTable.Sub(tab1,tab2)
+    local result = {};
+    for i, v in pairs(tab1) do
+        if (v==nil) then
+            break;
+        end
+        result[i]=tab1[i] - tab2[i];
+    end
+    return result;
+end
+
+function setTable.ToString(tab)
+    local tabResult = {}
+    for i, v in pairs(tab) do
+        tabResult[#tabResult+1] = v;
+    end
+    return table.concat(tabResult,",")
+end
+
+setTable.__add = setTable.Adding
+setTable.__sub = setTable.Sub
+
+setTable.__tostring = setTable.ToString;
+setTable.__metatable = "元表不可修改";
+
+
+setmetatable(tab_1,setTable);
+setmetatable(tab_2,setTable);
+setmetatable(tab_3,setTable);
+setmetatable(tab_4,setTable);
+setmetatable(tab_5,setTable);
+
+-- resultTable = tab_1 + tab_2;
+resultTable = tab_3 - tab_4;
+
+--for i = 1, #resultTable do
+--    print(resultTable[i]);
+--end
+
+--for k,v in pairs(resultTable) do
+--    print(v);
+--end
+
+print(tab_1);
+print(tab_5);
+print(getmetatable(tab_5));
 ```
-
-> fus ro dah
-> Sero
 
 ### __call
 
@@ -104,7 +183,7 @@ myTable(666)
 > 666
 > fus ro dah
 
-### 元表的运算符重载
+### 元表的运算符重载例子
 
 ```lua
 metaTable = {
@@ -197,9 +276,17 @@ print(myTable .. myTable2)
 > 252
 > [Finished in 0.1s]
 
-### __index
+### Table访问类元方法
 
-当**子表中找不到某个属性**时，回到元表中的**__index指定的表**去找索引
+#### __index
+
+当访问一个table中不存在的字段时，得到的结果为nil。
+
+这是对的，但并非完全正确。实际上，这些访问会促使解释器去查找一个叫`__index`的元方法。
+
+如果没有这个元方法，那么访问结果就是nil，否则由这个元方法来提供最终的结果。
+
+**子表中找不到某个属性**时，回到元表中的**__index指定的表**去找索引
 
 ```lua
 meta = {
@@ -252,9 +339,11 @@ print(myTable.secret) -- 先在meta自身的找，再向meta4的__index指向的
 > nil
 > 9999
 
-### __newIndex
+#### __newIndex
 
-如果给子表的属性赋值，如果属性索引不存在，会把这个值赋值到元表的__newindex所指向的表中，不会修改子表
+当对一个table中不存在的索引赋值时，解释器就会查找`__newindex`元方法。如果有这个元方法，解释器就调用它，而不是执行赋值。
+
+如果给子表的属性赋值，如果属性索引不存在，会把这个值赋值到元表的`__newindex`所指向的表中，不会修改子表
 
 ```lua
 myTable = {}

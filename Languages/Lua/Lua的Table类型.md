@@ -6,13 +6,145 @@
 
 Lua变量没有预定义类型，任何变量都可以包含任何类型的值。
 
+Table可以表示各种数据结构：
+
+Table是Lua中主要的数据结构机制，可以作为其他数据结构的基础，具有强大的功能。
+
+基于Table可以以一种简单、统一和高效的方式来表示“数组”、“二维数组”、“键值对集合”、“链表”、“双向队列”和其他数据结构等。同时Lua也是通过table来表示“模块”、“对象”等。
+
+Table在Lua中既不是“值”也不是“变量”，而是“对象”。
+
+Lua不会暗中产生Table的副本或创建新的Table，也不需要声明一个Table。
+
+Table是通过“构造表达式”完成的，最简单的构造表达式就是“{}”。
+
+Table永远是“匿名的”，一个持有Table变量与Table自身之间是没有固定关联性的。
+
+可以将Table认为是一种动态分配的对象，程序仅保存对他们的引用。（即：可以理解为指针）
+
+当程序没有对一个Table进行引用时，Lua的垃圾收集器最终会删除该Table，并复用它的内存。
+
+```lua
+local myArr1 = {10,20,50,60,90};
+local myArr2 = myArr1;
+myArr1 = nil;
+
+for i = 1, #myArr2 do
+    print(myArr2[i]);
+end
+```
+
+
+
 ## 二维数组
+
+Table实现“关联数组”是一种具有特殊索引方式的数组。不仅可以通过整数来索引它，还可以是以哦那个字符串或其他非nil值类索引。
+
+Table没有固定大小，可以通过表元素来进行动态扩容。当初始化数组时，也就间接的定义了它的大小。
+
+```lua
+local doubleArr = {};
+local arrayRow_1 = {};
+local arrayRow_2 = {};
+
+arrayRow_1[1] = 10;
+arrayRow_1[2] = 10;
+
+arrayRow_2[1] = 60;
+arrayRow_2[2] = 80;
+
+doubleArr[1] = arrayRow_1;
+doubleArr[2] = arrayRow_2;
+
+for i = 1, #doubleArr do
+    local curLine = "";
+    for j = 1, #doubleArr[i] do
+        curLine = curLine .. doubleArr[i][j] .. " ";
+    end
+    print(curLine);
+end
+
+for i, v in ipairs(doubleArr) do
+    print(unpack(v));
+end
+```
+
+> 10 10 
+> 60 80 
+> 10	10
+> 60	80
+
+```lua
+function CreateDoubleArray(row, col)
+    local doubleArray = {};
+    for i = 1, row do
+        doubleArray[i] = {};
+        for j = 1, col do
+            doubleArray[i][j] = 0;
+        end
+    end
+    return doubleArray;
+end
+
+local doubleArray = CreateDoubleArray(5,4);
+
+for i, v in ipairs(doubleArray) do
+    print(unpack(v));
+end
+```
+
+> 0	0	0	0
+> 0	0	0	0
+> 0	0	0	0
+> 0	0	0	0
+> 0	0	0	0
 
 
 
 ## 链表
 
+由于Lua中Table是动态的实体，所以在Lua中实现链表是很方便的。
 
+每一个链表结点以Table来表示，节点包含两个值Next和Value，注意尾节点的Next应该是nil。
+
+```lua
+function CreateLinked(n)
+    n = (n or 0);
+    local listResult = {};
+    n = n + 1;
+    if (n > 10) then
+        return nil;
+    end
+    listResult.Value = n;
+    listResult.Next = CreateLinked(n);
+    return listResult;
+end
+
+function QueryLinkList(list)
+    return function()
+        local returnValue = nil;
+        if (not list) then
+            return nil;
+        end
+        returnValue = list.Value;
+        list = list.Next;
+        return returnValue;
+    end
+end
+
+local list = CreateLinked();
+local listStr = "";
+for v in QueryLinkList(list) do
+    if v then
+        listStr = listStr .. v .. " ";
+    else
+        break;
+    end
+end
+print(listStr);
+```
+
+> 1 2 3 4 5 6 7 8 9 10
 
 
 
