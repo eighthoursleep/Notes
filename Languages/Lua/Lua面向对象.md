@@ -1,66 +1,103 @@
----
-title: Lua面向对象
-date: 2020-07-05 17:04:46
-toc: true
-tags: Lua
----
+# Lua面向对象
 
-封装、继承、多态、new方法的实现、base的实现、怎么创建子类、怎么实例化一个类、怎么重写方法
 
-<!--more-->
 
 **面向对象、类都是基于表、元表来实现。**
 
-## 封装
-
-- 表是实现类的一种形式
-- 实现new方法，本质上是通过元表和__index创建了一个空表
-- 修改创建的对象的属性是在为这个空表对象新建一个成员变量
+Table是主要的数据结构机制，可以作为其他数据结构的基础。
 
 ```lua
-Object = {}
-Object.id = 1
--- 冒号会自动调用这个函数的对象，作为第一个参数传入的写法
-function Object:new( ... )
-	-- self代表默认传入的第一个参数
-	-- 对象就是变量
-	-- 返回的内容本质上是表对象
-	local obj = {}
-	-- 当找自己的变量找不到时就会去找元表中__index指向的内容
-	self.__index = self
-	setmetatable(obj,self)
-	return obj
+Person={}
+
+Person["Name"] = "Aldia"
+Person.Gender = "Male"
+
+function Person:PersonInfo()
+    print(string.format("name : %s, Gender : %s",self.Name,self.Gender))
 end
 
-function Object:Test()
-	print(self.id)
-end
-
-local myObj = Object:new()
-print(myObj)
-print(myObj.id)
-myObj:Test()
--- 对空表中，声明一个新的属性，叫id
-myObj.id = 2
-print(Object.id)
-myObj:Test()
+Person:PersonInfo();
 ```
 
-> table: 00A69790
-> 1
-> 1
-> 1
-> 2
-
-- 表是实现类的一种形式
-
-- 用表实现new方法本质上是创建了一个空表
-- 修改创建的对象的属性变量时，是在为这个空表对象新建一个成员属性（变量）
+> name : Aldia, Gender : Male
 
 ## 继承
 
-- 使用_G根据字符串创建一个新的表（类）
-- 相关知识：元表、__index
+使用元表`__index`实现继承机制。
+
+```lua
+Person={}
+
+Person["Name"] = "Aldia"
+Person.Gender = "Male"
+Person.Country = "China"
+
+function Person:PersonInfo()
+    print(string.format("name : %s, Gender : %s",self.Name,self.Gender))
+end
+
+local Child = {}
+Child.Name = "Jessie"
+Child.Gender = "Female"
+
+function Child:Speak()
+    print(string.format("%s comes from %s.",self.Name,self.Country));
+end
+
+setmetatable(Child,{__index=Person})
+
+print(Child.Name)
+Child:PersonInfo()
+Child:Speak()
+```
+
+> Jessie
+> name : Jessie, Gender : Female
+> Jessie comes from China.
+
+进一步优化Lua继承机制：
+
+通过“父类”定义特殊函数，实现方法覆盖的机制
+
+```lua
+Person={}
+
+Person["Name"] = ""
+Person.Gender = ""
+Person.Country = "China"
+
+function Person:PersonInfo()
+    print(string.format("NAME : %s, GENDER : %s",self.Name,self.Gender))
+end
+
+function Person:New(name,gender) -- 定义获取子类实例的方法
+    local child = {}; -- 定义返回的子类
+    self.__index = self;
+    setmetatable(child,self);
+    child.Name = name;
+    child.Gender = gender;
+    return child; -- 返回的子类
+end
+
+local Student = {}
+Student = Person:New("Jessie","Female");
+
+print(Student.Name);
+Student:PersonInfo(); -- 没有就调用父类方法
+
+function Student:PersonInfo() -- 方法覆盖
+    print("Student info:");
+    print(string.format("name: %s, gender : %s",self.Name,self.Gender));
+end
+Student:PersonInfo(); -- 调用子类方法
+```
+
+> Jessie
+> NAME : Jessie, GENDER : Female
+> Student info:
+> name: Jessie, gender : Female
+
+使用_G根据字符串创建一个新的表（类）
 
 ```lua
 Object = {}
@@ -134,6 +171,52 @@ m1:Test() -- 调用Object的Test的方法
 > m1.id : 1
 > m1.id : 200
 > My TestId is 200
+
+## 封装
+
+- 表是实现类的一种形式
+- 实现new方法，本质上是通过元表和__index创建了一个空表
+- 修改创建的对象的属性是在为这个空表对象新建一个成员变量
+
+```lua
+Object = {}
+Object.id = 1
+-- 冒号会自动调用这个函数的对象，作为第一个参数传入的写法
+function Object:new( ... )
+	-- self代表默认传入的第一个参数
+	-- 对象就是变量
+	-- 返回的内容本质上是表对象
+	local obj = {}
+	-- 当找自己的变量找不到时就会去找元表中__index指向的内容
+	self.__index = self
+	setmetatable(obj,self)
+	return obj
+end
+
+function Object:Test()
+	print(self.id)
+end
+
+local myObj = Object:new()
+print(myObj)
+print(myObj.id)
+myObj:Test()
+-- 对空表中，声明一个新的属性，叫id
+myObj.id = 2
+print(Object.id)
+myObj:Test()
+```
+
+> table: 00A69790
+> 1
+> 1
+> 1
+> 2
+
+- 表是实现类的一种形式
+
+- 用表实现new方法本质上是创建了一个空表
+- 修改创建的对象的属性变量时，是在为这个空表对象新建一个成员属性（变量）
 
 ## 多态
 

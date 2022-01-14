@@ -142,7 +142,268 @@ print(tab_5);
 print(getmetatable(tab_5));
 ```
 
-### __call
+### Table访问类元方法
+
+#### __index
+
+当访问一个table中不存在的字段时，得到的结果为nil。
+
+这是对的，但并非完全正确。实际上，这些访问会促使解释器去查找一个叫`__index`的元方法。
+
+如果没有这个元方法，那么访问结果就是nil，否则由这个元方法来提供最终的结果。
+
+```lua
+tab = {str1="怪物猎人崛起",str2="怪物猎人世界"};
+
+local setTable = {}
+
+function setTable.tipNotFound()
+    return "您查询Table中没有对应的记录！";
+end
+
+setTable.__index = setTable.tipNotFound;
+setmetatable(tab,setTable);
+
+-- 简化：
+-- setmetatable(tab,{__index=tipNotFound});
+
+print(tab["str1"]);
+print(tab["str3"]);
+```
+
+> 怪物猎人崛起
+> 您查询Table中没有对应的记录！
+
+简化：
+
+```lua
+tab = {str1="怪物猎人崛起",str2="怪物猎人世界"};
+
+function tipNotFound()
+    return "您查询Table中没有对应的记录！";
+end
+
+setmetatable(tab, {__index=tipNotFound});
+
+print(tab["str1"]);
+print(tab["str3"]);
+```
+
+步骤：
+
+1. 定义原始表
+2. 定义元表的核心函数
+3. 设置元表和设置元方法
+
+**子表中找不到某个属性**时，回到元表中的**__index指定的表**去找索引
+
+```lua
+meta = {
+	level = 1
+}
+myTable = {}
+setmetatable(myTable,meta)
+print(myTable.level)
+
+meta.__index = meta
+print(myTable.level)
+
+meta.__index = {level = 10}
+print(myTable.level)
+
+meta2 = {
+	level = 2,
+	__index = {level = 20}
+}
+setmetatable(myTable,meta2)
+print(myTable.level)
+print("----------------分割线---------------------")
+-- __index 最好写在表外
+meta3 = {
+	level = 3,
+	__index = meta3
+}
+setmetatable(myTable,meta3)
+print(myTable.level)
+print("----------------分割线---------------------")
+-- 可以逐层查找__index
+meta4 = {
+	secret = 9999
+}
+meta4.__index = meta4
+setmetatable(myTable,meta)
+setmetatable(meta,meta4)
+print(myTable.secret) -- meta的__index此时指向不是自身
+meta.__index = meta -- meta的__index指向自身
+print(myTable.secret) -- 先在meta自身的找，再向meta4的__index指向的表（meta4自身）里找
+```
+
+> nil
+> 1
+> 10
+> 20
+> ----------------分割线---------------------
+> nil
+> ----------------分割线---------------------
+> nil
+> 9999
+
+#### __newIndex
+
+`__newIndex`用于给table新字段赋值。
+
+当对一个table中不存在的索引赋值时，解释器就会查找`__newindex`元方法。如果有这个元方法，解释器就调用它，而不是执行赋值。
+
+```lua
+tab = {str1="怪物猎人崛起",str2="怪物猎人世界"};
+
+function tipNotFound()
+    return "您查询Table中没有对应的记录！";
+end
+
+function AddValue(tab,k,v)
+    print("add value: ".."k="..k.." v="..v);
+end
+
+setmetatable(tab,{__newindex=AddValue});
+
+print(tab["str1"]);
+tab["str3"]="god of war";
+print(tab["str3"]);
+tab["str2"]="dark souls";
+print(tab["str2"]);
+```
+
+> 怪物猎人崛起
+> add value: k=str3 v=god of war
+> nil
+> dark souls
+
+特别注意：
+
+1. `rawset(t,k,v)`方法可以**绕过元方法**直接对table进行赋值。
+2. `rawset()`可以**使得增加的记录直接生效，但元表函数继续执行。对于修改的记录则没有影响。**
+
+```lua
+tab = {str1="怪物猎人崛起",str2="怪物猎人世界"};
+
+function tipNotFound()
+    return "您查询Table中没有对应的记录！";
+end
+
+function AddValue(tab,k,v)
+    rawset(tab,k,v);
+    print("add value: ".."k="..k.." v="..v);
+end
+
+setmetatable(tab,{__newindex=AddValue});
+
+print(tab["str1"]);
+tab["str3"]="god of war";
+print(tab["str3"]);
+tab["str2"]="dark souls";
+print(tab["str2"]);
+```
+
+> 怪物猎人崛起
+> add value: k=str3 v=god of war
+> god of war
+> dark souls
+
+`__newindex`的再次简化：
+
+```lua
+myTab = setmetatable(
+    {key1="Value"},
+    {
+        __newindex = function(myTab,k,v)
+            rawset(myTab,k,"---"..v.."---");
+        end
+    }
+);
+myTab.key1 = "new Value";
+myTab.key2 = 88;
+
+print(myTab.key1, myTab.key2);
+```
+
+> new Value	---88---
+
+如果给子表的属性赋值，如果属性索引不存在，会把这个值赋值到元表的`__newindex`所指向的表中，不会修改子表
+
+```lua
+myTable = {}
+myTable.level = 1
+print(myTable.level)
+
+myTable.level = nil
+meta = {}
+setmetatable(myTable,meta)
+meta.__newindex = meta
+myTable.level = 2
+print(myTable.level)
+print(meta.level)
+
+meta.level = nil
+meta.__newindex = {}
+myTable.level = 3
+print(myTable.level)
+-- getmetatable(子表)：返回元表
+print(getmetatable(myTable))
+-- rawget(表名,属性)：忽略__index,只在自身查找属性
+meta.health = 1000
+meta.__index = meta
+print(myTable.health)
+print(rawget(myTable,"health"))
+print("-------------分割线----------------")
+-- rawset(表名,属性,值)：忽略__newindex,给自身属性赋值
+meta.__newindex = meta
+myTable.mega = 500
+print(rawget(myTable,"mega"))
+print(rawget(meta,"mega"))
+
+rawset(myTable,"stamina",2000)
+print(rawget(myTable,"stamina"))
+print(rawget(meta,"stamina"))
+```
+
+> 1
+> nil
+> 2
+> nil
+> table: 00C895B0
+> 1000
+> nil
+> -------------分割线----------------
+> nil
+> 500
+> 2000
+> nil
+
+#### __call
+
+`__call`调用表
+
+```lua
+tab = {}
+function InvokeMethod()
+    print("本元表被调用");
+end
+
+setmetatable(tab,{__call=InvokeMethod});
+print(tab()); -- 相当于一个table被执行了，即元方法核心处理函数，成为了表中的一个函数。
+
+tab1={10,20}
+function Add(tab,num1,num2)
+    return num1 + num2;
+end
+setmetatable(tab1,{__call=Add});
+print("调用结果=",tab1(tab1[1],tab1[2]))
+```
+
+> 本元表被调用
+>
+> 调用结果=	30
 
 ```lua
 myTable = {
@@ -182,6 +443,12 @@ myTable(666)
 > Sero
 > 666
 > fus ro dah
+
+#### __mode
+
+`__mode`弱引用
+
+
 
 ### 元表的运算符重载例子
 
@@ -275,124 +542,6 @@ print(myTable .. myTable2)
 > true
 > 252
 > [Finished in 0.1s]
-
-### Table访问类元方法
-
-#### __index
-
-当访问一个table中不存在的字段时，得到的结果为nil。
-
-这是对的，但并非完全正确。实际上，这些访问会促使解释器去查找一个叫`__index`的元方法。
-
-如果没有这个元方法，那么访问结果就是nil，否则由这个元方法来提供最终的结果。
-
-**子表中找不到某个属性**时，回到元表中的**__index指定的表**去找索引
-
-```lua
-meta = {
-	level = 1
-}
-myTable = {}
-setmetatable(myTable,meta)
-print(myTable.level)
-
-meta.__index = meta
-print(myTable.level)
-
-meta.__index = {level = 10}
-print(myTable.level)
-
-meta2 = {
-	level = 2,
-	__index = {level = 20}
-}
-setmetatable(myTable,meta2)
-print(myTable.level)
-print("----------------分割线---------------------")
--- __index 最好写在表外
-meta3 = {
-	level = 3,
-	__index = meta3
-}
-setmetatable(myTable,meta3)
-print(myTable.level)
-print("----------------分割线---------------------")
--- 可以逐层查找__index
-meta4 = {
-	secret = 9999
-}
-meta4.__index = meta4
-setmetatable(myTable,meta)
-setmetatable(meta,meta4)
-print(myTable.secret) -- meta的__index此时指向不是自身
-meta.__index = meta -- meta的__index指向自身
-print(myTable.secret) -- 先在meta自身的找，再向meta4的__index指向的表（meta4自身）里找
-```
-
-> nil
-> 1
-> 10
-> 20
-> ----------------分割线---------------------
-> nil
-> ----------------分割线---------------------
-> nil
-> 9999
-
-#### __newIndex
-
-当对一个table中不存在的索引赋值时，解释器就会查找`__newindex`元方法。如果有这个元方法，解释器就调用它，而不是执行赋值。
-
-如果给子表的属性赋值，如果属性索引不存在，会把这个值赋值到元表的`__newindex`所指向的表中，不会修改子表
-
-```lua
-myTable = {}
-myTable.level = 1
-print(myTable.level)
-
-myTable.level = nil
-meta = {}
-setmetatable(myTable,meta)
-meta.__newindex = meta
-myTable.level = 2
-print(myTable.level)
-print(meta.level)
-
-meta.level = nil
-meta.__newindex = {}
-myTable.level = 3
-print(myTable.level)
--- getmetatable(子表)：返回元表
-print(getmetatable(myTable))
--- rawget(表名,属性)：忽略__index,只在自身查找属性
-meta.health = 1000
-meta.__index = meta
-print(myTable.health)
-print(rawget(myTable,"health"))
-print("-------------分割线----------------")
--- rawset(表名,属性,值)：忽略__newindex,给自身属性赋值
-meta.__newindex = meta
-myTable.mega = 500
-print(rawget(myTable,"mega"))
-print(rawget(meta,"mega"))
-
-rawset(myTable,"stamina",2000)
-print(rawget(myTable,"stamina"))
-print(rawget(meta,"stamina"))
-```
-
-> 1
-> nil
-> 2
-> nil
-> table: 00C895B0
-> 1000
-> nil
-> -------------分割线----------------
-> nil
-> 500
-> 2000
-> nil
 
 ## Lua中元表的作用是什么？对于开发者何意义
 
