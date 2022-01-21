@@ -1,13 +1,6 @@
----
-title: C#委托与事件
-date: 2020-04-04 09:49:00
-tag: C Sharp
-toc: true
----
+# C#委托与事件
 
-关键词：委托、事件、Lambda公式
 
-<!--more-->
 
 # 一、委托
 
@@ -115,7 +108,7 @@ namespace ProjectDelegate
 }
 ```
 
-![image-20200625225950962](image-20200625225950962.png)
+![image-20200625225950962](C Sharp委托与事件/image-20200625225950962.png)
 
 ## 例2（无返回值的委托，任务逻辑）
 
@@ -223,7 +216,7 @@ namespace ProjectDelegate
 }
 ```
 
-![image-20200626003706760](image-20200626003706760.png)
+![image-20200626003706760](C Sharp委托与事件/image-20200626003706760.png)
 
 ## 例3（有返回值的委托）
 
@@ -275,7 +268,7 @@ namespace ProjectDelegate
 }
 ```
 
-![image-20200625235114816](image-20200625235114816.png)
+![image-20200625235114816](C Sharp委托与事件/image-20200625235114816.png)
 
 ## 例4（多路委托）
 
@@ -409,7 +402,7 @@ namespace ProjectDelegate
 }
 ```
 
-![image-20200626010801791](image-20200626010801791.png)
+![image-20200626010801791](C Sharp委托与事件/image-20200626010801791.png)
 
 # 二、事件
 
@@ -542,7 +535,7 @@ namespace ProjectEvent
 }
 ```
 
-![image-20200626015729499](image-20200626015729499.png)
+![image-20200626015729499](C Sharp委托与事件/image-20200626015729499.png)
 
 
 
@@ -620,7 +613,7 @@ namespace ProjectEvent
 }
 ```
 
-![image-20200626104053613](image-20200626104053613.png)
+![image-20200626104053613](C Sharp委托与事件/image-20200626104053613.png)
 
 ## 匿名方法绑定事件
 
@@ -685,7 +678,7 @@ namespace ProjectEvent
 }
 ```
 
-![image-20200626105126020](image-20200626105126020.png)
+![image-20200626105126020](C Sharp委托与事件/image-20200626105126020.png)
 
 # 三、Lambda
 
@@ -755,7 +748,7 @@ namespace ProjectEvent
 }
 ```
 
-![image-20200626110532165](image-20200626110532165.png)
+![image-20200626110532165](C Sharp委托与事件/image-20200626110532165.png)
 
 # 四、类库中的委托
 
@@ -834,7 +827,7 @@ namespace ProjectEvent
 }
 ```
 
-![image-20200626143246445](image-20200626143246445.png)
+![image-20200626143246445](C Sharp委托与事件/image-20200626143246445.png)
 
 参考[List\<T\>.Sort方法详情](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1.sort?view=netcore-3.1#System_Collections_Generic_List_1_Sort)
 
@@ -987,7 +980,7 @@ namespace ProjectFunc
 }
 ```
 
-![image-20200626152400311](image-20200626152400311.png)
+![image-20200626152400311](C Sharp委托与事件/image-20200626152400311.png)
 
 ## 例2
 
@@ -1048,4 +1041,4 @@ namespace Project_Func
 
 程序运行结果：
 
-![image-20200404112753056](image-20200404112753056.png)
+![image-20200404112753056](C Sharp委托与事件/image-20200404112753056.png)
