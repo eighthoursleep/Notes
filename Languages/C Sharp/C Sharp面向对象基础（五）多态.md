@@ -1,14 +1,6 @@
----
-title: C#面向对象基础（五）多态
-date: 2020-06-29 12:57:50
-tags: C Sharp
-toc: true
-categories: 面向对象
----
+# C#面向对象基础（五）多态
 
-关键词：编译时多态、运行时多态、重载和覆盖的区别
 
-<!--more-->
 
 # 概念
 
@@ -111,7 +103,7 @@ namespace ProjectPolymorphism
 }
 ```
 
-![image-20200629133510033](image-20200629133510033.png)
+![image-20200629133510033](C Sharp面向对象基础（五）多态/image-20200629133510033.png)
 
 # 总结
 

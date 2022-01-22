@@ -1,14 +1,6 @@
----
-title: C#面向对象基础（六）附加修饰符
-date: 2020-06-29 14:42:07
-tags: C Sharp
-toc: true
-categories: 面向对象
----
+# C#面向对象基础（六）附加修饰符
 
-关键词：static、静态类、类的加载次序、单例模式、abstract、sealed、const、readonly
 
-<!--more-->
 
 # 一、static
 
@@ -29,7 +21,7 @@ categories: 面向对象
 
 格式：
 
-```
+```c#
 static ClassName(){}
 ```
 
@@ -99,7 +91,7 @@ namespace ProjectStatic
 }
 ```
 
-![image-20200629151143443](image-20200629151143443.png)
+![image-20200629151143443](C Sharp面向对象基础（六）附加修饰符/image-20200629151143443.png)
 
 ## 例2（静态类使用）
 
@@ -133,7 +125,7 @@ namespace ProjectStatic
 }
 ```
 
-![image-20200629192544485](image-20200629192544485.png)
+![image-20200629192544485](C Sharp面向对象基础（六）附加修饰符/image-20200629192544485.png)
 
 
 
@@ -200,7 +192,7 @@ namespace ProjectStatic
 }
 ```
 
-![image-20200629195446963](image-20200629195446963.png)
+![image-20200629195446963](C Sharp面向对象基础（六）附加修饰符/image-20200629195446963.png)
 
 # 三、单例模式
 
@@ -258,7 +250,7 @@ namespace ProjectStatic
 }
 ```
 
-![image-20200629204010992](image-20200629204010992.png)
+![image-20200629204010992](C Sharp面向对象基础（六）附加修饰符/image-20200629204010992.png)
 
 # 四、abstract
 
@@ -268,7 +260,7 @@ namespace ProjectStatic
 
 用abstract关键字来修饰的类
 
-```
+```c#
 abstract class AbstractClass
 {
 }
@@ -284,7 +276,7 @@ abstract class AbstractClass
 
 用abstract类修饰的方法
 
-```
+```c#
 abstract returnType AbstractMethod([paramlist]);
 ```
 
@@ -359,9 +351,9 @@ namespace ProjectAbstract
 }
 ```
 
-![image-20200630084151307](image-20200630084151307.png)
+![image-20200630084151307](C Sharp面向对象基础（六）附加修饰符/image-20200630084151307.png)
 
-![image-20200630090129400](image-20200630090129400.png)
+![image-20200630090129400](C Sharp面向对象基础（六）附加修饰符/image-20200630090129400.png)
 
 # 五、sealed
 
@@ -371,7 +363,7 @@ namespace ProjectAbstract
 
 被sealed修饰的类被称为**密封类**
 
-```
+```c#
 sealed class SealedClass
 {
 }
@@ -383,7 +375,7 @@ sealed class SealedClass
 
 被sealed修饰的方法被称为**密封方法**
 
-```
+```c#
 sealed override returnType SealedMethodName([paramLlist])
 {
 }
@@ -401,7 +393,7 @@ sealed override returnType SealedMethodName([paramLlist])
 
 被sealed修饰的属性被称为密封属性
 
-```
+```c#
 sealed override returnType Property
 {
 	set
