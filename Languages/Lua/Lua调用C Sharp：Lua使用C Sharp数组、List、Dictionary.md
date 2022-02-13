@@ -1,16 +1,6 @@
----
-title: Lua调用C#：数组、List、Dictionary
-date: 2020-07-08 13:11:46
-tags:
-- C Sharp
-- Lua
-categories: xLua
-toc: true
----
+# Lua调用C#：数组、List、Dictionary
 
-Lua使用C#数组、List、Dictionary
 
-<!--more-->
 
 C#脚本里声明List和Dictionary
 

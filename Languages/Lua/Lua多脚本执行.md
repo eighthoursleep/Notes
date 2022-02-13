@@ -1,14 +1,6 @@
----
-title: Lua多脚本执行
-date: 2020-01-29 17:04:46
-tags: Lua
----
+# Lua多脚本执行
 
-table
 
-require关键字
-
-<!--more-->
 
 test.lua
 

@@ -1,14 +1,4 @@
----
-title: C#数据结构（二）Array
-date: 2020-07-01 18:14:18
-tags: C Sharp
-toc: true
-categories: 数据结构
----
-
-关键词：Array数组的创建与访问、多维数组
-
-<!--more-->
+# C#数据结构（二）Array
 
 # 一、Array数组的创建与访问
 
@@ -68,7 +58,7 @@ namespace ProjectArray
 }
 ```
 
-![image-20200701184229039](image-20200701184229039.png)
+![image-20200701184229039](C Sharp数据结构（二）Array/image-20200701184229039.png)
 
 # 二、多维数组
 
@@ -125,7 +115,7 @@ namespace ProjectArray
 }
 ```
 
-![image-20200701190303499](image-20200701190303499.png)
+![image-20200701190303499](C Sharp数据结构（二）Array/image-20200701190303499.png)
 
 ## 例2（用二维数组打印出回型矩阵）
 
@@ -197,7 +187,7 @@ namespace ProjectArray
 
 ```
 
-![image-20200701194511796](image-20200701194511796.png)
+![image-20200701194511796](C Sharp数据结构（二）Array/image-20200701194511796.png)
 
 # 三、Array类的练习
 
@@ -280,7 +270,7 @@ namespace ProjectArray
 }
 ```
 
-![image-20200701204342125](image-20200701204342125.png)
+![image-20200701204342125](C Sharp数据结构（二）Array/image-20200701204342125.png)
 
 ## 3
 

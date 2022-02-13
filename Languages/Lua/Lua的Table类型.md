@@ -225,40 +225,6 @@ end
 > nil
 > 6
 
-## 用Lua实现冒泡排序
-
-```lua
-a = {1,3,4,9,5,7,2,8,6,0}
-function BubbleSort(a)
-	local temp = 0;
-	for i=1, #a do
-		for j=1, #a - i do
-			if a[j] > a[j+1] then
-				temp = a[j]
-				a[j] = a[j+1]
-				a[j+1] = temp
-			end
-		end
-	end
-end
-
-BubbleSort(a)
-for i=1,#a do
-	print(a[i])
-end
-```
-
-> 0
-> 1
-> 2
-> 3
-> 4
-> 5
-> 6
-> 7
-> 8
-> 9
-
 ## 迭代器遍历（ipairs与pairs的区别）
 
 ```lua
@@ -532,6 +498,40 @@ print(str)
 > 33
 > 22
 > 123-456-789-1999
+
+### 用Lua实现冒泡排序
+
+```lua
+a = {1,3,4,9,5,7,2,8,6,0}
+function BubbleSort(a)
+	local temp = 0;
+	for i=1, #a do
+		for j=1, #a - i do
+			if a[j] > a[j+1] then
+				temp = a[j]
+				a[j] = a[j+1]
+				a[j+1] = temp
+			end
+		end
+	end
+end
+
+BubbleSort(a)
+for i=1,#a do
+	print(a[i])
+end
+```
+
+> 0
+> 1
+> 2
+> 3
+> 4
+> 5
+> 6
+> 7
+> 8
+> 9
 
 ### 用Lua实现插入排序
 

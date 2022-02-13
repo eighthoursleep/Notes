@@ -1,14 +1,4 @@
----
-title: C#数据结构：List
-date: 2020-08-01 19:53:20
-tags: C Sharp
-toc: true	
-categories: 数据结构
----
-
-关键词：
-
-<!--more-->
+# C#数据结构：List
 
 # 一、简单列表
 
@@ -53,7 +43,7 @@ int capacity = arrayList.Capacity;
 
 arrayList.Count返回列表中存储的元素数目，arrayList.Capacity返回列表可以存储多少个元素。每当我们往列表中添加一个元素时，arrayList.Capacity会自动增加到合适的数字。
 
-![image-20200802090808117](image-20200802090808117.png)
+![image-20200802090808117](C Sharp数据结构：List/image-20200802090808117.png)
 
 **Contains方法**用于检查列表是否存在某个具体元素
 
@@ -205,7 +195,7 @@ namespace ListAndDictionary
 }
 ```
 
-![image-20200802160907343](image-20200802160907343.png)
+![image-20200802160907343](C Sharp数据结构：List/image-20200802160907343.png)
 
 # 二、排序列表
 
@@ -252,7 +242,7 @@ namespace ListAndDictionary
 }
 ```
 
-![image-20200802171317967](image-20200802171317967.png)
+![image-20200802171317967](C Sharp数据结构：List/image-20200802171317967.png)
 
 # 三、链表
 

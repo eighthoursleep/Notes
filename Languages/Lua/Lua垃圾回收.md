@@ -1,15 +1,6 @@
----
-title: Lua垃圾回收
-date: 2020-07-07 18:04:46
-tags: Lua
-widgets: null
----
+# Lua垃圾回收
 
-涉及时间、数学运算、路径
 
-关键字：collectgarbage(命令)
-
-<!--more-->
 
 ```lua
 -- 垃圾回收
