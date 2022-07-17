@@ -5,7 +5,6 @@
 复制光标所在行并插入下一行：Ctrl + Shift + D
 
 
-
 ## WebStorm
 
 复制光标所在行并插入下一行：Ctrl + D
@@ -13,13 +12,15 @@
 切换光标上一次/下一次的位置：Ctrl + Alt + 左右方向键 
 
 
-
 ## Visual Studio Code
 
-复制光标所在行并插入下一行：Ctrl + Shift + 方向键下
+复制光标所在行并插入下一行：Shift + Alt + 方向键下
 
 切换光标上一次/下一次的位置：Alt + 左右方向键 
 
+显示命令面板 ：Ctrl + Shift + P，F1
+
+快速打开：Ctrl + P
 
 
 ## Visual Studio 2019
