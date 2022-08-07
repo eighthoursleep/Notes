@@ -1,15 +1,36 @@
 # UGUI优化
 
-
-
 ## 基本概念
 
-1. 所有的UI都是由网格绘制而来的
+1. 所有的UI都是由网格绘制的
 2. 什么是drawcall
 3. 像素分辨率、填充率，什么是overdraw
 4. 批处理
 
-Canvas和Graphic的基本关联
+Unity Scene窗口Wireframe模式可以看到网格。
+Text每个字符由单独1个面片（2个三角形）构成。
+
+CPU准备一次数据，GPU绘制一次图形，每次绘制过程是一次【drawcall】。
+
+【填充率】：某个像素在绘制过程中被绘制了多少次。
+
+【overdraw】：屏幕上某个区域的像素因为两个物体的重叠，被重复绘制。
+
+【batching】：把可以合并网格的UI合并，达到减少drawcall的目的
+
+两个mesh需要两次drawcall来绘制
+
+mesh合并可以降低drawcall
+
+
+## Canvas和Graphic的基本关联
+
+Canvas的作用是把当前所有UI图形描绘到屏幕上。
+
+通过看源码可知，Canvas是封装的C++类，通过C++实现内部方法。
+
+Canvas会将子节点首先进行一个批处理（能合并的合并），最后发送渲染指令到Unity
+
 
 脏标记
 
