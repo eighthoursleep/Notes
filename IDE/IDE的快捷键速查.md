@@ -25,6 +25,8 @@
 
 按行查找：Ctrl + P，输入冒号行号后回车
 
+折叠所有代码：先按下ctrl + K,再按下ctrl + 0
+
 
 ## Visual Studio 2019
 
