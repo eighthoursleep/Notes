@@ -1,6 +1,8 @@
 # 【GDC】Platinum Games：Action Without Borders
 2020-01-08
 
+[TOC]
+
 ## What is an Action Game?
 
 - A set of actions responding to output 玩家对游戏的每一个输出结果进行一系列动作反应

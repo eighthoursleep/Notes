@@ -1,5 +1,7 @@
 # Cinemachine
 
+[TOC]
+
 ## CinemachineBrain
 
 相机上的CinemachineBrain和创建的虚拟相机绑定，构成cinemachine的基本运行逻辑。

@@ -2,6 +2,8 @@
 
 （摘自[Laya官网](https://layabox.com)）
 
+[TOC]
+
 ## 画布
 
 画布就是浏览器的`canvas`

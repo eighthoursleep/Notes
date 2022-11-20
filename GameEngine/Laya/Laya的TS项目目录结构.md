@@ -2,7 +2,6 @@
 
 （摘自[Laya官网](https://layabox.com)）
 
-
 YouProjectName目录
 
 - `.laya` 目录：存放的是项目在开发运行中的一些配置信息

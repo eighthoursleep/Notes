@@ -2,6 +2,8 @@
 
 参考自[Laya官网](https://ldc2.layabox.com/)
 
+[TOC]
+
 ## 安装Node.js环境
 
 请[下载](https://nodejs.org)LTS版本。

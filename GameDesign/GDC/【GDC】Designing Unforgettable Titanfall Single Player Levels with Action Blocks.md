@@ -1,6 +1,8 @@
 # 【GDC】Designing Unforgettable Titanfall Single Player Levels with Action Blocks
 2020-01-08 21:47:26
 
+[TOC]
+
 # How to Action Blocks
 
 ## Action Block

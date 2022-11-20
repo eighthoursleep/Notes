@@ -2,6 +2,8 @@
 
 (参考[Laya官网](https://layabox.com))
 
+[TOC]
+
 ## 场景渲染配置
 
 Scene3D继承于Sprite。

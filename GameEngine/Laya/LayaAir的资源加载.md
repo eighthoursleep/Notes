@@ -1,6 +1,8 @@
+# LayaAir的资源类型
+
 (参考[Laya官网](https://layabox.com))
 
-# LayaAir的资源类型
+[TOC]
 
 `.ls`为场景文件，选择导出Scene类别时生成。其中包含了场景需要的各种数据、光照贴图、模型、位置等。需使用 **Scene3D** 类加载。
 

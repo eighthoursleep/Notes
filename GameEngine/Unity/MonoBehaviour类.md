@@ -1,6 +1,8 @@
 # MonoBehaviour类
 date: 2020/06/25 12:23:00
 
+[TOC]
+
 所有的Unity组件都是MonoBehaviour的子类。脚本里自定义的类如果继承MonoBehaviour则可以通过组件的方式挂载到物体上，且这个类不能直接用new关键字生成一个对象。
 
 ## Awake方法
