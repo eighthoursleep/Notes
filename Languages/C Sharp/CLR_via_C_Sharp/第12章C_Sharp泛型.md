@@ -211,15 +211,113 @@ private static void DifferentDataLinkedList()
 
 ### 泛型类型同一性
 
+有人处于简化的考虑定义了一个新的非泛型类：
+```c#
+internal sealed class DateTimeList: List<DateTime>{
+
+}
+
+...
+
+DateTimeList dtl = new DateTimeList();
+```
+绝对不要单纯出于增强源码可读性的目的定义一个新类。
+
+这样做会丧失类型的同一性和相等性。
+
+```c#
+Boolean sameType = (typeof(List<DateTime>) == typeof(DateTimeList));
+```
+上述代码运行时，sameType会被初始化未false。因为比较的是两个不同类型的对象。
+
+意味着，如果方法的原型接受一个DateTimeList，那么不可以将一个List<DateTime>传给它。
+
+如果方法的原型接受一个List<DateTime>，那么可以将一个DateTimeList传给它，因为DateTimeList从List<DateTime>派生。
+
+幸好，C#允许使用简化的语法来引用泛型封闭类型，同时不影响类型的相等性。这个语法要求在源文件顶部使用传统的using指令，例如：
+```c#
+using DateTimeList = System.Collections.Generic.List<System.DateTime>;
+```
+
+using指定实际定义的是名未DateTimeList的符号。
+
+代码编译时，编译器将代码中出现的所有DateTimeList替换成System.Collections.Generic.List<System.DateTime>。在这种情况下，执行下边的代码，sameType会被初始化为true。
+```c#
+Boolean sameType = (typeof(List<DateTime>) == typeof(DateTimeList));
+```
+### 代码爆炸
+
+使用泛型类型参数的方法在进行JIT编译时，CLR获取方法的IL，用指定的类型实参替换，然后创建恰当的本机代码。这是泛型的重要特点。
+
+但这么做有一个缺点：CLR腰围每种不同的方法/类型组合生成本机代码。我们将这个现象称为“代码爆炸”。它可能造成应用程序的工作国际显著增大，从而损害性能。
+
+幸好，CLR内建了一些优化措施能缓解代码爆炸。
+
+首先，假如为特定的类型实参调用了一个方法，以后再用相同的类型实参调用这个方法，CLR只会为这个方法/类型组合编译一次代码。
+
+所以，如果一个程序集使用List<DateTime>，一个完全不同的程序集（加载到同一个AppDomain中）也使用List<DateTime>，CLR只为List<DateTime>编译一次方法。这样就显著缓解了代码爆炸。
+
+CLR还有另一个优化，它认为所有引用类型实参都完全相同，所以代码能够共享。
+
+例如，CLR为List<String>的方法编译的代码可直接用于List<Stream>的方法，因为String和Stream均为引用类型。
+
+事实上，对于任何引用类型，都会使用相同的代码。CLR之所以能执行这个优化，是因为所有引用类型的实参或变量实际只是指向堆上对象的指针，而所有对象指针都以相同的方式操纵。
+
+但是，假如某个类型实参时值类型，CLR必须专门为哪个值类型生成本机代码。因为值类型的大小不定。
+
+即使两个值类型大小一样（比如Int32和UInt32，都是32位），CLR仍然无法共享代码，因为可能要用不同的本机CPU指令来操纵这些值。
 
 ## 三、泛型接口
 
+没有泛型接口，每次用得非泛型接口来操纵值类型都会发生装箱，而且失去编译时的类型安全性。严重制约泛型类型的应用范围。
 
+因此CLR提供对泛型接口的支持。引用类型或值类型可指定类型实参实现泛型接口。也可保持类型实参的未指定状态实现泛型接口。
+
+例子：
+```c#
+public interface IEnumerator<T>: IDisposable, IEnumerator{
+    T Current{get;}
+}
+
+internal sealed class Triangle : IEnumerator<Point>{
+    private Point[] m_vertices;
+    public Point Current{get{...}}
+    ...
+}
+
+internal sealed class ArrayEnumerator<T> : IEnumerator<T>{
+    private T[] m_array;
+    public T Current{get{...}}
+    ...
+}
+```
 
 
 ## 四、泛型委托
 
+CLR支持泛型委托，目的时保证任何类型的对象都能以类型安全的方式传给回调方法。
+
+此外，泛型委托允许值类型实例在传给回调方法时不进行任何装箱。
+
+如果定义的委托类型指定了类型参数，编译器会定义委托类的方法，用指定的类型参数替换方法的参数类型和返回类型。
+
+例如，下边这样定义的泛型委托：
+```c#
+public delegate TReturn CallMe<TReturn, TKey, TValue>(TKey key, TValue value);
+```
+编译器会将它转换成：
+```c#
+public sealed class CallMe<TReturn, TKey, TValue>: MulticastDelegate{
+    public CallMe(Object object, IntPtr method);
+    public virtual TReturn Invoke(TKey key, TValue value);
+    public virtual IAsyncResult BeginInvoke(TKey key, TValue value, AsyncCallback callback, Object object);
+    public virtual TReturn EndInvoke(IAsyncResult result);
+}
+```
+
 ## 五、委托和接口的逆变和协变泛型类型实参
+
+
 
 ## 六、泛型方法
 
