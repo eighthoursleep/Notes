@@ -321,6 +321,156 @@ public sealed class CallMe<TReturn, TKey, TValue>: MulticastDelegate{
 
 ## 六、泛型方法
 
+定义泛型类、结构体或接口时，类型中定义的任何方法都可以引用类型指定的类型参数。
+
+类型参数可作为方法参数、方法返回值或方法内部定义的局部变量的类型使用。
+
+CLR还允许方法指定它自己的类型参数。这些类型参数也可作为参数、返回值或局部变量的类型使用。
+
+例子1：
+```c#
+internal sealed class GenericType<T>
+{
+    private T m_value;
+    public GenericType(T value){m_value = value;}
+    public TOutput Converter<TOutput>()
+    {
+        TOutput result = (TOutput) Convert.ChangeType(m_value, typepf(TOutput));
+        return result;//返回类型转换之后的结果
+    }
+}
+```
+例子2：
+```c#
+private static void Swap<T>(ref T o1, ref T o2)
+{
+    T temp = o1;
+    o1 = o2;
+    o2 = temp;
+}
+...
+private static void CallingSwap()
+{
+    Int32 n1 = 1, n2 = 2;
+    Console.WriteLine("n1 = {0}, n2 = {1}", n1, n2);
+    Swap<Int32>(ref n1, ref n2);
+    Console.WriteLine("n1 = {0}, n2 = {1}", n1, n2);
+
+    String s1 = "Aidan", s2 = "Grant";
+    Console.WriteLine("s1 = {0}, s2 = {1}", s1, s2);
+    Swap<String>(ref s1, ref s2);
+    Console.WriteLine("s1 = {0}, s2 = {1}", s1, s2);
+}
+```
+
+### 泛型方法和类型推断
+
+为了改进代码的创建，增加可读性和可维护性，C#编译器支持在调用泛型方法时进行类型推断。
+
+编译器会在调用泛型泛型方法时自动判断或者说推断要使用的类型。
+```c#
+private static void CallingSwapUsingInference()
+{
+    Int32 n1 = 1, n2 = 2;
+    Swap(ref n1, ref n2); //调用Swap<Int32>
+
+    String s1 = "Aidan";
+    Object s2 = "Grant";
+    Swap(ref s1, ref s2); //错误，不能推断类型
+}
+```
+
+类型可定义多个方法，让其中一个方法接受具体数据类型，让另一个接受泛型类型参数，例子：
+```c#
+private static void Display(String s)
+{
+    Console.WriteLine(s);
+}
+private static void Display<T>(T o)
+{
+    Display(o.ToString()); //调用Display(String)
+}
+...
+Display("Jeff");//调用Display(String)
+Display(123);// 调用Display<T>(T)
+Display<String>("Aidan");//调用Display<T>(T)
+```
+
+第1个调用，编译器可调用接受1个String参数的Display方法，也可调用泛型Display方法（将T替换成String）。但C#编译器的策略是先考虑较明确的匹配，再考虑泛型匹配。
+
+所以编译器会生成对非泛型Display方法的调用，也就是接受一个String参数的版本。对于第2个调用，编译器不能调用接受String参数的非泛型Display方法，所以必须调用泛型Display方法，
+
+对第3个调用，明确指定了泛型类型实参String。这告诉编译器不要陈曙光hi推断类型实参。相反，应使用显式指定的类型实参。在本例，泛型Display方法会为传入的字符串调用ToString方法，然后将转换所得的字符串传给非泛型Display方法。
+
 ## 七、泛型和其他成员
 
+在C#中，属性、索引器、事件、操作符方法、构造器、析构器本身不能有类型参数。但它们能在泛型类型中定义，而且这些成员中更多代码能使用类型的类型参数。
+
+C#之所以不允许这些成员指定自己的泛型类型参数，是因为微软C#团队认为开发人员很少需要将这些成员作为泛型使用。除此之外，为这些成员添加泛型支持的代价丧失相当高的，因为必须为语言设计足够的语法。例如，在代码中使用一个`+`操作符时，编译器可能要调用一个操作符重载方法。而在代码中，没有任何办法能伴随`+`操作符指定类型实参。
+
 ## 八、可验证性和约束
+
+编译泛型代码时，C#编译器会进行分析，确保代码使用于当前已有或将来可能定义的任何类型。例子：
+```c#
+private static Boolean MethodTakingAnyType<T>(T o)
+{
+    T temp = o;
+    Console.WriteLine(o.ToString());
+    Boolean b = temp.Equals(o);
+    return b;
+}
+```
+这个方法适用于任何类型。无论T是引用类型、值类型、枚举类型，还是将来能定义的任何类型，因为所有类型都支持Object类型的变量的赋值，也支持对Object类型定义的方法调用。
+
+```c#
+private static T Min<T>(T o1, T o2)
+{
+    if(o1.CompareTo(o2) < 0) return o1;
+    return o2;
+}
+```
+Min方法试图适用o1变量来调用CompareTo方法。但是许多类型都没有提供CompareTo方法，所以C#编译器不能编译上述代码，它不能保证这个方法适用于所有类型。
+
+编译器和CLR支持称为**约束**的机制。
+
+约束的作用：限制能指定成泛型实参的类型数量。通过限制类型的数量，可以对那些类型执行更多的操作。
+```c#
+private static T Min<T>(T o1, T o2) where T : IComparable<T>
+{
+    if(o1.CompareTo(o2) < 0) return o1;
+    return o2;
+}
+```
+C#的where关键字告诉编译器，为T指定的任何类型都必须实现同类型（T）的泛型IComparable接口。有了这个约束，就可以在方法中调用CompareTo，因为已知IComparable<T>接口定义了CompareTo。
+
+约束可应用于泛型类型的类型参数，也可应用于泛型方法的类型参数。
+
+CLR不允许基于类型参数名称或约束来进行重载；只能基于元数（类型参数个数）对类型或方法进行重载。
+```c#
+internal sealed class AType{}
+internal sealed class AType<T>{}
+internal sealed class AType<T1, T2>{}
+//错误：与没有约束的AType<T>冲突
+internal sealed class AType<T> where T : IComparable<T>{}
+//错误：与AType<T1, T2>冲突
+internal sealed class AType<T3, T4>{}
+
+internal sealed class AnotherType
+{
+    private static void M(){}
+    private static void M<T>(){}
+    private static void M<T1, T2>(){}
+    //错误：与没有约束的M<T>冲突
+    private static void M<T>() where T : IComparable<T>{}
+    //错误：与M<T1, T2>冲突
+    private static void M<T3, T4>(){}
+}
+```
+
+### 主要约束
+
+### 次要约束
+
+### 构造器约束
+
+### 其他可验证性问题
