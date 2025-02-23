@@ -1,20 +1,10 @@
----
-title: C#网络编程
-date: 2020-04-14 11:14:59
-tags: C Sharp
-toc: true
----
-
-Socket-TCP、Socket-UDP、Http、实现文件下载的功能
-
-<!--more-->
+# C#网络编程
 
 目标：访问网络共享资源、实现玩家之间的交互
 
 技术点应用：软件、游戏、网站、App、...
 
 程序之间如何通信：通过IP找到通信的主机、通过Port找到主机上的程序
-
 
 
 # Socket-TCP
@@ -532,8 +522,7 @@ namespace Client
 
 在服务端输入消息后回车，客户端端接收到消息并打印。
 
-![image-20200416173425579](image-20200416173425579.png)
-
+![image-20200416173425579](.\\CSharp网络编程\\image-20200416173425579.png)
 
 
 # Socket-UDP
@@ -737,7 +726,7 @@ namespace Project_Client
 
 程序运行后在Project_Client的控制台窗口输入要发送的消息后回车，Project_Server的控制台窗口将打印接收到的消息，如下图：
 
-![image-20200418223632262](D:\blog\source\_posts\C Sharp网络编程\image-20200418223632262.png)
+![image-20200418223632262](.\\CSharp网络编程\\image-20200418223632262.png)
 
 
 
@@ -972,7 +961,7 @@ namespace Project_Client
 
 运行两个程序后，先在客户端向服务器发送一条消息，此时服务器接收到消息并获知了客户端的端口，此时可以从服务器控制台向客户端发送消息。
 
-![image-20200421201139889](D:\blog\source\_posts\C Sharp网络编程\image-20200421201139889.png)
+![image-20200421201139889](.\\CSharp网络编程\\image-20200421201139889.png)
 
 
 

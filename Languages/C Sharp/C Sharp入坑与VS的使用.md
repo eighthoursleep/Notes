@@ -1,13 +1,4 @@
----
-title: C#入坑与VS的使用
-date: 2020-01-14 14:13:12
-tag: C Sharp
-toc: true
----
-
-《Professional C# 7 and .NET Core 2.0》、《C#高级编程（第7版）》笔记
-
-<!--more-->
+# C#入坑与VS的使用
 
 # 一、C#与.net
 
@@ -56,7 +47,7 @@ Console.ReadKey();  //等待任意键继续
 
 Ctrl + S 保存，点击功能栏的【启动】，运行程序
 
-![image_1](image_1.png)
+![image_1](.\\CSharp入坑与VS的使用\\image_1.png)
 
 # 三、VS中常用快捷键
 
@@ -69,7 +60,7 @@ Ctrl + S 保存，点击功能栏的【启动】，运行程序
 
 # 四、VS界面各部分讲解
 
-![image_2](image_2.png)
+![image_2](.\\CSharp入坑与VS的使用\\image_2.png)
 
 - 解决方案、项目、类之间的关系
 
@@ -83,7 +74,7 @@ Ctrl + S 保存，点击功能栏的【启动】，运行程序
 
   Program.cs: 类文件
 
-![image_3](image_3.png)
+![image_3](.\\CSharp入坑与VS的使用\\image_3.png)
 
 1. 引用命名空间（地址）
 2. namespace: 项目名称

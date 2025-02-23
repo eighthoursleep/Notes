@@ -1,13 +1,4 @@
----
-title: C#脚本基础
-date: 2020-01-17 16:34:55
-tag: C Sharp
-toc: true
----
-
-脚本结构、基础语法、数据类型
-
-<!--more-->
+# C#脚本基础
 
 # 一、开发环境
 
@@ -15,9 +6,9 @@ IDE：Visual Studio 2017
 
 新建项目途径：
 
-​	其他语言 > Visual C# > Windows桌面 > 空项目(.NET Framework)或者控制台应用。
+其他语言 > Visual C# > Windows桌面 > 空项目(.NET Framework)或者控制台应用。
 
-![image-20200219123758165](image-20200219123758165.png)
+![image-20200219123758165](.\\CSharp脚本基础\\image-20200219123758165.png)
 
 # 二、脚本结构
 

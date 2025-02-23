@@ -1,9 +1,4 @@
----
-title: C#文件管理
-date: 2020-04-03 17:40:00
-tag: C Sharp
-toc: true
----
+# C#文件管理
 
 - 目的和作用
 - 通过File类对文件进行操作
@@ -110,9 +105,9 @@ namespace Project_File
 
 运行程序后，在控制台界面打印原来的文本，打开查看Save.txt发现成功添加了一行新文本
 
-![image-20200403183858701](image-20200403183858701.png)
+![image-20200403183858701](.\\CSharp文件管理\\image-20200403183858701.png)
 
-![image-20200403184037485](image-20200403184037485.png)
+![image-20200403184037485](.\\CSharp文件管理\\image-20200403184037485.png)
 
 
 
@@ -229,9 +224,9 @@ namespace Project_FileStream
 
 程序运行后，在控制台打印Save.txt里的旧信息，关闭控制台后打开Save.txt发现成功添加了新的一行信息。
 
-![image-20200403200834154](image-20200403200834154.png)
+![image-20200403200834154](.\\CSharp文件管理\\image-20200403200834154.png)
 
-![image-20200403200902781](image-20200403200902781.png)
+![image-20200403200902781](.\\CSharp文件管理\\image-20200403200902781.png)
 
 
 
@@ -276,7 +271,7 @@ namespace Project_StreamReaderWrite
 
 运行程序结果如下：
 
-![image-20200403220142996](image-20200403220142996.png)
+![image-20200403220142996](.\\CSharp文件管理\\image-20200403220142996.png)
 
 
 
@@ -311,7 +306,7 @@ namespace Project_StreamReaderWrite
 
 运行程序后Save.txt成功添加了一行：
 
-![image-20200403220724294](image-20200403220724294.png)
+![image-20200403220724294](.\\CSharp文件管理\\image-20200403220724294.png)
 
 
 
@@ -413,7 +408,7 @@ namespace Project_FileInfo
 
 运行后控制台打印了Save.txt的文件属性，如下图：
 
-![image-20200403222757115](image-20200403222757115.png)
+![image-20200403222757115](.\\CSharp文件管理\\image-20200403222757115.png)
 
 
 
@@ -514,4 +509,4 @@ namespace Project_DirectoryInfo
 
 运行程序后，成功在控制台打印Skyrim文件夹的属性信息，并成功创建了子文件Data。
 
-![image-20200403224939892](image-20200403224939892.png)
+![image-20200403224939892](.\\CSharp文件管理\\image-20200403224939892.png)
