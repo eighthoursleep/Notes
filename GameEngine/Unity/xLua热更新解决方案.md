@@ -1,5 +1,4 @@
 # xLua热更新解决方案
-date: 2020-07-07 19:04:46
 
 [TOC]
 
@@ -13,7 +12,7 @@ date: 2020-07-07 19:04:46
 
 导入管理AB的脚本：
 
-```C# ABMgr.cs
+```C#
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -228,7 +227,7 @@ public class ABMgr : SingletonAutoMono<ABMgr>
 }
 ```
 
-```C# SingletonAutoMono.cs
+```C#
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -259,7 +258,7 @@ public class SingletonAutoMono<T> : MonoBehaviour where T : MonoBehaviour
 }
 ```
 
-```C# SingletonMono.cs
+```C#
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -286,7 +285,7 @@ public class SingletonMono<T> : MonoBehaviour where T: MonoBehaviour
 }
 ```
 
-```c# BaseManager.cs
+```c#
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

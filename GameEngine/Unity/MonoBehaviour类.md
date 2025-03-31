@@ -1,5 +1,4 @@
 # MonoBehaviour类
-date: 2020/06/25 12:23:00
 
 [TOC]
 
